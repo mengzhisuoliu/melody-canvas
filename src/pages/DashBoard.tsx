@@ -1,9 +1,13 @@
-import Sidebar from "@/components/Sidebar";
+import MediaControls from "@/components/MediaControls";
+import PreviewArea from "@/components/PreviewArea";
+import SideNav from "@/components/SideNav";
 
 function DashBoard() {
   return (
     <>
-      <Sidebar />
+      <SideNav />
+      <PreviewArea />
+      <MediaControls />
     </>
   );
 }

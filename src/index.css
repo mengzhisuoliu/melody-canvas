@@ -1,9 +1,10 @@
 body {
-  @apply h-screen bg-dark-100 text-white;
+  @apply h-screen bg-dark-100 text-white font-mono;
 }
 
+label,
+input,
 button {
   cursor: pointer;
   outline: none;
 }
- 

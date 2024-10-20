@@ -1,5 +1,4 @@
 import MediaControls from "@/components/MediaControls";
-import PreviewArea from "@/components/PreviewArea";
 import SideNav from "@/components/SideNav";
 import TopNav from "@/components/TopNav";
 
@@ -8,7 +7,6 @@ function DashBoard() {
     <>
       <TopNav />
       <SideNav />
-      <PreviewArea />
       <MediaControls />
     </>
   );

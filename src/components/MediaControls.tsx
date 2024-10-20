@@ -1,34 +1,33 @@
 import { useEffect, useRef, useState } from "react";
 
+import PreviewArea from "@/components/PreviewArea";
 import useMediaStore from "@/stores/mediaStore";
 
 const MediaControls: React.FC = () => {
-  const { audioMeta } = useMediaStore();
+  const { audioMeta, audioPlaying, setAudioPlaying } = useMediaStore();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  const [volume, setVolume] = useState(0.5);
+  const [volume, setVolume] = useState(0.1);
   const [previousVolume, setPreviousVolume] = useState(volume);
 
   useEffect(() => {
-    setIsPlaying(false);
+    setAudioPlaying(false);
   }, [audioMeta?.url]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
 
-    if (isPlaying) {
+    if (audioPlaying) {
       audioRef.current.pause();
     } else {
       audioRef.current.play();
     }
 
-    setIsPlaying(!isPlaying);
+    setAudioPlaying(!audioPlaying);
   };
 
   const handleTimeUpdate = () => {
@@ -81,14 +80,22 @@ const MediaControls: React.FC = () => {
 
   return (
     <>
+      {/* 音频 */}
       {audioMeta?.url && (
-        <audio ref={audioRef} src={audioMeta.url} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleLoadedMeta} />
+        <audio
+          ref={audioRef}
+          src={audioMeta.url}
+          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={handleLoadedMeta}
+          onEnded={() => setAudioPlaying(false)}
+        />
       )}
 
+      {/* 播放器 */}
       <div className="bg-dark-300 w-screen h-16 absolute bottom-0 flex items-center justify-between px-6">
         {/* 播放按钮 */}
         <button onClick={togglePlay} className="w-12 aspect-square rounded-full bg-emerald-300 flex-center">
-          <div className={`w-5 h-5 ${isPlaying ? "i-solar:pause-bold" : "i-solar:play-bold"}`}></div>
+          <div className={`w-5 h-5 ${audioPlaying ? "i-solar:pause-bold" : "i-solar:play-bold"}`}></div>
         </button>
 
         {/* 音量控制 */}
@@ -132,6 +139,9 @@ const MediaControls: React.FC = () => {
           onChange={handleSeek}
         />
       </div>
+
+      {/* 视频预览 */}
+      <PreviewArea/>
     </>
   );
 };

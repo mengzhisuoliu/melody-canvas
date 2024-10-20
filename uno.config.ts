@@ -14,5 +14,13 @@ export default defineConfig({
     })
   ],
   transformers: [transformerDirectives()],
-  shortcuts: [["flex-center", "flex justify-center items-center"]]
+  content: {
+    pipeline: {
+      include: ["src/**/*.{ts,tsx}"]
+    }
+  },
+  shortcuts: [
+    ["flex-center", "flex justify-center items-center"],
+    ["flex-between", "flex justify-between items-center"]
+  ]
 });

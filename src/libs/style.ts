@@ -1,0 +1,1 @@
+export const SVG_STYLE = "fill-white group-hover:fill-emerald-300";

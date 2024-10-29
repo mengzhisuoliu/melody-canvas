@@ -1,1 +1,0 @@
-export const AUDIO_SVG = "fill-white group-hover:fill-emerald-300";

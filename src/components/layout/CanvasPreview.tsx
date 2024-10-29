@@ -4,27 +4,29 @@ import { useEffect, useRef } from "react";
 import { FABRIC_CONFIG } from "@/libs/config";
 import useCanvasStore from "@/stores/canvasStore";
 
-interface PreviewAreaProps {}
-
-const PreviewArea: React.FC<PreviewAreaProps> = () => {
-  const { createFabric, disposeFabric } = useCanvasStore();
+/**
+ * 视频预览区域
+ */
+const CanvasPreview: React.FC = () => {
+  const { createCanvas, disposeCanvas } = useCanvasStore();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
 
     const canvasEl = canvasRef.current;
+    const canvasParent = canvasEl.parentElement!;
     const instance = new Canvas(canvasEl, {
-      width: canvasEl.parentElement!.clientWidth,
-      height: canvasEl.parentElement!.clientHeight
+      width: canvasParent.clientWidth,
+      height: canvasParent.clientHeight
     });
-    
-    Object.assign(FabricObject.ownDefaults, FABRIC_CONFIG);
 
-    createFabric(instance);
+    Object.assign(FabricObject.ownDefaults, FABRIC_CONFIG);
+    
+    createCanvas(instance);
 
     return () => {
-      disposeFabric();
+      disposeCanvas();
     };
   }, []);
 
@@ -35,4 +37,4 @@ const PreviewArea: React.FC<PreviewAreaProps> = () => {
   );
 };
 
-export default PreviewArea;
+export default CanvasPreview;

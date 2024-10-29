@@ -1,4 +1,4 @@
-const TextEditor: React.FC = () => {
+const TextManager: React.FC = () => {
   return (
     <>
       <div className="">Text</div>
@@ -6,4 +6,4 @@ const TextEditor: React.FC = () => {
   );
 };
 
-export default TextEditor;
+export default TextManager;

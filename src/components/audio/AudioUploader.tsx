@@ -2,20 +2,17 @@ import useMediaStore from "@/stores/mediaStore";
 import AudioSvgGroup from "./AudioSvgGroup";
 
 const AudioUploader: React.FC = () => {
-  const { audioMeta, setAudioMeta } = useMediaStore();
+  const { audioFile, setAudioFile } = useMediaStore();
 
-  const handleAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAudioUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setAudioMeta({
-        name: file.name,
-        url: URL.createObjectURL(file)
-      });
+      setAudioFile(file);
     }
   };
 
   const formatAudioName = () => {
-    if (!audioMeta)
+    if (!audioFile)
       return (
         <>
           <span text="lg">Upload a File</span>
@@ -23,8 +20,9 @@ const AudioUploader: React.FC = () => {
         </>
       );
 
-    const name = audioMeta.name.split(".").slice(0, -1).join(".");
-    const ext = audioMeta.name.split(".").pop();
+    // 避免文件名过长的情况
+    const name = audioFile.name.split(".").slice(0, -1).join(".");
+    const ext = audioFile.name.split(".").pop();
     return (
       <>
         <div className="flex-center">
@@ -41,8 +39,8 @@ const AudioUploader: React.FC = () => {
       <div>
         {/* 音频上传 */}
         <label className="px-2 py-1 hover:text-stone-200 flex-center">
-          <div className="w-full whitespace-nowrap flex-between">{formatAudioName()}</div>
-          <input type="file" accept="audio/*" className="hidden" onChange={handleAudioChange} />
+          <div className="w-full h-6 whitespace-nowrap flex-between">{formatAudioName()}</div>
+          <input type="file" accept="audio/*" className="hidden" onChange={handleAudioUpload} />
         </label>
         {/* 分割线 */}
         <div className="h-0.5 w-full border-b-2 border-dotted border-dark-50 py-1"></div>

@@ -1,13 +1,13 @@
-import MediaControls from "@/components/MediaControls";
-import SideNav from "@/components/SideNav";
-import TopNav from "@/components/TopNav";
+import { AudioControls } from "@/components/audio";
+import { CanvasPreview, SideNav, TopNav } from "@/components/layout";
 
 function DashBoard() {
   return (
     <>
       <TopNav />
       <SideNav />
-      <MediaControls />
+      <CanvasPreview />
+      <AudioControls />
     </>
   );
 }

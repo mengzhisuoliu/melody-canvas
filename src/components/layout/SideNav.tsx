@@ -1,9 +1,7 @@
 import { useState } from "react";
 
-import AudioUploader from "./AudioUploader";
-import BackdropDisplay from "./BackdropDisplay";
-import ImageProcessor from "./ImageProcessor";
-import TextEditor from "./TextEditor";
+import { AudioUploader } from "../audio";
+import { BackdropDisplay, ImageProcessor, TextManager } from "../editor";
 
 interface NavItemProps {
   icon: string;
@@ -16,8 +14,7 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => 
   <button
     className={`w-16 h-16 rounded-md bg-dark-100 flex-center flex-col p-1 ${
       isActive ? "pointer-events-none border-2 border-dotted border-emerald-400 text-emerald-300" : "hover:bg-dark-50"
-    }
-      `}
+    }`}
     onClick={onClick}
   >
     <div className={`${icon} text-2xl my-1`} />
@@ -25,6 +22,9 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => 
   </button>
 );
 
+/**
+ * 左侧边栏
+ */
 const SideNav: React.FC = () => {
   const [activeNav, setActiveNav] = useState<string>("Audio");
 
@@ -32,7 +32,7 @@ const SideNav: React.FC = () => {
     { icon: "i-icon-park-outline:electric-wave", label: "Audio", component: <AudioUploader /> },
     { icon: "i-geo:turf-size", label: "Backdrop", component: <BackdropDisplay /> },
     { icon: "i-lsicon:picture-outline", label: "Image", component: <ImageProcessor /> },
-    { icon: "i-iconoir:text-square", label: "Text", component: <TextEditor /> }
+    { icon: "i-iconoir:text-square", label: "Text", component: <TextManager /> }
   ];
 
   return (

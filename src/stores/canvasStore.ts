@@ -3,6 +3,7 @@ import { create } from "zustand";
 
 interface CanvasState {
   canvasInstance: Canvas | null;
+  activeObject: FabricObject | null;
 }
 
 interface CanvasAction {
@@ -14,7 +15,19 @@ type CanvasStore = CanvasState & CanvasAction;
 
 const useCanvasStore = create<CanvasStore>((set, get) => ({
   canvasInstance: null,
-  createCanvas: (value) => set({ canvasInstance: value }),
+  activeObject: null,
+  createCanvas: (value) => {
+    set({ canvasInstance: value });
+
+    const updateActiveObject = () => {
+      set({ activeObject: value.getActiveObject() });
+    };
+    value.on("selection:created", updateActiveObject);
+    value.on("selection:updated", updateActiveObject);
+    value.on("selection:cleared", () => {
+      set({ activeObject: null });
+    });
+  },
   disposeCanvas: () => {
     get().canvasInstance?.dispose();
   }

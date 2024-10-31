@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import { FABRIC_CONFIG } from "@/libs/config";
 import useCanvasStore from "@/stores/canvasStore";
 
+import RightClickMenu from "./RightClickMenu";
+
 /**
  * 视频预览区域
  */
@@ -22,7 +24,6 @@ const CanvasPreview: React.FC = () => {
     });
 
     Object.assign(FabricObject.ownDefaults, FABRIC_CONFIG);
-    
     createCanvas(instance);
 
     return () => {
@@ -33,6 +34,7 @@ const CanvasPreview: React.FC = () => {
   return (
     <div className="w-[70vw] h-[calc(70vw*9/16)] bg-dark-800 absolute transform translate-y-[-50%] top-[calc(50%-16px)] right-7">
       <canvas ref={canvasRef} className="w-full h-full"></canvas>
+      <RightClickMenu />
     </div>
   );
 };

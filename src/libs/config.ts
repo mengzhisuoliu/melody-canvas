@@ -1,4 +1,4 @@
-const THEME_COLOR = "#63debb";
+export const THEME_COLOR = "#63debb";
 
 export const FABRIC_CONFIG = {
   borderColor: THEME_COLOR,

@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+
+import { THEME_COLOR } from "@/libs/config";
 import useMediaStore from "@/stores/mediaStore";
+
 import AudioVisualizer from "./AudioVisualizer";
+
+const SLIDER_STYLE = {
+  handle: { borderColor: THEME_COLOR },
+  track: { backgroundColor: THEME_COLOR }
+}
 
 const AudioControls: React.FC = () => {
   const { audioFile } = useMediaStore();
@@ -44,19 +54,18 @@ const AudioControls: React.FC = () => {
     }
   };
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = Number(e.target.value);
-      setCurrentTime(audioRef.current.currentTime);
+  const handleSeek = (time: number | number[]) => {
+    if (audioRef.current && typeof time === 'number') {
+      audioRef.current.currentTime = time;
+      setCurrentTime(time);
     }
   };
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!audioRef.current) return;
-
-    const newVolume = Number(e.target.value);
-    audioRef.current.volume = newVolume;
-    setVolume(newVolume);
+  const handleVolumeChange = (volume: number | number[]) => {
+    if (audioRef.current && typeof volume === 'number') {
+      audioRef.current.volume = volume;
+      setVolume(volume);
+    }
   };
 
   const formatTime = (time: number) => {
@@ -90,18 +99,17 @@ const AudioControls: React.FC = () => {
         </button>
 
         {/* 音量控制 */}
-        <button className={`ml-6 ${audioRef.current ? "group" : "pointer-events-none text-dark-50"}`}>
+        <button className={`ml-4 ${audioRef.current ? "group" : "pointer-events-none text-dark-50"}`}>
           <div className="i-lsicon:volume-outline text-2xl"></div>
-          <div className="absolute bottom-14 -ml-3 opacity-0 group-hover:opacity-100 bg-dark-300 border-2 border-dark-50 w-12 p-2 rounded-md flex flex-col">
-            <input
-              type="range"
-              min="0.01" // 避免完全静音 -> 无法获取实时音频数据
-              max="1"
-              step="0.01"
+          <div className="h-36 absolute bottom-14 -ml-3 opacity-0 group-hover:opacity-100 bg-dark-300 border-2 border-dark-50 w-12 p-2 rounded-md flex-center flex-col">
+            <Slider
+              vertical
+              min={0.01} // 避免完全静音 -> 无法获取实时音频数据
+              max={1}
+              step={0.01}
               value={volume}
               onChange={handleVolumeChange}
-              className="h-24 transform scale-y-[-1]"
-              style={{ writingMode: "vertical-lr" }}
+              styles={SLIDER_STYLE}
             />
             <div text="xs" m="t-1">
               {Math.round(volume * 100)}%
@@ -110,21 +118,21 @@ const AudioControls: React.FC = () => {
         </button>
 
         {/* 时间 */}
-        <div className="flex items-center justify-between mx-4">
+        <div className="flex items-center justify-between ml-2 mr-4">
           <span className="text-white text-sm mx-4 whitespace-nowrap">
             {formatTime(currentTime)} / {formatTime(duration)}
           </span>
         </div>
 
         {/* 进度条 */}
-        <input
-          type="range"
-          className={`w-full mr-6`}
-          step="0.1"
-          min="0"
+        <Slider
+          min={0}
           max={duration}
+          step={0.1}
           value={currentTime}
           onChange={handleSeek}
+          styles={SLIDER_STYLE}
+          className="hover:cursor-pointer"
         />
       </div>
     </>

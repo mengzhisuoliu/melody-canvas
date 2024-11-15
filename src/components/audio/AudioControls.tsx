@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 
 import { THEME_COLOR } from "@/libs/config";
 import useMediaStore from "@/stores/mediaStore";
@@ -11,7 +11,7 @@ import AudioVisualizer from "./AudioVisualizer";
 const SLIDER_STYLE = {
   handle: { borderColor: THEME_COLOR },
   track: { backgroundColor: THEME_COLOR }
-}
+};
 
 const AudioControls: React.FC = () => {
   const { audioFile } = useMediaStore();
@@ -55,14 +55,14 @@ const AudioControls: React.FC = () => {
   };
 
   const handleSeek = (time: number | number[]) => {
-    if (audioRef.current && typeof time === 'number') {
+    if (audioRef.current && typeof time === "number") {
       audioRef.current.currentTime = time;
       setCurrentTime(time);
     }
   };
 
   const handleVolumeChange = (volume: number | number[]) => {
-    if (audioRef.current && typeof volume === 'number') {
+    if (audioRef.current && typeof volume === "number") {
       audioRef.current.volume = volume;
       setVolume(volume);
     }
@@ -100,25 +100,27 @@ const AudioControls: React.FC = () => {
 
         {/* 音量控制 */}
         <button className={`ml-4 ${audioRef.current ? "group" : "pointer-events-none text-dark-50"}`}>
-          <div className="i-lsicon:volume-outline text-2xl"></div>
-          <div className="h-36 absolute bottom-14 -ml-3 opacity-0 group-hover:opacity-100 bg-dark-300 border-2 border-dark-50 w-12 p-2 rounded-md flex-center flex-col">
+          <div
+            className={`${volume === 0 ? "i-lsicon:volume-mute-outline" : "i-lsicon:volume-outline"} text-2xl`}
+          ></div>
+          <div className="h-40 absolute bottom-14 -ml-3 opacity-0 group-hover:opacity-100 bg-dark-300 border-2 border-dark-50 w-12 pt-5 rounded-md flex-center flex-col">
             <Slider
               vertical
-              min={0.01} // 避免完全静音 -> 无法获取实时音频数据
+              min={0}
               max={1}
               step={0.01}
               value={volume}
               onChange={handleVolumeChange}
               styles={SLIDER_STYLE}
             />
-            <div text="xs" m="t-1">
+            <div text="xs" m="t-4 b-2">
               {Math.round(volume * 100)}%
             </div>
           </div>
         </button>
 
         {/* 时间 */}
-        <div className="flex items-center justify-between ml-2 mr-4">
+        <div className="flex items-center justify-between ml-1 mr-4">
           <span className="text-white text-sm mx-4 whitespace-nowrap">
             {formatTime(currentTime)} / {formatTime(duration)}
           </span>

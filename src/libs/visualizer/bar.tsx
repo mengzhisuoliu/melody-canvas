@@ -50,20 +50,16 @@ export const initBufferBar = (canvasWidth: number, canvasHeight: number) => {
   }
 
   const group = new Group(rects, {
-    top: canvasHeight, // 矩形的底边与画布底部对齐
+    top: canvasHeight // 矩形的底边与画布底部对齐
   });
   group.set({ id: "bar" });
   return group;
 };
 
-export const drawDynamicBar = (analyser: AnalyserNode, targetGroup: Group) => {
-  const bucketSize = analyser.frequencyBinCount;
-  const bucket = new Uint8Array(bucketSize);
-  analyser.getByteFrequencyData(bucket);
-
+export const drawDynamicBar = (frequency: number[], targetGroup: Group) => {
   targetGroup.getObjects().forEach((rect, i) => {
     if (rect.type === "rect") {
-      const objHeight = getScaledHeight(bucket[i], targetGroup.canvas!.getHeight());
+      const objHeight = getScaledHeight(frequency[i], targetGroup.canvas!.getHeight());
       rect.set({
         height: objHeight
       });

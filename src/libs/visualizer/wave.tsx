@@ -55,18 +55,9 @@ export const initBufferWave = (canvasWidth: number, canvasHeight: number) => {
   return group;
 };
 
-export const drawDynamicWave = (analyser: AnalyserNode, targetGroup: Group) => {
-  const bucketSize = analyser.frequencyBinCount;
-  const bucket = new Uint8Array(bucketSize);
-  /**
-   * @param bucket
-   * 数组长度：FFT_SIZE / 2
-   * 数据范围：[0, 255]
-   */
-  analyser.getByteFrequencyData(bucket);
-
+export const drawDynamicWave = (frequency: number[], targetGroup: Group) => {
   targetGroup.getObjects().forEach((circle, i) => {
-    const objHeight = getScaledHeight(bucket[i], targetGroup.canvas!.getHeight());
+    const objHeight = getScaledHeight(frequency[i], targetGroup.canvas!.getHeight());
     if (circle.type === "circle") {
       circle.set({
         // 物体的坐标是相对于当前所在 Group 原点

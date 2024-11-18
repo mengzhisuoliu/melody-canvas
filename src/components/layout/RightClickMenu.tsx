@@ -4,7 +4,7 @@ import useCanvasStore from "@/stores/canvasStore";
 const MENU_BUTTON_STYLE = "rounded-md flex-between hover:bg-dark-50 px-2 space-x-4";
 
 /**
- * （画布）自定义右键菜单
+ * 自定义右键菜单
  */
 const RightClickMenu = () => {
   const { canvasInstance, activeObject } = useCanvasStore();
@@ -31,13 +31,25 @@ const RightClickMenu = () => {
       const canvasRect = canvas.getBoundingClientRect();
       const mouseX = event.clientX - canvasRect.left;
       const mouseY = event.clientY - canvasRect.top;
+
       const { left, top, width, height } = activeObject.getBoundingRect();
 
+      const matrix = activeObject.transformMatrixKey();
+      const offsetLeft = left + matrix[4];
+      const offsetTop = top + matrix[5];
+
       // 鼠标需要落在当前选中物体内
-      if (mouseX >= left && mouseX <= left + width && mouseY >= top && mouseY <= top + height) {
+      if (
+        mouseX >= offsetLeft &&
+        mouseX <= offsetLeft + width &&
+        mouseY >= offsetTop &&
+        mouseY <= offsetTop + height
+      ) {
         const { offsetWidth, offsetHeight } = menuRef.current!;
+        // 确保菜单不会超出画布边界
         const newX = mouseX + offsetWidth < canvasInstance.width ? mouseX : mouseX - offsetWidth;
-        const newY = mouseY + offsetHeight < canvasInstance.height ? mouseX : mouseY - offsetHeight;
+        const newY = mouseY + offsetHeight < canvasInstance.height ? mouseY : mouseY - offsetHeight;
+
         setPosition({ x: newX, y: newY });
         setVisible(true);
       } else {

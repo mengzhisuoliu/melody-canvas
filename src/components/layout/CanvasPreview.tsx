@@ -1,7 +1,7 @@
 import { Canvas, FabricObject } from "fabric";
 import { useEffect, useRef } from "react";
 
-import { FABRIC_CONFIG } from "@/libs/config";
+import { FABRIC_CONFIG } from "@/libs/common/constant";
 import useCanvasStore from "@/stores/canvasStore";
 
 import RightClickMenu from "./RightClickMenu";

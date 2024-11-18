@@ -1,7 +1,6 @@
 import { Circle, Group } from "fabric";
 
-import { FFT_SIZE, SVG_WIDTH } from "@/libs/config";
-import { SVG_STYLE } from "@/libs/style";
+import { FFT_SIZE, SVG_WIDTH, SVG_STYLE} from "@/libs/common/constant";;
 import { getScaledHeight } from ".";
 
 export const svgWave = () => {

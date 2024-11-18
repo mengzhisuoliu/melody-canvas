@@ -1,7 +1,6 @@
 import { Group, Rect } from "fabric";
 
-import { FFT_SIZE, SVG_WIDTH } from "@/libs/config";
-import { SVG_STYLE } from "@/libs/style";
+import { FFT_SIZE, STANDARD_LIMIT, SVG_WIDTH, SVG_STYLE } from "@/libs/common/constant";
 import { getScaledHeight } from ".";
 
 export const svgBar = () => {
@@ -31,7 +30,7 @@ export const initBufferBar = (canvasWidth: number, canvasHeight: number) => {
   const rects: Rect[] = [];
 
   const bucketSize = FFT_SIZE / 2;
-  const bucket = new Uint8Array(bucketSize).fill(255);
+  const bucket = new Uint8Array(bucketSize).fill(STANDARD_LIMIT);
   const objWidth = canvasWidth / bucketSize - 2;
 
   let x = 0;

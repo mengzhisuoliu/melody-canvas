@@ -51,14 +51,15 @@ const RightClickMenu = () => {
     return () => window.removeEventListener("contextmenu", handleContextMenu);
   }, [activeObject]);
 
-  const actions = !canvasInstance || !activeObject
-    ? null
-    : {
-      edit: () => { },
-      delete: () => canvasInstance.remove(activeObject),
-      bringToFront: () => canvasInstance.bringObjectToFront(activeObject),
-      sendToBack: () => canvasInstance.sendObjectToBack(activeObject),
-    };
+  const actions =
+    !canvasInstance || !activeObject
+      ? null
+      : {
+          edit: () => {},
+          delete: () => canvasInstance.remove(activeObject),
+          bringToFront: () => canvasInstance.bringObjectToFront(activeObject),
+          sendToBack: () => canvasInstance.sendObjectToBack(activeObject)
+        };
 
   return (
     <div
@@ -67,36 +68,24 @@ const RightClickMenu = () => {
       style={{
         top: position.y,
         left: position.x,
-        visibility: visible ? 'visible' : 'hidden'
+        visibility: visible ? "visible" : "hidden"
       }}
     >
       <div className="flex flex-col space-y-1">
-        <button
-          className={MENU_BUTTON_STYLE}
-          onClick={() => actions?.edit?.()}
-        >
+        <button className={MENU_BUTTON_STYLE} onClick={() => actions?.edit?.()}>
           <div className="i-material-symbols:settings"></div>
           <div>Edit</div>
         </button>
-        <button
-          className={MENU_BUTTON_STYLE}
-          onClick={() => actions?.delete?.()}
-        >
+        <button className={MENU_BUTTON_STYLE} onClick={() => actions?.delete?.()}>
           <div className="i-material-symbols:delete"></div>
           <div>Delete</div>
         </button>
         <span className="w-full h-0.5 bg-dark-50"></span>
-        <button
-          className={MENU_BUTTON_STYLE}
-          onClick={() => actions?.bringToFront?.()}
-        >
+        <button className={MENU_BUTTON_STYLE} onClick={() => actions?.bringToFront?.()}>
           <div className="i-material-symbols:vertical-align-top"></div>
           <div>Bring to Front</div>
         </button>
-        <button
-          className={MENU_BUTTON_STYLE}
-          onClick={() => actions?.sendToBack?.()}
-        >
+        <button className={MENU_BUTTON_STYLE} onClick={() => actions?.sendToBack?.()}>
           <div className="i-material-symbols:vertical-align-bottom"></div>
           <div>Send to Back</div>
         </button>

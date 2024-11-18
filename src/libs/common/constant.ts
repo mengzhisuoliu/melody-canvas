@@ -1,4 +1,5 @@
 export const THEME_COLOR = "#63debb";
+export const SVG_STYLE = "fill-white group-hover:fill-emerald-300";
 
 export const FABRIC_CONFIG = {
   borderColor: THEME_COLOR,
@@ -9,4 +10,5 @@ export const FABRIC_CONFIG = {
 
 export const SVG_WIDTH = 400;
 
+export const STANDARD_LIMIT = 255;
 export const FFT_SIZE = 128;

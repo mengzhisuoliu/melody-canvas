@@ -1,8 +1,8 @@
-import useMediaStore from "@/stores/mediaStore";
+import useAudioStore from "@/stores/audioStore";
 import AudioSvgGroup from "./AudioSvgGroup";
 
 const AudioUploader: React.FC = () => {
-  const { audioFile, setAudioFile } = useMediaStore();
+  const { audioFile, setAudioFile } = useAudioStore();
 
   const handleAudioUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

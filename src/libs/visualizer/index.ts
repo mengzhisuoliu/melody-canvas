@@ -1,8 +1,10 @@
-import { initBufferBar, svgBar, drawDynamicBar } from "./bar";
-import { initBufferWave, svgWave, drawDynamicWave } from "./wave";
+import { drawDynamicBar, initBufferBar, svgBar } from "./bar";
+import { drawDynamicWave, initBufferWave, svgWave } from "./wave";
+
+import { STANDARD_LIMIT } from "../common/constant";
 
 export const getScaledHeight = (objHeight: number, canvasHeight: number) => {
-  return ((objHeight / 255) * canvasHeight) / 4;
+  return ((objHeight / STANDARD_LIMIT) * canvasHeight) / 4;
 };
 
 export const VISUAL_MAP = {

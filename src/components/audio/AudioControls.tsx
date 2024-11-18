@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
-import { THEME_COLOR } from "@/libs/config";
-import useMediaStore from "@/stores/mediaStore";
+import { THEME_COLOR } from "@/libs/common/constant";
+import useAudioStore from "@/stores/audioStore";
 
 import AudioVisualizer from "./AudioVisualizer";
 
@@ -14,7 +14,7 @@ const SLIDER_STYLE = {
 };
 
 const AudioControls: React.FC = () => {
-  const { audioFile } = useMediaStore();
+  const { audioFile } = useAudioStore();
 
   const audioRef = useRef<HTMLAudioElement>(null);
 

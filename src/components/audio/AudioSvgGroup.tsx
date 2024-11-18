@@ -1,6 +1,6 @@
-import { SVG_WIDTH } from "@/libs/config";
-import useCanvasStore from "@/stores/canvasStore";
+import { SVG_WIDTH } from "@/libs/common/constant";
 import { VISUAL_MAP, VisualType } from "@/libs/visualizer";
+import useCanvasStore from "@/stores/canvasStore";
 
 interface SvgProps {
   type: VisualType;

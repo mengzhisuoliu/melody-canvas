@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import useCanvasStore from "@/stores/canvasStore";
 
-const MENU_BUTTON_STYLE = "rounded-md flex-between hover:bg-dark-50 px-2 space-x-4";
+const MENU_BUTTON_STYLE = "rounded-md flex-between px-2 space-x-4 hover:bg-emerald-100 dark:hover:bg-dark-50 dark:hover:text-white";
 
 /**
  * 自定义右键菜单
  */
 const RightClickMenu = () => {
-  const { canvasInstance, activeObject } = useCanvasStore();
+  const { canvasInstance, activeObjects } = useCanvasStore();
 
   const menuRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState<boolean>(false);
@@ -25,28 +25,26 @@ const RightClickMenu = () => {
   useEffect(() => {
     const handleContextMenu = (event: MouseEvent) => {
       event.preventDefault();
-      if (!activeObject || !canvasInstance) return;
+      if (!canvasInstance) return;
 
       const canvas = canvasInstance.getElement();
       const canvasRect = canvas.getBoundingClientRect();
       const mouseX = event.clientX - canvasRect.left;
       const mouseY = event.clientY - canvasRect.top;
 
-      const { left, top, width, height } = activeObject.getBoundingRect();
+      const inSelectedArea = activeObjects.some((obj) => {
+        const { left, top, width, height } = obj.getBoundingRect();
+        const matrix = obj.transformMatrixKey();
+        const offsetLeft = left + matrix[4];
+        const offsetTop = top + matrix[5];
 
-      const matrix = activeObject.transformMatrixKey();
-      const offsetLeft = left + matrix[4];
-      const offsetTop = top + matrix[5];
+        return (
+          mouseX >= offsetLeft && mouseX <= offsetLeft + width && mouseY >= offsetTop && mouseY <= offsetTop + height
+        );
+      });
 
-      // 鼠标需要落在当前选中物体内
-      if (
-        mouseX >= offsetLeft &&
-        mouseX <= offsetLeft + width &&
-        mouseY >= offsetTop &&
-        mouseY <= offsetTop + height
-      ) {
+      if (inSelectedArea) {
         const { offsetWidth, offsetHeight } = menuRef.current!;
-        // 确保菜单不会超出画布边界
         const newX = mouseX + offsetWidth < canvasInstance.width ? mouseX : mouseX - offsetWidth;
         const newY = mouseY + offsetHeight < canvasInstance.height ? mouseY : mouseY - offsetHeight;
 
@@ -61,22 +59,26 @@ const RightClickMenu = () => {
 
     window.addEventListener("contextmenu", handleContextMenu);
     return () => window.removeEventListener("contextmenu", handleContextMenu);
-  }, [activeObject]);
+  }, [canvasInstance, activeObjects]);
 
-  const actions =
-    !canvasInstance || !activeObject
-      ? null
-      : {
-          edit: () => {},
-          delete: () => canvasInstance.remove(activeObject),
-          bringToFront: () => canvasInstance.bringObjectToFront(activeObject),
-          sendToBack: () => canvasInstance.sendObjectToBack(activeObject)
-        };
+  const actions = {
+    edit: () => {},
+    delete: () => {
+      activeObjects.forEach((obj) => canvasInstance!.remove(obj));
+      canvasInstance!.discardActiveObject();
+    },
+    bringToFront: () => {
+      canvasInstance!.bringObjectToFront(activeObjects[0]);
+    },
+    sendToBack: () => {
+      canvasInstance!.sendObjectToBack(activeObjects[0]);
+    }
+  };
 
   return (
     <div
       ref={menuRef}
-      className="z-1000 absolute bg-dark-100 border border-gray-300 rounded-md px-1 py-2 shadow-lg"
+      className="z-1000 absolute bg-white border border-gray-500 rounded-md px-1 py-2 shadow-lg"
       style={{
         top: position.y,
         left: position.x,
@@ -84,23 +86,45 @@ const RightClickMenu = () => {
       }}
     >
       <div className="flex flex-col space-y-1">
-        <button className={MENU_BUTTON_STYLE} onClick={() => actions?.edit?.()}>
-          <div className="i-material-symbols:settings"></div>
-          <div>Edit</div>
-        </button>
-        <button className={MENU_BUTTON_STYLE} onClick={() => actions?.delete?.()}>
-          <div className="i-material-symbols:delete"></div>
-          <div>Delete</div>
-        </button>
-        <span className="w-full h-0.5 bg-dark-50"></span>
-        <button className={MENU_BUTTON_STYLE} onClick={() => actions?.bringToFront?.()}>
-          <div className="i-material-symbols:vertical-align-top"></div>
-          <div>Bring to Front</div>
-        </button>
-        <button className={MENU_BUTTON_STYLE} onClick={() => actions?.sendToBack?.()}>
-          <div className="i-material-symbols:vertical-align-bottom"></div>
-          <div>Send to Back</div>
-        </button>
+        {activeObjects.length > 1 && (
+          <div className="px-2 text-sm mb-1 italic">{activeObjects.length} items selected</div>
+        )}
+
+        {activeObjects.length !== 0 && (
+          <button
+            className={MENU_BUTTON_STYLE}
+            onClick={() => actions?.delete?.()}
+          >
+            <div className="i-material-symbols:delete"></div>
+            <div>Delete</div>
+          </button>
+        )}
+        {activeObjects.length === 1 && (
+          <>
+            <button
+              className={MENU_BUTTON_STYLE}
+              onClick={() => actions?.edit?.()}
+            >
+              <div className="i-material-symbols:settings"></div>
+              <div>Edit</div>
+            </button>
+            <span className="w-full h-0.4 bg-dark-50"></span>
+            <button
+              className={MENU_BUTTON_STYLE}
+              onClick={() => actions?.bringToFront?.()}
+            >
+              <div className="i-material-symbols:vertical-align-top"></div>
+              <div>Bring to Front</div>
+            </button>
+            <button
+              className={MENU_BUTTON_STYLE}
+              onClick={() => actions?.sendToBack?.()}
+            >
+              <div className="i-material-symbols:vertical-align-bottom"></div>
+              <div>Send to Back</div>
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

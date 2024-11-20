@@ -1,4 +1,5 @@
 import { AudioClip, Combinator, OffscreenSprite } from "@webav/av-cliper";
+import { Button, Tabs } from "tdesign-react";
 
 import { cloneCanvas, downloadFile } from "@/libs/common/toolkit";
 import { getAudioBuffer } from "@/libs/media/audio";
@@ -7,12 +8,14 @@ import CanvasClip from "@/libs/media/clip";
 import useAudioStore from "@/stores/audioStore";
 import useCanvasStore from "@/stores/canvasStore";
 
+const { TabPanel } = Tabs;
+
 /**
  * 顶部栏
  */
 const TopNav: React.FC = () => {
   const { audioFile } = useAudioStore();
-  const { canvasInstance } = useCanvasStore();
+  const { canvasInstance, themeMode, setThemeMode } = useCanvasStore();
 
   const exportVideo = async () => {
     if (!canvasInstance || !audioFile) return;
@@ -41,14 +44,37 @@ const TopNav: React.FC = () => {
 
   return (
     <>
-      <div className="absolute top-5 right-8 z-10">
-        <button
-          onClick={exportVideo}
-          className="w-46 flex-center px-2 py-1 bg-dark-800 hover:bg-dark-400 border-2 border-dark-50  rounded-md text-lg"
+      <div className="absolute top-5 right-8 z-10 flex justify-end space-x-10">
+        {/* 主题切换 */}
+        <Tabs
+          theme="card"
+          className="rounded-sm h-8 w-16 flex-center border border-emerald-700 dark:border-dark-50"
+          value={themeMode}
+          onChange={(v) => setThemeMode(v as "light" | "dark")}
         >
-          <div className="i-ri:folder-video-line mr-4 text-xl"></div>
-          <span>Export Video</span>
-        </button>
+          <TabPanel
+            value="light"
+            className="w-4 flex-center"
+            label={<div className="i-material-symbols:sunny text-lg"></div>}
+          ></TabPanel>
+          <TabPanel
+            value="dark"
+            className="w-4 flex-center"
+            label={<div className="i-material-symbols:nightlight text-lg"></div>}
+          ></TabPanel>
+        </Tabs>
+
+        {/* 视频导出 */}
+        <Button
+          theme="primary"
+          variant="outline"
+          onClick={exportVideo}
+        >
+          <div className="flex-center text-lg font-bold">
+            <div className="i-ri:folder-video-line mr-4"></div>
+            <span>Export Video</span>
+          </div>
+        </Button>
       </div>
     </>
   );

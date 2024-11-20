@@ -35,7 +35,7 @@ const AudioSvgGroup: React.FC = () => {
         return (
           <div
             key={key}
-            className="group cursor-pointer rounded-md border-2 border-dotted border-stone-400 hover:bg-dark-400"
+            className="group cursor-pointer rounded-md border-2 border-dotted border-stone-400"
           >
             <AudioSvg type={key as VisualType} />
           </div>

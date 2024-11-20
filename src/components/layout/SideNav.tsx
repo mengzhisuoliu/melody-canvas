@@ -12,13 +12,13 @@ interface NavItemProps {
 
 const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => (
   <button
-    className={`w-16 h-16 rounded-md bg-dark-100 flex-center flex-col p-1 ${
-      isActive ? "pointer-events-none border-2 border-dotted border-emerald-400 text-emerald-300" : "hover:bg-dark-50"
+    className={`w-16 h-16 rounded-md flex-center flex-col p-1 font-bold border-2 border-dotted text-emerald-800  border-emerald-800 dark:(text-emerald-200 border-emerald-200) ${
+      isActive ? "pointer-events-none  bg-emerald-100  dark:bg-dark-300" : "hover:(bg-emerald-100 dark:bg-dark-200)"
     }`}
     onClick={onClick}
   >
     <div className={`${icon} text-2xl my-1`} />
-    <span text="xs">{label}</span>
+    <span className="text-xs">{label}</span>
   </button>
 );
 
@@ -37,20 +37,24 @@ const SideNav: React.FC = () => {
 
   return (
     <>
-      <div className="absolute h-screen left-0 space-x-10 bg-dark-800">
+      <div
+        className="w-24 h-screen left-0 space-x-10 border-r-2 border-emerald-700 bg-emerald-50 flex"
+        dark="bg-dark-900 border-dark-200"
+      >
         {/* 左侧栏 */}
         <nav className="w-24">
           <div className="px-2 py-4 flex flex-col items-center text-center">
             {/* Logo */}
             <div m="b-6">
-              <img src="favicon.png" width={36} m="x-auto" />
-              <div p="y-2" text="sm" font="bold sans">
-                Melody Canvas
-              </div>
+              <img
+                src="favicon.png"
+                className="w-10 h-10 mx-auto rounded-lg shadow-md"
+              />
+              <div className="py-2 font-sans font-bold text-sm text-emerald-800 dark:text-white">Melody Canvas</div>
             </div>
 
             {/* 按钮组 */}
-            <div space="y-8" className="flex flex-col">
+            <div className="flex flex-col space-y-8">
               {navList.map((item, index) => (
                 <NavItem
                   key={index}
@@ -65,8 +69,11 @@ const SideNav: React.FC = () => {
         </nav>
 
         {/* 对应的子组件 */}
-        <div className="h-[90vh] w-[18vw] bg-dark-500 rounded-md absolute transform translate-y-[-50%] top-[calc(50%-32px)] left-18 p-4">
-          {navList.find((item) => item.label === activeNav)?.component}
+        <div
+          className="h-[90vh] w-[18vw] border-2 border-emerald-500 bg-green-50 rounded-md absolute left-18 top-2 p-4"
+          dark="bg-dark-400 border-dark-200"
+        >
+          {navList.find((nav) => nav.label === activeNav)?.component}
         </div>
       </div>
     </>

@@ -3,7 +3,7 @@
  */
 const config = {
   semi: true,
-  // singleAttributePerLine: true,
+  singleAttributePerLine: true,
   singleQuote: false,
   jsxBracketSameLine: false,
   printWidth: 120,

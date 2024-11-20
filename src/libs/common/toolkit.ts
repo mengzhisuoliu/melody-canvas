@@ -1,5 +1,7 @@
 import { Canvas } from "fabric";
 
+
+
 export const cloneCanvas = async (source: Canvas) => {
   const lowerCanvas = document.createElement("canvas");
   lowerCanvas.width = source.getWidth();

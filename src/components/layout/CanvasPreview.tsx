@@ -10,7 +10,7 @@ import RightClickMenu from "./RightClickMenu";
  * 视频预览区域
  */
 const CanvasPreview: React.FC = () => {
-  const { createCanvas, disposeCanvas } = useCanvasStore();
+  const { createCanvas, disposeCanvas, backdrop } = useCanvasStore();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const CanvasPreview: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-[70vw] h-[calc(70vw*9/16)] bg-dark-800 absolute transform translate-y-[-50%] top-[calc(50%-16px)] right-7">
+    <div className="w-[70vw] h-[calc(70vw*9/16)] bg-black  border-2 border-emerald-500 dark:border-dark-50 absolute transform translate-y-[-50%] top-[calc(50%-16px)] right-7">
       <canvas ref={canvasRef} className="w-full h-full"></canvas>
       <RightClickMenu />
     </div>

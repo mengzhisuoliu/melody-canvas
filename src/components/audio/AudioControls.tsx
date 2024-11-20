@@ -1,17 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import { Slider } from "tdesign-react";
 
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
-
-import { THEME_COLOR } from "@/libs/common/constant";
 import useAudioStore from "@/stores/audioStore";
-
 import AudioVisualizer from "./AudioVisualizer";
-
-const SLIDER_STYLE = {
-  handle: { borderColor: THEME_COLOR },
-  track: { backgroundColor: THEME_COLOR }
-};
 
 const AudioControls: React.FC = () => {
   const { audioFile } = useAudioStore();
@@ -80,42 +71,50 @@ const AudioControls: React.FC = () => {
       {/* 音频操作 */}
       {audioFile && (
         <>
-          <audio ref={audioRef} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleLoadedMeta} />
+          <audio
+            ref={audioRef}
+            onTimeUpdate={handleTimeUpdate}
+            onLoadedMetadata={handleLoadedMeta}
+          />
           <AudioVisualizer audioRef={audioRef} />
         </>
       )}
 
-      <div className="bg-dark-300 w-screen h-16 absolute bottom-0 flex items-center justify-between px-6">
+      <div
+        className="w-screen h-15 absolute bottom-0 bg-[#42b093] border-t-2 border-emerald-800 flex items-center justify-between px-6"
+        dark="bg-dark-500 border-dark-50"
+      >
         {/* 播放按钮 */}
         <button
+          disabled={!audioRef.current}
           onClick={togglePlay}
-          className={`w-12 aspect-square rounded-full bg-emerald-300 flex-center ${!audioRef.current ? "cursor-not-allowed" : ""}`}
+          className="w-12 aspect-square rounded-full bg-emerald-700 border border-emerald-800 dark:bg-emerald-300 flex-center"
         >
           <div
-            w="5"
-            h="5"
-            className={`${!audioRef.current || audioRef.current.paused ? "i-solar:play-bold" : "i-solar:pause-bold"}`}
+            className={`w-5 h-5 bg-white ${!audioRef.current || audioRef.current.paused ? "i-solar:play-bold" : "i-solar:pause-bold"}`}
           ></div>
         </button>
 
         {/* 音量控制 */}
-        <button className={`ml-4 ${audioRef.current ? "group" : "pointer-events-none text-dark-50"}`}>
+        <button
+          disabled={!audioRef.current}
+          className={`ml-4 ${audioRef.current ? "group text-white" : "text-dark-50"}`}
+        >
           <div
-            className={`${volume === 0 ? "i-lsicon:volume-mute-outline" : "i-lsicon:volume-outline"} text-2xl`}
+            className={`text-2xl ${volume === 0 || !audioRef.current ? "i-lsicon:volume-mute-outline" : "i-lsicon:volume-outline"}`}
           ></div>
-          <div className="h-40 absolute bottom-14 -ml-3 opacity-0 group-hover:opacity-100 bg-dark-300 border-2 border-dark-50 w-12 pt-5 rounded-md flex-center flex-col">
+          <div className="h-40 absolute bottom-14 -ml-3 w-12 pt-5 rounded-md flex-center flex-col opacity-0 group-hover:opacity-100 bg-[#42b093] dark:bg-dark-500 border-2 border-emerald-800 dark:border-dark-50">
             <Slider
-              vertical
+              layout="vertical"
               min={0}
               max={1}
               step={0.01}
               value={volume}
               onChange={handleVolumeChange}
-              styles={SLIDER_STYLE}
+              label={false}
+              disabled={!audioRef.current}
             />
-            <div text="xs" m="t-4 b-2">
-              {Math.round(volume * 100)}%
-            </div>
+            <div className="text-xs mt-4 mb-2">{Math.round(volume * 100)}%</div>
           </div>
         </button>
 
@@ -133,8 +132,8 @@ const AudioControls: React.FC = () => {
           step={0.1}
           value={currentTime}
           onChange={handleSeek}
-          styles={SLIDER_STYLE}
-          className="hover:cursor-pointer"
+          label={false}
+          disabled={!audioRef.current}
         />
       </div>
     </>

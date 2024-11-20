@@ -1,0 +1,31 @@
+:root {
+  --td-component-border: #56dcab !important;
+}
+
+* {
+  @apply font-mono;
+}
+
+body {
+  height: 100vh;
+  background-color: var(--td-bg-color-page);
+  overflow: hidden
+}
+
+label,
+input,
+button {
+  cursor: pointer;
+}
+
+:disabled {
+  cursor: not-allowed;
+}
+
+.t-button__text {
+  width: 100%;
+}
+
+.t-color-picker__panel{
+  width: 100% !important;
+}

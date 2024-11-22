@@ -1,5 +1,5 @@
 import { Canvas, FabricObject } from "fabric";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { FABRIC_CONFIG } from "@/libs/common/constant";
 import useCanvasStore from "@/stores/canvasStore";
@@ -10,18 +10,16 @@ import RightClickMenu from "./RightClickMenu";
  * 视频预览区域
  */
 const CanvasPreview: React.FC = () => {
-  const { createCanvas, disposeCanvas, backdrop } = useCanvasStore();
+  const { createCanvas, disposeCanvas, canvasInstance, backdrop } = useCanvasStore();
+
+  const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const [canvasRatio, setCanvasRatio] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
 
   useEffect(() => {
     if (!canvasRef.current) return;
-
-    const canvasEl = canvasRef.current;
-    const canvasParent = canvasEl.parentElement!;
-    const instance = new Canvas(canvasEl, {
-      width: canvasParent.clientWidth,
-      height: canvasParent.clientHeight
-    });
+    const instance = new Canvas(canvasRef.current);
 
     Object.assign(FabricObject.ownDefaults, FABRIC_CONFIG);
     createCanvas(instance);
@@ -31,9 +29,52 @@ const CanvasPreview: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!canvasInstance) return;
+    canvasInstance.backgroundColor = backdrop.color;
+    canvasInstance.renderAll();
+  }, [canvasInstance, backdrop.color]);
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (!canvasInstance?.lowerCanvasEl) return;
+
+      const [width, height] = backdrop.ratio.split(":").map(Number);
+      setCanvasRatio({ width, height });
+
+      let canvasWidth = containerRef.current!.clientWidth;
+      let canvasHeight = containerRef.current!.clientHeight;
+
+      // 视频编码器要求：H264 only supports even sized frames
+      canvasWidth = canvasWidth % 2 === 0 ? canvasWidth : canvasWidth - 1;
+      canvasHeight = canvasHeight % 2 === 0 ? canvasHeight : canvasHeight - 1;
+
+      canvasInstance.setDimensions({
+        width: canvasWidth,
+        height: canvasHeight
+      });
+    };
+
+    updateDimensions();
+
+    const observer = new ResizeObserver(updateDimensions);
+    observer.observe(containerRef!.current!);
+    return () => observer.disconnect();
+  }, [canvasInstance, backdrop.ratio]);
+
   return (
-    <div className="w-[70vw] h-[calc(70vw*9/16)] bg-black  border-2 border-emerald-500 dark:border-dark-50 absolute transform translate-y-[-50%] top-[calc(50%-16px)] right-7">
-      <canvas ref={canvasRef} className="w-full h-full"></canvas>
+    <div
+      ref={containerRef}
+      className="absolute bg-black border-2 border-emerald-500 dark:border-dark-50 flex-center"
+      style={{
+        transform: "translate(-50%, -50%)",
+        left: "calc(50% + 12.5vw)",
+        top: "50%",
+        width: `calc(60vh * ${canvasRatio.width} / ${canvasRatio.height})`,
+        height: "60vh"
+      }}
+    >
+      <canvas ref={canvasRef}></canvas>
       <RightClickMenu />
     </div>
   );

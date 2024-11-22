@@ -1,47 +1,66 @@
-import type { DropdownOption } from "tdesign-react";
-import { Button, Dropdown } from "tdesign-react";
+import { useState } from "react";
+import { ColorPickerPanel, SelectInput } from "tdesign-react";
 
 import useCanvasStore from "@/stores/canvasStore";
 
 const BackdropDisplay: React.FC = () => {
-  const { backdrop } = useCanvasStore();
+  const { backdrop, setBackdrop } = useCanvasStore();
+  const [popupVisible, setPopupVisible] = useState(false);
 
-  const handleAdjustSize = (item: DropdownOption) => {};
+  const ratioOptions = ["16:9", "9:16", "1:1"]
+    .filter((item) => item !== backdrop.ratio)
+    .map((item) => ({ content: item }));
 
   return (
     <>
-      <div>
-        {/* 尺寸 */}
-        <Dropdown
-          hideAfterItemClick
-          options={[
-            {
-              content: "9:16"
-            },
-            {
-              content: "1:1"
-            }
-          ]}
-          placement="bottom-right"
-          trigger="click"
-          onClick={(item) => handleAdjustSize(item)}
-        >
-          <Button
-            block
-            theme="primary"
-            variant="dashed"
-            size="large"
+      <div className="flex flex-col space-y-8">
+        {/* 画布比例 */}
+        <div className="card flex-center">
+          <span className="card-title mr-4">Ratio</span>
+          <SelectInput
             suffix={<div className="i-gridicons:chevron-down"></div>}
-          >
-            <div className="flex-between w-full mr-1 text-emerald-800 dark:text-emerald-400">
-              <div className="flex-center font-bold">
-                <div className="i-mingcute:display-line text-xl mr-2"></div>
-                <div>Size</div>
-              </div>
-              <span>16:9</span>
-            </div>
-          </Button>
-        </Dropdown>
+            popupVisible={popupVisible}
+            onPopupVisibleChange={(val) => setPopupVisible(val)}
+            style={{ width: "110px" }}
+            value={backdrop.ratio}
+            panel={
+              <ul className="text-right text-base cursor-pointer">
+                {ratioOptions.map((item) => (
+                  <li
+                    className="px-1 rounded-md hover:(bg-emerald-100 dark:bg-dark-100)"
+                    key={item.content}
+                    onClick={() => {
+                      setBackdrop({
+                        ratio: item.content
+                      });
+                      setPopupVisible(false);
+                    }}
+                  >
+                    {item.content}
+                  </li>
+                ))}
+              </ul>
+            }
+          />
+        </div>
+
+        {/* 背景颜色 */}
+        <div className="card">
+          <div className="card-title mb-2">Color</div>
+          <ColorPickerPanel
+            format="HEX"
+            colorModes={["monochrome"]}
+            recentColors={null}
+            swatchColors={null}
+            defaultValue={backdrop.color}
+            style={{ width: "100%" }}
+            onChange={(color) =>
+              setBackdrop({
+                color: color
+              })
+            }
+          />
+        </div>
       </div>
     </>
   );

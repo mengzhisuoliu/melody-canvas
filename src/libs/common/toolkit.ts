@@ -1,16 +1,15 @@
 import { Canvas } from "fabric";
 
-
-
 export const cloneCanvas = async (source: Canvas) => {
   const lowerCanvas = document.createElement("canvas");
-  lowerCanvas.width = source.getWidth();
-  lowerCanvas.height = source.getHeight();
-
   lowerCanvas.classList.add("temp_canvas");
   lowerCanvas.style.display = "none";
 
-  const copy = new Canvas(lowerCanvas);
+  const copy = new Canvas(lowerCanvas,{
+    width: source.width,
+    height: source.height,
+    backgroundColor: source.backgroundColor
+  });
 
   await Promise.all(
     source.getObjects().map(async (obj) => {

@@ -19,7 +19,7 @@ interface CanvasAction {
   setThemeMode: (value: ThemeMode) => void;
   createCanvas: (value: Canvas) => void;
   disposeCanvas: () => void;
-  setBackdrop: (value: Backdrop) => void;
+  setBackdrop: (value: Partial<Backdrop>) => void;
 }
 
 type CanvasStore = CanvasState & CanvasAction;
@@ -52,7 +52,12 @@ const useCanvasStore = create<CanvasStore>((set, get) => ({
     color: "#000000"
   },
   setBackdrop: (value) => {
-    set({ backdrop: value });
+    set({
+      backdrop: {
+        ...get().backdrop,
+        ...value
+      }
+    });
   }
 }));
 

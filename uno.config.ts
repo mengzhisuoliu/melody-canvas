@@ -26,6 +26,8 @@ export default defineConfig({
   },
   shortcuts: [
     ["flex-center", "flex justify-center items-center"],
-    ["flex-between", "flex justify-between items-center"]
-  ]
+    ["flex-between", "flex justify-between items-center"],
+    ["card", "w-full bg-white dark:bg-dark-400 border border-dashed border-stone-400 rounded-md p-4"],
+    ["card-title","font-bold text-emerald-800 dark:text-emerald-100"]
+  ],
 });

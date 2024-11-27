@@ -62,7 +62,6 @@ const RightClickMenu = () => {
   }, [canvasInstance, activeObjects]);
 
   const actions = {
-    edit: () => {},
     delete: () => {
       activeObjects.forEach((obj) => canvasInstance!.remove(obj));
       canvasInstance!.discardActiveObject();
@@ -99,16 +98,10 @@ const RightClickMenu = () => {
             <div>Delete</div>
           </button>
         )}
+
         {activeObjects.length === 1 && (
           <>
-            <button
-              className={MENU_BUTTON_STYLE}
-              onClick={() => actions?.edit?.()}
-            >
-              <div className="i-material-symbols:settings"></div>
-              <div>Edit</div>
-            </button>
-            <span className="w-full h-0.4 bg-dark-50"></span>
+            <span className="h-0.4 bg-dark-50 mx-1"></span>
             <button
               className={MENU_BUTTON_STYLE}
               onClick={() => actions?.bringToFront?.()}

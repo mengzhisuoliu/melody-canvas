@@ -15,13 +15,13 @@ const BackdropDisplay: React.FC = () => {
     <>
       <div className="flex flex-col space-y-8">
         {/* 画布比例 */}
-        <div className="card flex-center">
+        <div className="card">
           <span className="card-title mr-4">Ratio</span>
           <SelectInput
             suffix={<div className="i-gridicons:chevron-down"></div>}
             popupVisible={popupVisible}
             onPopupVisibleChange={(val) => setPopupVisible(val)}
-            style={{ width: "110px" }}
+            style={{ width: "65%" }}
             value={backdrop.ratio}
             panel={
               <ul className="text-right text-base cursor-pointer">
@@ -52,7 +52,7 @@ const BackdropDisplay: React.FC = () => {
             colorModes={["monochrome"]}
             recentColors={null}
             swatchColors={null}
-            defaultValue={backdrop.color}
+            value={backdrop.color}
             style={{ width: "100%" }}
             onChange={(color) =>
               setBackdrop({

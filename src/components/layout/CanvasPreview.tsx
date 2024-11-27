@@ -19,7 +19,10 @@ const CanvasPreview: React.FC = () => {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    const instance = new Canvas(canvasRef.current);
+
+    const instance = new Canvas(canvasRef.current, {
+      selectionColor: "rgba(83, 172, 142, 0.2)"
+    });
 
     Object.assign(FabricObject.ownDefaults, FABRIC_CONFIG);
     createCanvas(instance);

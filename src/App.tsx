@@ -8,7 +8,11 @@ import useThemeMode from "@/hooks/useThemeMode";
 function App() {
   useThemeMode();
 
-  const globalConfig = merge(enConfig, {});
+  const globalConfig = merge(enConfig, {
+    input: {
+      placeholder: ""
+    }
+  });
 
   return (
     <>

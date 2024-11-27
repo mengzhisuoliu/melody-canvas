@@ -20,7 +20,16 @@ export const svgBar = () => {
         const height = `${30 + (isFirstHalf ? i * 5 : (totalRects - 1 - i) * 5)}%`; // 先低后高再低
         const y = isFirstHalf ? `${100 - (30 + i * 5)}%` : `${100 - (30 + (totalRects - 1 - i) * 5)}%`;
 
-        return <rect className={SVG_STYLE} key={i} width={rectWidth} height={height} x={x} y={y} />;
+        return (
+          <rect
+            className={SVG_STYLE}
+            key={i}
+            width={rectWidth}
+            height={height}
+            x={x}
+            y={y}
+          />
+        );
       })}
     </g>
   );
@@ -30,18 +39,17 @@ export const initBufferBar = (canvasWidth: number, canvasHeight: number) => {
   const rects: Rect[] = [];
 
   const bucketSize = FFT_SIZE / 2;
-  const bucket = new Uint8Array(bucketSize).fill(STANDARD_LIMIT);
+  const objHeight = getScaledHeight(STANDARD_LIMIT, canvasHeight);
   const objWidth = canvasWidth / bucketSize - 2;
 
   let x = 0;
   for (let i = 0; i < bucketSize; i++) {
-    const objHeight = getScaledHeight(bucket[i], canvasHeight);
     const rect = new Rect({
       left: x,
       width: objWidth,
       height: objHeight,
       fill: "#ffffff",
-      selectable: false
+      originY: "bottom" // 使 top 属性成为 obj「底」到 canvas「顶」的距离
     });
 
     rects.push(rect);
@@ -49,7 +57,7 @@ export const initBufferBar = (canvasWidth: number, canvasHeight: number) => {
   }
 
   const group = new Group(rects, {
-    top: canvasHeight // 矩形的底边与画布底部对齐
+    top: canvasHeight - objHeight // 矩形的底边与画布底部对齐
   });
   group.set({ id: "bar" });
   return group;

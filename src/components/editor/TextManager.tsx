@@ -1,7 +1,8 @@
 import { Textbox } from "fabric";
 import { useEffect, useState } from "react";
-import { Button, Checkbox, ColorPicker, InputNumber, SelectInput, Tag, Textarea } from "tdesign-react";
+import { Checkbox, ColorPicker, InputNumber, SelectInput, Textarea } from "tdesign-react";
 
+import ActionButton from "@/components/base/ActionButton";
 import useCanvasStore from "@/stores/canvasStore";
 
 import { DEFAULT_TEXT, FONT_LIST } from "./props";
@@ -99,25 +100,10 @@ const TextManager: React.FC = () => {
         <div>
           <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-3">
             <div className="text-base mt-0.5">Content</div>
-            {getTextbox() ? (
-              <Tag
-                shape="square"
-                size="small"
-                theme="success"
-                variant="light-outline"
-              >
-                Editing
-              </Tag>
-            ) : (
-              <Button
-                shape="round"
-                size="small"
-                suffix={<div className="i-material-symbols:add-rounded"></div>}
-                onClick={handleAddText}
-              >
-                <span className="font-bold">New</span>
-              </Button>
-            )}
+            <ActionButton
+              activeObj={getTextbox()}
+              onAdd={handleAddText}
+            />
           </div>
           {/* 文本 */}
           <Textarea

@@ -4,3 +4,22 @@ export type TextOptions = {
   fontStyle: "normal" | "italic";
   fontFamily: string;
 };
+
+export type RadiusOptions = {
+  tl: number;
+  tr: number;
+  bl: number;
+  br: number;
+};
+
+export type StrokeOptions = {
+  stroke: string;
+  strokeWidth: number;
+};
+
+export type ShadowOptions = {
+  color: string;
+  blur: number;
+  offsetX: number;
+  offsetY: number;
+};

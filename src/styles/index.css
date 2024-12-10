@@ -1,31 +1,80 @@
 :root {
-  --td-component-border: #56dcab !important;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-* {
+*,
+::placeholder {
   @apply font-mono;
 }
 
 body {
   height: 100vh;
   background-color: var(--td-bg-color-page);
-  overflow: hidden
+  overflow: hidden;
 }
 
 label,
 input,
 button {
   cursor: pointer;
+  font-family: var(--font-mono) !important;
 }
 
 :disabled {
   cursor: not-allowed;
 }
 
+/* Button */
 .t-button__text {
   width: 100%;
 }
 
-.t-color-picker__panel{
-  width: 100% !important;
+/* Checkbox */
+.t-checkbox__label {
+  margin-left: 4px !important;
+  font-size: 0.8rem !important;
+  font-family: var(--font-mono) !important;
+}
+
+/* ColorPicker */
+.color-inner {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+.t-input.t-align-left.t-input--prefix {
+  height: 24px !important;
+  font-size: 0.75rem;
+}
+
+/* Upload */
+.t-upload__card-container {
+  background-color: var(--td-bg-color-container) !important;
+}
+
+.t-upload__card-item.t-is-background {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.t-upload__card-content.t-upload__card-box {
+  margin-bottom: 5px;
+}
+
+.t-upload__image-add svg {
+  margin-bottom: 0 !important;
+}
+
+.t-upload__add-text {
+  display: none;
+}
+
+.t-image-viewer-preview-image .t-image-viewer__modal-mask {
+  backdrop-filter: blur(3px);
+}
+
+.t-image-viewer__utils-content div:nth-of-type(1),
+.t-image-viewer__utils-content div:nth-of-type(2) {
+  display: none;
 }

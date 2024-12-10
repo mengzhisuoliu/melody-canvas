@@ -1,4 +1,5 @@
 import { Canvas } from "fabric";
+import { RadiusOptions } from "@/components/editor/types";
 
 export const cloneCanvas = async (source: Canvas) => {
   const lowerCanvas = document.createElement("canvas");
@@ -29,4 +30,20 @@ export const cloneCanvas = async (source: Canvas) => {
   document.body.appendChild(upperCanvas);
 
   return copy;
+};
+
+export const createRoundedPath = (width: number, height: number, radius: RadiusOptions) => {
+  const { tl, tr, bl, br } = radius;
+  return `
+      M ${tl} 0 
+      L ${width - tr} 0 
+      Q ${width} 0 ${width} ${tr} 
+      L ${width} ${height - br} 
+      Q ${width} ${height} ${width - br} ${height} 
+      L ${bl} ${height} 
+      Q 0 ${height} 0 ${height - bl} 
+      L 0 ${tl} 
+      Q 0 0 ${tl} 0
+      Z
+    `;
 };

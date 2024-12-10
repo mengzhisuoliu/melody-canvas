@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import useCanvasStore from "@/stores/canvasStore";
+import { cloneFabricObject } from "@/libs/media/canvas";
 
 const MENU_BUTTON_STYLE = "rounded-md flex-between px-2 space-x-4 hover:bg-emerald-100 dark:hover:bg-dark-50 dark:hover:text-white";
 
@@ -62,6 +63,12 @@ const RightClickMenu = () => {
   }, [canvasInstance, activeObjects]);
 
   const actions = {
+    duplicate: async () => {
+      const clonedObject = await cloneFabricObject(activeObjects[0]);
+      canvasInstance!.add(clonedObject);
+      canvasInstance!.sendObjectToBack(clonedObject);
+      canvasInstance!.renderAll();
+    },
     delete: () => {
       activeObjects.forEach((obj) => canvasInstance!.remove(obj));
       canvasInstance!.discardActiveObject();
@@ -92,7 +99,7 @@ const RightClickMenu = () => {
         {activeObjects.length !== 0 && (
           <button
             className={MENU_BUTTON_STYLE}
-            onClick={() => actions?.delete?.()}
+            onClick={actions.delete}
           >
             <div className="i-material-symbols:delete"></div>
             <div>Delete</div>
@@ -101,17 +108,24 @@ const RightClickMenu = () => {
 
         {activeObjects.length === 1 && (
           <>
+            <button
+              className={MENU_BUTTON_STYLE}
+              onClick={actions.duplicate}
+            >
+              <div className="i-clarity:clone-solid"></div>
+              <div>Duplicate</div>
+            </button>
             <span className="h-0.4 bg-dark-50 mx-1"></span>
             <button
               className={MENU_BUTTON_STYLE}
-              onClick={() => actions?.bringToFront?.()}
+              onClick={actions.bringToFront}
             >
               <div className="i-material-symbols:vertical-align-top"></div>
               <div>Bring to Front</div>
             </button>
             <button
               className={MENU_BUTTON_STYLE}
-              onClick={() => actions?.sendToBack?.()}
+              onClick={actions.sendToBack}
             >
               <div className="i-material-symbols:vertical-align-bottom"></div>
               <div>Send to Back</div>

@@ -1,4 +1,4 @@
-import { Canvas } from "fabric";
+import { Canvas, FabricObject } from "fabric";
 import { RadiusOptions } from "@/components/editor/types";
 import { STANDARD_LIMIT } from "../common/constant";
 
@@ -11,30 +11,35 @@ export const cloneCanvas = async (source: Canvas) => {
   lowerCanvas.classList.add("temp_canvas");
   lowerCanvas.style.display = "none";
 
-  const copy = new Canvas(lowerCanvas, {
+  const newCanvas = new Canvas(lowerCanvas, {
     width: source.width,
     height: source.height,
     backgroundColor: source.backgroundColor
   });
 
   await Promise.all(
-    source.getObjects().map(async (obj) => {
-      const temp = await obj.clone();
-      if (obj.subType) {
-        temp.set({ subType: obj.subType });
-      }
-      copy.add(temp);
+    source.getObjects().map(async (object) => {
+      const obj = await cloneFabricObject(object);
+      newCanvas.add(obj);
     })
   );
 
-  const upperCanvas = copy.upperCanvasEl;
+  const upperCanvas = newCanvas.upperCanvasEl;
   upperCanvas.classList.add("temp_canvas");
   upperCanvas.style.display = "none";
 
   document.body.appendChild(lowerCanvas);
   document.body.appendChild(upperCanvas);
 
-  return copy;
+  return newCanvas;
+};
+
+export const cloneFabricObject = async (source: FabricObject) => {
+  const newObject = await source.clone();
+  if (source.subType) {
+    newObject.set({ subType: source.subType });
+  }
+  return newObject;
 };
 
 export const createRoundedPath = (width: number, height: number, radius: RadiusOptions) => {

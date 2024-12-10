@@ -1,7 +1,6 @@
 export type TextOptions = {
   fill: string;
-  fontSize: number;
-  fontWeight: number;
+  fontWeight: 400 | 900;
   fontStyle: "normal" | "italic";
   fontFamily: string;
 };

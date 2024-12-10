@@ -4,11 +4,12 @@ import { Button } from "tdesign-react";
 import useCanvasStore from "@/stores/canvasStore";
 
 interface ActionButton {
-  activeObj: FabricObject | undefined;
+  activeObj: FabricObject | null | undefined;
+  disabled: boolean;
   onAdd: () => void;
 }
 
-const ActionButton: React.FC<ActionButton> = ({ activeObj, onAdd }) => {
+const ActionButton: React.FC<ActionButton> = ({ activeObj, disabled, onAdd }) => {
   const { canvasInstance } = useCanvasStore();
 
   const action = activeObj
@@ -32,6 +33,7 @@ const ActionButton: React.FC<ActionButton> = ({ activeObj, onAdd }) => {
       suffix={<div className={action.icon}></div>}
       onClick={action.onClick}
       theme={action.theme}
+      disabled={disabled}
     >
       <span className="font-bold">{action.text}</span>
     </Button>

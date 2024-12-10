@@ -1,8 +1,9 @@
 import { AudioClip, Combinator, OffscreenSprite } from "@webav/av-cliper";
 import { Button, Tabs } from "tdesign-react";
 
-import { cloneCanvas, downloadFile } from "@/libs/common/toolkit";
+import { downloadFile } from "@/libs/common/toolkit";
 import { getAudioBuffer } from "@/libs/media/audio";
+import { cloneCanvas } from "@/libs/media/canvas";
 import CanvasClip from "@/libs/media/clip";
 
 import useAudioStore from "@/stores/audioStore";

@@ -1,87 +1,50 @@
 import { Textbox } from "fabric";
-import { useEffect, useState } from "react";
-import { Checkbox, ColorPicker, InputNumber, SelectInput, Textarea } from "tdesign-react";
+import { useEffect, useMemo, useState } from "react";
+import { Checkbox, ColorPicker, Select, Textarea } from "tdesign-react";
 
 import ActionButton from "@/components/base/ActionButton";
+import { formatSelectOptions, pickValues } from "@/libs/common/toolkit";
 import useCanvasStore from "@/stores/canvasStore";
 
-import { DEFAULT_TEXT, FONT_LIST } from "./props";
+import { DEFAULT_TEXT, FONT_LIST, OBJECT_CONFIG } from "./props";
 import { TextOptions } from "./types";
 
 const TextManager: React.FC = () => {
   const { canvasInstance, activeObjects } = useCanvasStore();
 
-  const [popupVisible, setPopupVisible] = useState<boolean>(false);
-  const [textStatus, setTextStatus] = useState<"default" | "error">("default");
-
   const [text, setText] = useState<string>("");
   const [textOptions, setTextOptions] = useState<TextOptions>(DEFAULT_TEXT);
 
-  useEffect(() => {
-    const handleModified = () => {
-      const textbox = getTextbox();
-      if (textbox) {
-        // 确保文本框尺寸与字体大小适配
-        const newWidth = textbox.width * textbox.scaleX;
-        const newFontSize = parseFloat((textbox.fontSize * textbox.scaleX).toFixed(2));
-        textbox.set({
-          width: newWidth,
-          fontSize: newFontSize,
-          scaleX: 1, // 重置 -> 避免累积缩放
-          scaleY: 1
-        });
-        canvasInstance?.renderAll();
+  const resetOptions = () => {
+    setText("");
+    setTextOptions(DEFAULT_TEXT);
+  };
 
-        setTextOptions((prev) => ({
-          ...prev,
-          fontSize: newFontSize
-        }));
-      }
-    };
-
-    canvasInstance?.on("object:modified", handleModified);
-    return () => {
-      canvasInstance?.off("object:modified", handleModified);
-    };
+  const activeText = useMemo(() => {
+    const obj = activeObjects[0];
+    if (obj?.type === "textbox") {
+      return obj as Textbox;
+    } else {
+      resetOptions();
+      return null;
+    }
   }, [activeObjects]);
 
-  const getTextbox = () => {
-    if (activeObjects.length !== 1) return;
+  useEffect(() => {
+    if (activeText) {
+      const textInput = activeText.text;
+      const textData = pickValues(activeText as Partial<TextOptions>, DEFAULT_TEXT);
 
-    const obj = activeObjects[0];
-    if (obj.type === "textbox") {
-      return obj as Textbox;
+      setText(textInput);
+      setTextOptions(textData);
     }
-  };
-
-  const updateTextOptions = (options: Partial<TextOptions>) => {
-    setTextOptions((prev) => {
-      const updatedOptions = { ...prev, ...options };
-
-      const textbox = getTextbox();
-      if (textbox) {
-        textbox.set(updatedOptions);
-        canvasInstance?.renderAll();
-      }
-
-      return updatedOptions;
-    });
-  };
+  }, [activeObjects]);
 
   const handleAddText = () => {
-    if (!canvasInstance || text === "") {
-      setTextStatus("error");
-      return;
-    }
-
-    const textConfig = {
-      left: 50,
-      top: 50,
-      originY: "top" as const
-    };
+    if (!canvasInstance || text === "") return;
 
     const textbox = new Textbox(text, {
-      ...textConfig,
+      ...OBJECT_CONFIG,
       ...textOptions
     });
     // 禁止变形拉伸
@@ -91,7 +54,23 @@ const TextManager: React.FC = () => {
     });
 
     canvasInstance.add(textbox);
+    canvasInstance.setActiveObject(textbox);
     canvasInstance.renderAll();
+
+    resetOptions();
+  };
+
+  const updateTextOptions = (options: Partial<TextOptions>) => {
+    setTextOptions((prev) => {
+      const updatedOptions = { ...prev, ...options };
+
+      if (activeText) {
+        activeText.set(updatedOptions);
+        canvasInstance?.renderAll();
+      }
+
+      return updatedOptions;
+    });
   };
 
   return (
@@ -101,19 +80,16 @@ const TextManager: React.FC = () => {
           <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-3">
             <div className="text-base mt-0.5">Content</div>
             <ActionButton
-              activeObj={getTextbox()}
+              activeObj={activeText}
+              disabled={text === ""}
               onAdd={handleAddText}
             />
           </div>
           {/* 文本 */}
           <Textarea
             placeholder="Type something..."
-            status={textStatus}
             value={text}
-            onChange={(val) => {
-              setTextStatus("default");
-              setText(val);
-            }}
+            onChange={(val) => setText(val)}
           />
         </div>
 
@@ -124,25 +100,14 @@ const TextManager: React.FC = () => {
             <div className="card flex items-center h-16">
               <span className="card-title mr-3">Color</span>
               <ColorPicker
-                key={getTextbox()?.toString()} // TDesign 内部缓存问题
+                key={activeText?.toString()} // TDesign 内部缓存问题
                 format="HEX"
                 colorModes={["monochrome"]}
                 recentColors={null}
                 swatchColors={null}
+                inputProps={{ style: { width: "126px" } }}
                 value={textOptions.fill}
                 onChange={(val) => updateTextOptions({ fill: val as string })}
-                inputProps={{ style: { width: "126px" } }}
-              />
-            </div>
-
-            {/* 大小 */}
-            <div className="card flex items-center h-16">
-              <span className="card-title mr-5">Size</span>
-              <InputNumber
-                size="small"
-                min={0}
-                value={textOptions.fontSize}
-                onChange={(val) => updateTextOptions({ fontSize: val as number })}
               />
             </div>
 
@@ -166,33 +131,10 @@ const TextManager: React.FC = () => {
             {/* 字体 */}
             <div className="card flex items-center h-16">
               <span className="card-title mr-4">Font</span>
-              <SelectInput
-                suffix={<div className="i-gridicons:chevron-down"></div>}
-                popupVisible={popupVisible}
+              <Select
                 style={{ width: "130px" }}
-                onPopupVisibleChange={(val) => setPopupVisible(val)}
                 value={textOptions.fontFamily}
-                panel={
-                  <ul className="text-right space-y-1">
-                    {FONT_LIST.map((font, index) => (
-                      <li
-                        key={index}
-                        className={`px-1 rounded-md truncate ${
-                          font === textOptions.fontFamily
-                            ? "bg-emerald-50 dark:bg-dark-100"
-                            : "cursor-pointer hover:(bg-emerald-100 dark:bg-dark-50)"
-                        }`}
-                        onClick={() => {
-                          updateTextOptions({ fontFamily: font });
-                          setPopupVisible(false);
-                        }}
-                        style={{ fontFamily: font }}
-                      >
-                        {font}
-                      </li>
-                    ))}
-                  </ul>
-                }
+                options={formatSelectOptions(FONT_LIST)}
               />
             </div>
           </div>

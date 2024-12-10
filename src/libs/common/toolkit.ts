@@ -1,36 +1,3 @@
-import { Canvas } from "fabric";
-
-export const cloneCanvas = async (source: Canvas) => {
-  const lowerCanvas = document.createElement("canvas");
-  lowerCanvas.classList.add("temp_canvas");
-  lowerCanvas.style.display = "none";
-
-  const copy = new Canvas(lowerCanvas,{
-    width: source.width,
-    height: source.height,
-    backgroundColor: source.backgroundColor
-  });
-
-  await Promise.all(
-    source.getObjects().map(async (obj) => {
-      const temp = await obj.clone();
-      if (obj.id) {
-        temp.set({ id: obj.id });
-      }
-      copy.add(temp);
-    })
-  );
-
-  const upperCanvas = copy.upperCanvasEl;
-  upperCanvas.classList.add("temp_canvas");
-  upperCanvas.style.display = "none";
-
-  document.body.appendChild(lowerCanvas);
-  document.body.appendChild(upperCanvas);
-
-  return copy;
-};
-
 export const downloadFile = (blob: Blob, filename: string) => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -40,4 +7,22 @@ export const downloadFile = (blob: Blob, filename: string) => {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+};
+
+export const formatSelectOptions = (options: string[]) => {
+  return options.map((item) => ({ label: item, value: item }));
+};
+
+/**
+ * 根据给定的模板对象，提取源对象中对应的 value。
+ * 如果源对象中缺失某个 key，则使用模板对象中该 key 的默认值。
+ * @param {Partial<T>} source - 源对象，包含需要提取的值。
+ * @param {T} defaults - 模板对象，包含默认值。
+ */
+export const pickValues = <T extends object>(source: Partial<T> | undefined, defaults: T) => {
+  const result: Partial<T> = {};
+  Object.keys(defaults).forEach((key) => {
+    result[key as keyof T] = source?.[key as keyof T] ?? defaults[key as keyof T];
+  });
+  return result as T;
 };

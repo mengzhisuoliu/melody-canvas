@@ -1,5 +1,11 @@
 import { TextOptions } from "./types";
 
+export const OBJECT_CONFIG = {
+  left: 50,
+  top: 50
+};
+
+/* ----- TextManager ------ */
 export const FONT_LIST = [
   // 无衬线 sans-serif
   "Arial",
@@ -15,7 +21,6 @@ export const FONT_LIST = [
 
 export const DEFAULT_TEXT: TextOptions = {
   fill: "#ffffff",
-  fontSize: 50,
   fontWeight: 400,
   fontStyle: "normal",
   fontFamily: "Arial"

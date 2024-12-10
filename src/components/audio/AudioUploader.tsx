@@ -38,7 +38,7 @@ const AudioUploader: React.FC = () => {
     <>
       <div>
         {/* 音频上传 */}
-        <label className="flex-center px-2 py-1 text-emerald-800 dark:text-white hover:text-emerald-500 dark:hover:text-emerald-300 ">
+        <label className="flex-center px-2 py-1 text-emerald-800 dark:text-white hover:text-emerald-500 dark:hover:text-emerald-300">
           <div className="w-full h-6 whitespace-nowrap flex-between">{formatAudioName()}</div>
           <input
             type="file"

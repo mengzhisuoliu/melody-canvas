@@ -43,17 +43,16 @@ class CanvasClip implements IClip {
     const samples = extractSamples(this.#buffer, time / 1e6);
     const frequency = this.#analyzer.getFrequency(samples);
 
+    const objects = this.#canvas.getObjects();
     (Object.keys(VISUAL_MAP) as Array<keyof typeof VISUAL_MAP>).forEach((key) => {
-      const group = this.#canvas.getObjects().find((obj) => obj.type === "group" && obj.id === key) as
-        | Group
-        | undefined;
-
-      if (group) {
+      const groups = objects.filter((obj) => obj.subType?.variant === key) as Group[];
+    
+      groups.forEach((group) => {
         VISUAL_MAP[key].draw(frequency, group);
-      }
+      });
     });
 
-    this.#canvas.renderAll();
+    this.#canvas.requestRenderAll();
 
     return {
       state: "success",

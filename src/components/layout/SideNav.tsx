@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import useCanvasStore from "@/stores/canvasStore";
 import { AudioUploader } from "../audio";
 import { BackdropDisplay, ImageProcessor, TextManager } from "../editor";
 
 interface NavItemProps {
   icon: string;
-  label: string;
+  name: string;
   isActive: boolean;
   onClick: () => void;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => (
+const NavItem: React.FC<NavItemProps> = ({ icon, name, isActive, onClick }) => (
   <button
     className={`w-16 h-16 rounded-md flex-center flex-col p-1 font-bold border-2 border-dotted text-emerald-800  border-emerald-800 dark:(text-emerald-200 border-emerald-200) ${
       isActive ? "pointer-events-none  bg-emerald-100  dark:bg-dark-300" : "hover:(bg-emerald-100 dark:bg-dark-200)"
@@ -18,7 +19,7 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => 
     onClick={onClick}
   >
     <div className={`${icon} text-2xl my-1`} />
-    <span className="text-xs">{label}</span>
+    <span className="text-xs">{name}</span>
   </button>
 );
 
@@ -26,14 +27,25 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => 
  * 左侧边栏
  */
 const SideNav: React.FC = () => {
-  const [activeNav, setActiveNav] = useState<string>("Audio");
+  const { activeObjects } = useCanvasStore();
+  const [activeNav, setActiveNav] = useState<string>("nav-audio");
 
   const navList = [
-    { icon: "i-icon-park-outline:electric-wave", label: "Audio", component: <AudioUploader /> },
-    { icon: "i-geo:turf-size", label: "Backdrop", component: <BackdropDisplay /> },
-    { icon: "i-lsicon:picture-outline", label: "Image", component: <ImageProcessor /> },
-    { icon: "i-iconoir:text-square", label: "Text", component: <TextManager /> }
+    { id: "nav-audio", name: "Audio", icon: "i-icon-park-outline:electric-wave", component: <AudioUploader /> },
+    { id: "nav-backdrop", name: "Backdrop", icon: "i-geo:turf-size", component: <BackdropDisplay /> },
+    { id: "nav-image", name: "Image", icon: "i-lsicon:picture-outline", component: <ImageProcessor /> },
+    { id: "nav-text", name: "Text", icon: "i-iconoir:text-square", component: <TextManager /> }
   ];
+
+  useEffect(() => {
+    const activeCategory = activeObjects[0]?.subType?.category;
+    if (!activeCategory) return;
+
+    const matchingNav = navList.find((nav) => nav.id.split("-")[1] === activeCategory);
+    if (matchingNav) {
+      setActiveNav(matchingNav.id);
+    }
+  }, [activeObjects]);
 
   return (
     <>
@@ -59,9 +71,9 @@ const SideNav: React.FC = () => {
                 <NavItem
                   key={index}
                   icon={item.icon}
-                  label={item.label}
-                  isActive={activeNav === item.label}
-                  onClick={() => setActiveNav(item.label)}
+                  name={item.name}
+                  isActive={activeNav === item.id}
+                  onClick={() => setActiveNav(item.id)}
                 />
               ))}
             </div>
@@ -73,7 +85,15 @@ const SideNav: React.FC = () => {
           className="h-[90vh] w-[18vw] border-2 border-emerald-500 bg-green-50 rounded-md absolute left-18 top-2 p-4"
           dark="bg-dark-400 border-dark-200"
         >
-          {navList.find((nav) => nav.label === activeNav)?.component}
+          {navList.map((nav) => (
+            <div
+              key={nav.id}
+              id={nav.id}
+              hidden={nav.id !== activeNav}
+            >
+              {nav.component}
+            </div>
+          ))}
         </div>
       </div>
     </>

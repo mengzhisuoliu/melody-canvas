@@ -28,7 +28,7 @@ const ImageProcessor: React.FC = () => {
 
   const activeImage = useMemo(() => {
     const obj = activeObjects[0];
-    if (obj?.type === "group" && obj?.subType === "image") {
+    if (obj?.type === "group" && obj?.subType?.category === "image") {
       const group = obj as Group;
       const image = group.getObjects().find((child) => child.type === "image") as FabricImage;
       const stroke = group.getObjects().find((child) => child.type === "path") as Path;
@@ -149,7 +149,7 @@ const ImageProcessor: React.FC = () => {
     strokePath.scale(scaleFactor);
 
     const group = new Group([image, strokePath]);
-    group.set({ subType: "image" });
+    group.set({ subType: { category: "image" } });
 
     canvasInstance.add(group);
     canvasInstance.setActiveObject(group);

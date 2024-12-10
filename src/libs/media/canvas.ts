@@ -1,5 +1,10 @@
 import { Canvas } from "fabric";
 import { RadiusOptions } from "@/components/editor/types";
+import { STANDARD_LIMIT } from "../common/constant";
+
+export const getScaledHeight = (objHeight: number, canvasHeight: number) => {
+  return ((objHeight / STANDARD_LIMIT) * canvasHeight) / 4;
+};
 
 export const cloneCanvas = async (source: Canvas) => {
   const lowerCanvas = document.createElement("canvas");
@@ -15,8 +20,8 @@ export const cloneCanvas = async (source: Canvas) => {
   await Promise.all(
     source.getObjects().map(async (obj) => {
       const temp = await obj.clone();
-      if (obj.id) {
-        temp.set({ id: obj.id });
+      if (obj.subType) {
+        temp.set({ subType: obj.subType });
       }
       copy.add(temp);
     })

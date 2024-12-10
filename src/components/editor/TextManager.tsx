@@ -22,7 +22,7 @@ const TextManager: React.FC = () => {
 
   const activeText = useMemo(() => {
     const obj = activeObjects[0];
-    if (obj?.type === "textbox") {
+    if (obj?.subType?.category === "text") {
       return obj as Textbox;
     } else {
       resetOptions();
@@ -53,6 +53,7 @@ const TextManager: React.FC = () => {
       mb: false
     });
 
+    textbox.set({ subType: { category: "text" } });
     canvasInstance.add(textbox);
     canvasInstance.setActiveObject(textbox);
     canvasInstance.renderAll();

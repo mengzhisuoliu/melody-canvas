@@ -42,7 +42,7 @@ button {
   height: 15px !important;
 }
 
-.t-input.t-align-left.t-input--prefix {
+#nav-image .t-input.t-align-left.t-input--prefix {
   height: 24px !important;
   font-size: 0.75rem;
 }

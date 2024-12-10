@@ -1,7 +1,7 @@
 import { Group, Rect } from "fabric";
 
-import { FFT_SIZE, STANDARD_LIMIT, SVG_WIDTH, SVG_STYLE } from "@/libs/common/constant";
-import { getScaledHeight } from ".";
+import { FFT_SIZE, STANDARD_LIMIT, SVG_WIDTH, SVG_STYLE } from "../common/constant";
+import { getScaledHeight } from "../media/canvas";
 
 export const svgBar = () => {
   const rectWidth = 30;
@@ -59,7 +59,7 @@ export const initBufferBar = (canvasWidth: number, canvasHeight: number) => {
   const group = new Group(rects, {
     top: canvasHeight - objHeight // 矩形的底边与画布底部对齐
   });
-  group.set({ id: "bar" });
+  group.set({ subType: { category: "audio", variant: "bar" } });
   return group;
 };
 

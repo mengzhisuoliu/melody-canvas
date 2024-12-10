@@ -1,7 +1,7 @@
 import { Circle, Group } from "fabric";
 
-import { FFT_SIZE, STANDARD_LIMIT, SVG_STYLE, SVG_WIDTH } from "@/libs/common/constant";
-import { getScaledHeight } from ".";
+import { FFT_SIZE, STANDARD_LIMIT, SVG_STYLE, SVG_WIDTH } from "../common/constant";
+import { getScaledHeight } from "../media/canvas";
 
 export const svgWave = () => {
   const count = 25;
@@ -59,7 +59,7 @@ export const initBufferWave = (canvasWidth: number, canvasHeight: number) => {
   const group = new Group(circles, {
     top: canvasHeight / 4
   });
-  group.set({ id: "wave" });
+  group.set({ subType: { category: "audio", variant: "wave" } });
   return group;
 };
 

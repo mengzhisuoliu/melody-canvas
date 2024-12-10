@@ -28,13 +28,13 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioRef }) => {
     const samples = extractSamples(audioBufferRef!.current!, audioRef.current!.currentTime);
     const frequency = analyzerRef!.current!.getFrequency(samples);
 
+    const objects = canvasInstance.getObjects();
     (Object.keys(VISUAL_MAP) as Array<keyof typeof VISUAL_MAP>).forEach((key) => {
-      const group = canvasInstance.getObjects().find((obj) => obj.type === "group" && obj.id === key) as
-        | Group
-        | undefined;
-      if (group) {
+      const groups = objects.filter((obj) => obj.subType?.variant === key) as Group[];
+
+      groups.forEach((group) => {
         VISUAL_MAP[key].draw(frequency, group);
-      }
+      });
     });
 
     canvasInstance.requestRenderAll();

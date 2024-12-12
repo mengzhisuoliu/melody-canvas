@@ -52,7 +52,7 @@ class CanvasClip implements IClip {
       });
     });
 
-    this.#canvas.requestRenderAll();
+    this.#canvas.renderAll();
 
     return {
       state: "success",

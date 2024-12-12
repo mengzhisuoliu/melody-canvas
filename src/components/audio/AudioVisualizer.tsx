@@ -37,7 +37,7 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioRef }) => {
       });
     });
 
-    canvasInstance.requestRenderAll();
+    canvasInstance.renderAll();
     reqIDRef.current = requestAnimationFrame(drawAll);
   };
 

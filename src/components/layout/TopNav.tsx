@@ -1,4 +1,4 @@
-import { AudioClip, Combinator, OffscreenSprite } from "@webav/av-cliper";
+import { AudioClip, Combinator, Log, OffscreenSprite } from "@webav/av-cliper";
 import { Button, Tabs } from "tdesign-react";
 
 import { downloadFile } from "@/libs/common/toolkit";
@@ -10,6 +10,8 @@ import useAudioStore from "@/stores/audioStore";
 import useCanvasStore from "@/stores/canvasStore";
 
 const { TabPanel } = Tabs;
+
+Log.setLogLevel(Log.warn); // 隐藏默认 info 日志
 
 /**
  * 顶部栏

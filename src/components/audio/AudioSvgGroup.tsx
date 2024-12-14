@@ -1,4 +1,4 @@
-import { SVG_WIDTH } from "@/libs/common/constant";
+import { SVG_WIDTH } from "@/libs/common/config";
 import { VISUAL_MAP, VisualType } from "@/libs/visualizer";
 import useCanvasStore from "@/stores/canvasStore";
 

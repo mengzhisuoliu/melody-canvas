@@ -1,7 +1,7 @@
-import { Canvas, FabricObject } from "fabric";
+import { Canvas } from "fabric";
 import { useEffect, useRef, useState } from "react";
 
-import { FABRIC_CONFIG } from "@/libs/common/constant";
+import { THEME_COLOR } from "@/libs/common/config";
 import useCanvasStore from "@/stores/canvasStore";
 
 import RightClickMenu from "./RightClickMenu";
@@ -21,15 +21,13 @@ const CanvasPreview: React.FC = () => {
     if (!canvasRef.current) return;
 
     const instance = new Canvas(canvasRef.current, {
+      borderColor: THEME_COLOR,
+      cornerColor: THEME_COLOR,
       selectionColor: "rgba(83, 172, 142, 0.2)"
     });
-
-    Object.assign(FabricObject.ownDefaults, FABRIC_CONFIG);
     createCanvas(instance);
 
-    return () => {
-      disposeCanvas();
-    };
+    return () => disposeCanvas();
   }, []);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { Canvas, FabricObject } from "fabric";
 import { RadiusOptions } from "@/components/editor/types";
-import { STANDARD_LIMIT } from "../common/constant";
+import { STANDARD_LIMIT } from "../common/config";
 
 export const getScaledHeight = (objHeight: number, canvasHeight: number) => {
   return ((objHeight / STANDARD_LIMIT) * canvasHeight) / 4;

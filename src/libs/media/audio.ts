@@ -1,5 +1,5 @@
 import FFT from "fft.js";
-import { FFT_SIZE, STANDARD_LIMIT } from "../common/constant";
+import { FFT_SIZE, STANDARD_LIMIT } from "../common/config";
 
 const SCALE_FACTOR = 20; // 信号幅度进行对数转换时的常用系数
 const SMOOTH_UP = 0.2; // 越大 -> 上升更迅速

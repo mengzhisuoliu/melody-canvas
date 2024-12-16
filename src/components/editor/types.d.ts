@@ -12,11 +12,6 @@ export type RadiusOptions = {
   br: number;
 };
 
-export type StrokeOptions = {
-  stroke: string;
-  strokeWidth: number;
-};
-
 export type ShadowOptions = {
   color: string;
   blur: number;

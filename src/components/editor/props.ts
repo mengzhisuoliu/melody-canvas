@@ -1,4 +1,4 @@
-import { RadiusOptions, StrokeOptions, TextOptions, ShadowOptions } from "./types";
+import { RadiusOptions, ShadowOptions, TextOptions } from "./types";
 
 export const OBJECT_CONFIG = {
   left: 50,
@@ -35,5 +35,4 @@ export const RADIUS_INPUT = [
 ];
 
 export const DEFAULT_RADIUS: RadiusOptions = { tl: 0, tr: 0, bl: 0, br: 0 };
-export const DEFAULT_STROKE: StrokeOptions = { stroke: "#ffffff", strokeWidth: 0 };
 export const DEFAULT_SHADOW: ShadowOptions = { color: "#ffffff", blur: 0, offsetX: 0, offsetY: 0 };

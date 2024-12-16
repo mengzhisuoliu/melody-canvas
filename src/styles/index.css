@@ -78,3 +78,12 @@ button {
 .t-image-viewer__utils-content div:nth-of-type(2) {
   display: none;
 }
+
+/* InputNumber */
+#nav-image .t-input__inner {
+  min-width: 30px;
+}
+
+#nav-image .t-input-number button {
+  width: 28px !important;
+}

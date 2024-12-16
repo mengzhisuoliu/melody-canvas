@@ -4,7 +4,7 @@ import { ColorPicker, InputNumber, Upload, UploadFile } from "tdesign-react";
 
 import ActionButton from "@/components/base/ActionButton";
 import { pickValues } from "@/libs/common/toolkit";
-import { createRoundedPath } from "@/libs/media/canvas";
+import { createPathByRadius, extractRadiusFromPath } from "@/libs/media/canvas";
 import useCanvasStore from "@/stores/canvasStore";
 
 import { DEFAULT_RADIUS, DEFAULT_SHADOW, OBJECT_CONFIG, RADIUS_INPUT } from "./props";
@@ -40,11 +40,15 @@ const ImageProcessor: React.FC = () => {
       const imageURL = activeImage!.getSrc();
       setImageFile([{ url: imageURL }]);
 
-      const radiusData = pickValues(activeImage.clipPath as Partial<RadiusOptions>, DEFAULT_RADIUS);
       const shadowData = pickValues(activeImage.shadow as Partial<ShadowOptions>, DEFAULT_SHADOW);
-
-      setRadiusOptions(radiusData);
       setShadowOptions(shadowData);
+
+      const radiusData = extractRadiusFromPath(
+        (activeImage.clipPath as Path).path,
+        activeImage.width,
+        activeImage.height
+      );
+      setRadiusOptions(radiusData);
     }
   }, [activeImage]);
 
@@ -53,9 +57,10 @@ const ImageProcessor: React.FC = () => {
       const updatedOptions = { ...prev, ...options };
 
       if (activeImage) {
-        const pathData = createRoundedPath(activeImage.width, activeImage.height, updatedOptions);
-        const radius = activeImage.clipPath as Path;
-        radius._setPath(pathData);
+        const roundedPath = createPathByRadius(activeImage.width, activeImage.height, updatedOptions);
+        activeImage.set({
+          clipPath: roundedPath
+        });
         canvasInstance?.renderAll();
       }
 
@@ -100,11 +105,7 @@ const ImageProcessor: React.FC = () => {
     });
 
     // 圆角
-    const pathData = createRoundedPath(width, height, radiusOptions);
-    const roundedPath = new Path(pathData, {
-      left: -width / 2,
-      top: -height / 2
-    });
+    const roundedPath = createPathByRadius(width, height, radiusOptions);
     image.set({
       clipPath: roundedPath
     });

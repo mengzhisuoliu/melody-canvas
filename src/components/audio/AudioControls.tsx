@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Slider } from "tdesign-react";
 
+import useAudioVisualization from "@/hooks/useAudioVisualization";
 import useAudioStore from "@/stores/audioStore";
-import AudioVisualizer from "./AudioVisualizer";
 
 const AudioControls: React.FC = () => {
   const { audioFile } = useAudioStore();
-
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const { audioRef } = useAudioVisualization();
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -68,17 +67,12 @@ const AudioControls: React.FC = () => {
 
   return (
     <>
-      {/* 音频操作 */}
-      {audioFile && (
-        <>
-          <audio
-            ref={audioRef}
-            onTimeUpdate={handleTimeUpdate}
-            onLoadedMetadata={handleLoadedMeta}
-          />
-          <AudioVisualizer audioRef={audioRef} />
-        </>
-      )}
+      {/* 音频 */}
+      <audio
+        ref={audioRef}
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMeta}
+      />
 
       <div
         className="w-screen h-15 absolute bottom-0 bg-[#42b093] border-t-2 border-emerald-800 flex items-center justify-between px-6"
@@ -86,22 +80,22 @@ const AudioControls: React.FC = () => {
       >
         {/* 播放按钮 */}
         <button
-          disabled={!audioRef.current}
+          disabled={!audioFile}
           onClick={togglePlay}
           className="w-12 aspect-square rounded-full bg-emerald-700 border border-emerald-800 dark:bg-emerald-300 flex-center"
         >
           <div
-            className={`w-5 h-5 bg-white ${!audioRef.current || audioRef.current.paused ? "i-solar:play-bold" : "i-solar:pause-bold"}`}
+            className={`w-5 h-5 bg-white ${!audioFile || audioRef.current?.paused ? "i-solar:play-bold" : "i-solar:pause-bold"}`}
           ></div>
         </button>
 
         {/* 音量控制 */}
         <button
           disabled={!audioRef.current}
-          className={`ml-4 ${audioRef.current ? "group text-white" : "text-dark-50"}`}
+          className={`ml-4 ${audioFile ? "group text-white" : "text-dark-50"}`}
         >
           <div
-            className={`text-2xl ${volume === 0 || !audioRef.current ? "i-lsicon:volume-mute-outline" : "i-lsicon:volume-outline"}`}
+            className={`text-2xl ${volume === 0 || !audioFile ? "i-lsicon:volume-mute-outline" : "i-lsicon:volume-outline"}`}
           ></div>
           <div className="h-40 absolute bottom-14 -ml-3 w-12 pt-5 rounded-md flex-center flex-col opacity-0 group-hover:opacity-100 bg-[#42b093] dark:bg-dark-500 border-2 border-emerald-800 dark:border-dark-50">
             <Slider

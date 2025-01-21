@@ -9,11 +9,9 @@ import { VISUAL_MAP } from "@/libs/visualizer";
 import useAudioStore from "@/stores/audioStore";
 import useCanvasStore from "@/stores/canvasStore";
 
-interface AudioVisualizerProps {
-  audioRef: React.RefObject<HTMLAudioElement>;
-}
+const useAudioVisualization = () => {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioRef }) => {
   const { audioFile } = useAudioStore();
   const { canvasInstance } = useCanvasStore();
 
@@ -73,7 +71,7 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioRef }) => {
     };
   }, [audioRef, audioFile]);
 
-  return <></>;
+  return { audioRef };
 };
 
-export default AudioVisualizer;
+export default useAudioVisualization;

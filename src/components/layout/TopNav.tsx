@@ -8,6 +8,7 @@ import CanvasClip from "@/libs/media/clip";
 
 import useAudioStore from "@/stores/audioStore";
 import useCanvasStore from "@/stores/canvasStore";
+import useSettingStore from "@/stores/settingStore";
 
 const { TabPanel } = Tabs;
 
@@ -18,7 +19,8 @@ Log.setLogLevel(Log.warn); // 隐藏默认 info 日志
  */
 const TopNav: React.FC = () => {
   const { audioFile } = useAudioStore();
-  const { canvasInstance, themeMode, setThemeMode } = useCanvasStore();
+  const { canvasInstance } = useCanvasStore();
+  const { themeMode, setThemeMode } = useSettingStore();
 
   const exportVideo = async () => {
     if (!canvasInstance || !audioFile) return;

@@ -1,7 +1,5 @@
-import { Canvas, FabricObject } from "fabric";
+import type { Canvas, FabricObject } from "fabric";
 import { create } from "zustand";
-
-type ThemeMode = "light" | "dark";
 
 type Backdrop = {
   ratio: string;
@@ -9,14 +7,12 @@ type Backdrop = {
 };
 
 interface CanvasState {
-  themeMode: ThemeMode;
   canvasInstance: Canvas | null;
   activeObjects: FabricObject[];
   backdrop: Backdrop;
 }
 
 interface CanvasAction {
-  setThemeMode: (value: ThemeMode) => void;
   createCanvas: (value: Canvas) => void;
   disposeCanvas: () => void;
   setBackdrop: (value: Partial<Backdrop>) => void;
@@ -25,11 +21,6 @@ interface CanvasAction {
 type CanvasStore = CanvasState & CanvasAction;
 
 const useCanvasStore = create<CanvasStore>((set, get) => ({
-  themeMode: "light",
-  setThemeMode: (value) => {
-    set({ themeMode: value });
-    document.documentElement.setAttribute("theme-mode", value);
-  },
   canvasInstance: null,
   activeObjects: [],
   createCanvas: (value) => {

@@ -26,3 +26,26 @@ export const pickValues = <T extends object>(source: Partial<T> | undefined, def
   });
   return result as T;
 };
+
+/**
+ * 检查传入的 font-family 是否在当前游览器可用 
+ */
+export const checkFontAvailability = (font: string) => {
+  const testString = "abcdefghijklmnopqrstuvwxyz0123456789";
+  const testElement = document.createElement("span");
+
+  testElement.style.fontSize = "12px";
+  testElement.style.visibility = "hidden";
+  testElement.textContent = testString;
+
+  document.body.appendChild(testElement);
+  const defaultWidth = testElement.offsetWidth;
+
+  testElement.style.fontFamily = font;
+  const fontWidth = testElement.offsetWidth;
+
+  document.body.removeChild(testElement);
+
+  // 宽度不同说明产生了变化 -> 存在可用字体
+  return defaultWidth !== fontWidth;
+};

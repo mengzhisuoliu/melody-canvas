@@ -1,19 +1,20 @@
 import { Textbox } from "fabric";
 import { useEffect, useMemo, useState } from "react";
-import { Checkbox, ColorPicker, Select, Textarea } from "tdesign-react";
+import { Checkbox, ColorPicker, SelectInput, Textarea } from "tdesign-react";
 
 import ActionButton from "@/components/base/ActionButton";
-import { formatSelectOptions, pickValues } from "@/libs/common/toolkit";
+import { pickValues } from "@/libs/common/toolkit";
 import useCanvasStore from "@/stores/canvasStore";
 
 import { DEFAULT_TEXT, FONT_LIST, OBJECT_CONFIG } from "./props";
-import { TextOptions } from "./types";
+import type { TextOptions } from "./types";
 
 const TextManager: React.FC = () => {
   const { canvasInstance, activeObjects } = useCanvasStore();
 
   const [text, setText] = useState<string>("");
   const [textOptions, setTextOptions] = useState<TextOptions>(DEFAULT_TEXT);
+  const [popupVisible, setPopupVisible] = useState(false);
 
   const resetOptions = () => {
     setText("");
@@ -132,10 +133,32 @@ const TextManager: React.FC = () => {
             {/* 字体 */}
             <div className="card flex items-center h-16">
               <span className="card-title mr-4">Font</span>
-              <Select
-                style={{ width: "130px" }}
+              <SelectInput
                 value={textOptions.fontFamily}
-                options={formatSelectOptions(FONT_LIST)}
+                popupVisible={popupVisible}
+                placeholder="Select or Input"
+                allowInput
+                clearable
+                style={{ width: "75%" }}
+                onInputChange={(font) => updateTextOptions({ fontFamily: font })}
+                onPopupVisibleChange={(visible) => setPopupVisible(visible)}
+                panel={
+                  <ul className="">
+                    {FONT_LIST.map((font) => (
+                      <li
+                        key={font}
+                        className="text-xs cursor-pointer p-1 rounded-md hover:bg-emerald-50 dark:hover:bg-dark-800"
+                        style={{ fontFamily: font }}
+                        onClick={() => {
+                          updateTextOptions({ fontFamily: font });
+                          setPopupVisible(false);
+                        }}
+                      >
+                        {font}
+                      </li>
+                    ))}
+                  </ul>
+                }
               />
             </div>
           </div>

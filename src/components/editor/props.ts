@@ -1,4 +1,5 @@
-import { RadiusOptions, ShadowOptions, TextOptions } from "./types";
+import { checkFontAvailability } from "@/libs/common/toolkit";
+import type { RadiusOptions, ShadowOptions, TextOptions } from "./types";
 
 export const OBJECT_CONFIG = {
   left: 50,
@@ -12,12 +13,12 @@ export const FONT_LIST = [
   "Impact",
   "Comic Sans MS",
   // 衬线 serif
-  "宋体",
+  "FangSong",
+  "STZhongsong",
   "Times New Roman",
   // 等宽 monospace
-  "Consolas",
   "Courier New"
-].filter((font) => document.fonts.check(`12px "${font}"`));
+].filter((font) => checkFontAvailability(font));
 
 export const DEFAULT_TEXT: TextOptions = {
   fill: "#ffffff",

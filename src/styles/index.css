@@ -87,3 +87,8 @@ button {
 #nav-image .t-input-number button {
   width: 28px !important;
 }
+
+/* SelectInput */
+#nav-text .t-select-input .t-input input {
+  font-size: 12px;
+}

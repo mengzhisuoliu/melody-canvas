@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 
 import useCanvasStore from "@/stores/canvasStore";
-import { AudioUploader } from "../audio";
-import { BackdropDisplay, ImageProcessor, TextManager } from "../editor";
+import { AudioVisualizer, BackdropDisplay, ImageProcessor, TextManager } from "../editor";
 
 interface NavItemProps {
   icon: string;
@@ -31,7 +30,7 @@ const SideNav: React.FC = () => {
   const [activeNav, setActiveNav] = useState<string>("nav-audio");
 
   const navList = [
-    { id: "nav-audio", name: "Audio", icon: "i-icon-park-outline:electric-wave", component: <AudioUploader /> },
+    { id: "nav-audio", name: "Audio", icon: "i-icon-park-outline:electric-wave", component: <AudioVisualizer /> },
     { id: "nav-backdrop", name: "Backdrop", icon: "i-geo:turf-size", component: <BackdropDisplay /> },
     { id: "nav-image", name: "Image", icon: "i-lsicon:picture-outline", component: <ImageProcessor /> },
     { id: "nav-text", name: "Text", icon: "i-iconoir:text-square", component: <TextManager /> }

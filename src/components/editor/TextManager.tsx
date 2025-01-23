@@ -2,10 +2,10 @@ import { Textbox } from "fabric";
 import { useEffect, useMemo, useState } from "react";
 import { Checkbox, ColorPicker, SelectInput, Textarea } from "tdesign-react";
 
-import ActionButton from "@/components/base/ActionButton";
 import { pickValues } from "@/libs/common/toolkit";
 import useCanvasStore from "@/stores/canvasStore";
 
+import { ActionButton, OptionCard } from "../base";
 import { DEFAULT_TEXT, FONT_LIST, OBJECT_CONFIG } from "./props";
 import type { TextOptions } from "./types";
 
@@ -99,8 +99,7 @@ const TextManager: React.FC = () => {
           <div className="font-bold text-base text-emerald-600 dark:text-emerald-400 mb-3">Options</div>
           <div className="space-y-6">
             {/* 颜色 */}
-            <div className="card flex items-center h-16">
-              <span className="card-title mr-3">Color</span>
+            <OptionCard title="Color">
               <ColorPicker
                 key={activeText?.toString()} // TDesign 内部缓存问题
                 format="HEX"
@@ -111,11 +110,10 @@ const TextManager: React.FC = () => {
                 value={textOptions.fill}
                 onChange={(val) => updateTextOptions({ fill: val as string })}
               />
-            </div>
+            </OptionCard>
 
             {/* 样式 */}
-            <div className="card flex items-center h-16 space-x-2">
-              <span className="card-title mr-1.5">Style</span>
+            <OptionCard title="Style">
               <Checkbox
                 checked={textOptions.fontWeight === 900}
                 onChange={(checked) => updateTextOptions({ fontWeight: checked ? 900 : 400 })}
@@ -128,11 +126,10 @@ const TextManager: React.FC = () => {
               >
                 <span className="italic">Italic</span>
               </Checkbox>
-            </div>
+            </OptionCard>
 
             {/* 字体 */}
-            <div className="card flex items-center h-16">
-              <span className="card-title mr-4">Font</span>
+            <OptionCard title="Font">
               <SelectInput
                 value={textOptions.fontFamily}
                 popupVisible={popupVisible}
@@ -160,7 +157,7 @@ const TextManager: React.FC = () => {
                   </ul>
                 }
               />
-            </div>
+            </OptionCard>
           </div>
         </div>
       </div>

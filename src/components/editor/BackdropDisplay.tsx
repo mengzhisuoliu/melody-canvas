@@ -3,25 +3,28 @@ import { ColorPickerPanel, Select } from "tdesign-react";
 import { formatSelectOptions } from "@/libs/common/toolkit";
 import useCanvasStore from "@/stores/canvasStore";
 
+import { OptionCard } from "../base";
+
 const BackdropDisplay: React.FC = () => {
   const { backdrop, setBackdrop } = useCanvasStore();
 
   return (
     <>
-      <div className="flex flex-col space-y-8">
+      <div className="flex flex-col space-y-6">
         {/* 画布比例 */}
-        <div className="card flex items-center">
-          <span className="card-title mr-4">Ratio</span>
+        <OptionCard title="Ratio">
           <Select
             style={{ width: "65%" }}
             value={backdrop.ratio}
             options={formatSelectOptions(["16:9", "9:16", "1:1"])}
           />
-        </div>
+        </OptionCard>
 
         {/* 背景颜色 */}
-        <div className="card">
-          <div className="card-title mb-2">Color</div>
+        <OptionCard
+          vertical
+          title="Color"
+        >
           <ColorPickerPanel
             format="HEX"
             colorModes={["monochrome"]}
@@ -35,7 +38,7 @@ const BackdropDisplay: React.FC = () => {
               })
             }
           />
-        </div>
+        </OptionCard>
       </div>
     </>
   );

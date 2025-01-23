@@ -2,13 +2,13 @@ import { FabricImage, Path, Shadow } from "fabric";
 import { useEffect, useMemo, useState } from "react";
 import { ColorPicker, InputNumber, Upload, UploadFile } from "tdesign-react";
 
-import ActionButton from "@/components/base/ActionButton";
 import { pickValues } from "@/libs/common/toolkit";
 import { createPathByRadius, extractRadiusFromPath } from "@/libs/media/canvas";
 import useCanvasStore from "@/stores/canvasStore";
 
+import { ActionButton, OptionCard } from "../base";
 import { DEFAULT_RADIUS, DEFAULT_SHADOW, OBJECT_CONFIG, RADIUS_INPUT } from "./props";
-import { RadiusOptions, ShadowOptions } from "./types";
+import type { RadiusOptions, ShadowOptions } from "./types";
 
 const ImageProcessor: React.FC = () => {
   const { canvasInstance, activeObjects } = useCanvasStore();
@@ -119,7 +119,7 @@ const ImageProcessor: React.FC = () => {
 
   return (
     <>
-      <div className="text-sm space-y-8">
+      <div className="text-sm space-y-6">
         <div>
           <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-3">
             <div className="text-base mt-0.5">File</div>
@@ -145,8 +145,10 @@ const ImageProcessor: React.FC = () => {
           <div className="font-bold text-base text-emerald-600 dark:text-emerald-400 mb-3">Options</div>
           <div className="space-y-6">
             {/* 阴影 */}
-            <div className="card flex flex-col space-y-2">
-              <span className="card-title mr-4">Shadow</span>
+            <OptionCard
+              vertical
+              title="Shadow"
+            >
               <div className="grid grid-cols-2 gap-2">
                 <ColorPicker
                   format="HEX"
@@ -182,11 +184,13 @@ const ImageProcessor: React.FC = () => {
                   onChange={(val) => updateShadow({ offsetY: Number(val) })}
                 />
               </div>
-            </div>
+            </OptionCard>
 
             {/* 弧度 */}
-            <div className="card flex flex-col">
-              <div className="card-title mb-2">Rounded Corner</div>
+            <OptionCard
+              vertical
+              title="Rounded Corner"
+            >
               <div className="grid grid-cols-2 gap-2">
                 {RADIUS_INPUT.map(({ key, icon }) => (
                   <InputNumber
@@ -200,7 +204,7 @@ const ImageProcessor: React.FC = () => {
                   />
                 ))}
               </div>
-            </div>
+            </OptionCard>
           </div>
         </div>
       </div>

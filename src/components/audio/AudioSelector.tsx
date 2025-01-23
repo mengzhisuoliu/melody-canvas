@@ -1,7 +1,7 @@
 import useAudioStore from "@/stores/audioStore";
 import AudioSvgGroup from "./AudioSvgGroup";
 
-const AudioUploader: React.FC = () => {
+const AudioSelector: React.FC = () => {
   const { audioFile, setAudioFile } = useAudioStore();
 
   const handleAudioUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,4 +60,4 @@ const AudioUploader: React.FC = () => {
   );
 };
 
-export default AudioUploader;
+export default AudioSelector;

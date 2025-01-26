@@ -41,6 +41,27 @@ const TextManager: React.FC = () => {
     }
   }, [activeObjects]);
 
+  const updateText = (text: string) => {
+    setText(text);
+    if (activeText) {
+      activeText.set({ text });
+      canvasInstance?.renderAll();
+    }
+  };
+
+  const updateTextOptions = (options: Partial<TextOptions>) => {
+    setTextOptions((prev) => {
+      const updatedOptions = { ...prev, ...options };
+
+      if (activeText) {
+        activeText.set(updatedOptions);
+        canvasInstance?.renderAll();
+      }
+
+      return updatedOptions;
+    });
+  };
+
   const handleAddText = () => {
     if (!canvasInstance || text === "") return;
 
@@ -62,22 +83,9 @@ const TextManager: React.FC = () => {
     resetOptions();
   };
 
-  const updateTextOptions = (options: Partial<TextOptions>) => {
-    setTextOptions((prev) => {
-      const updatedOptions = { ...prev, ...options };
-
-      if (activeText) {
-        activeText.set(updatedOptions);
-        canvasInstance?.renderAll();
-      }
-
-      return updatedOptions;
-    });
-  };
-
   return (
     <>
-      <div className="text-sm space-y-8">
+      <div className="text-sm space-y-6">
         <div>
           <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-3">
             <div className="text-base mt-0.5">Content</div>
@@ -91,7 +99,7 @@ const TextManager: React.FC = () => {
           <Textarea
             placeholder="Type something..."
             value={text}
-            onChange={(val) => setText(val)}
+            onChange={(val) => updateText(val)}
           />
         </div>
 

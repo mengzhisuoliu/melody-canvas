@@ -1,21 +1,16 @@
 import type { Canvas, FabricObject } from "fabric";
 import { create } from "zustand";
 
-type Backdrop = {
-  ratio: string;
-  color: string;
-};
-
 interface CanvasState {
   canvasInstance: Canvas | null;
   activeObjects: FabricObject[];
-  backdrop: Backdrop;
+  ratio: string;
 }
 
 interface CanvasAction {
   createCanvas: (value: Canvas) => void;
   disposeCanvas: () => void;
-  setBackdrop: (value: Partial<Backdrop>) => void;
+  setRatio: (value: string) => void;
 }
 
 type CanvasStore = CanvasState & CanvasAction;
@@ -38,17 +33,9 @@ const useCanvasStore = create<CanvasStore>((set, get) => ({
   disposeCanvas: () => {
     get().canvasInstance?.dispose();
   },
-  backdrop: {
-    ratio: "16:9",
-    color: "#000000"
-  },
-  setBackdrop: (value) => {
-    set({
-      backdrop: {
-        ...get().backdrop,
-        ...value
-      }
-    });
+  ratio: "16:9",
+  setRatio: (value) => {
+    set({ ratio: value });
   }
 }));
 

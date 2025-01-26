@@ -1,12 +1,32 @@
+import { useState } from "react";
 import { ColorPickerPanel, Select } from "tdesign-react";
 
+import { DEFAULT_BACKGROUND_COLOR } from "@/libs/common/config";
 import { formatSelectOptions } from "@/libs/common/toolkit";
+
 import useCanvasStore from "@/stores/canvasStore";
 
 import { OptionCard } from "../base";
 
+/**
+ * 画布背景
+ */
 const BackdropDisplay: React.FC = () => {
-  const { backdrop, setBackdrop } = useCanvasStore();
+  const { canvasInstance, ratio, setRatio } = useCanvasStore();
+  const [backgroundColor, setBackgroundColor] = useState(DEFAULT_BACKGROUND_COLOR);
+
+  const updateBackground = (color: string) => {
+    setBackgroundColor(color);
+
+    /*
+      TDesign 疑似把整个函数缓存了
+      如果不给 ColorPicker 加 key
+      这里的 canvasInstance 一直是 null
+     */
+    if (!canvasInstance) return;
+    canvasInstance.backgroundColor = color;
+    canvasInstance.renderAll();
+  };
 
   return (
     <>
@@ -15,8 +35,9 @@ const BackdropDisplay: React.FC = () => {
         <OptionCard title="Ratio">
           <Select
             style={{ width: "65%" }}
-            value={backdrop.ratio}
             options={formatSelectOptions(["16:9", "9:16", "1:1"])}
+            value={ratio}
+            onChange={(ratio) => setRatio(ratio as string)}
           />
         </OptionCard>
 
@@ -26,17 +47,14 @@ const BackdropDisplay: React.FC = () => {
           title="Color"
         >
           <ColorPickerPanel
+            style={{ width: "100%" }}
+            key={canvasInstance?.toString()}
             format="HEX"
             colorModes={["monochrome"]}
             recentColors={null}
             swatchColors={null}
-            value={backdrop.color}
-            style={{ width: "100%" }}
-            onChange={(color) =>
-              setBackdrop({
-                color: color
-              })
-            }
+            value={backgroundColor}
+            onChange={(color) => updateBackground(color)}
           />
         </OptionCard>
       </div>

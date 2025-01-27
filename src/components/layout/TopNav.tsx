@@ -55,7 +55,7 @@ const TopNav: React.FC = () => {
           theme="card"
           className="rounded-sm h-8 w-16 flex-center border border-emerald-700 dark:border-dark-50"
           value={themeMode}
-          onChange={(v) => setThemeMode(v as "light" | "dark")}
+          onChange={(mode) => setThemeMode(mode as "light" | "dark")}
         >
           <TabPanel
             value="light"
@@ -75,7 +75,7 @@ const TopNav: React.FC = () => {
           variant="outline"
           onClick={exportVideo}
         >
-          <div className="flex-center text-lg font-bold">
+          <div className="flex-center font-bold">
             <div className="i-ri:folder-video-line mr-4"></div>
             <span>Export Video</span>
           </div>

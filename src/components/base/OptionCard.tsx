@@ -11,7 +11,7 @@ const OptionCard: React.FC<OptionCardProps> = ({ title, children, vertical = fal
         !vertical ? "flex-between" : "flex flex-col space-y-3"
       }`}
     >
-      <div className="font-bold text-emerald-800 dark:text-emerald-100">{title}</div>
+      <div className="text-sm font-bold text-emerald-800 dark:text-emerald-100">{title}</div>
       {children}
     </div>
   );

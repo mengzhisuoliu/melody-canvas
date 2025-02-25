@@ -2,16 +2,13 @@ import { AudioClip, Combinator, Log, OffscreenSprite } from "@webav/av-cliper";
 import { Canvas } from "fabric";
 import { Button, Tabs } from "tdesign-react";
 
+import { useAudioStore, useCanvasStore, useSettingStore } from "@/stores";
+
 import { downloadFile } from "@/libs/common/toolkit";
 import { getAudioBuffer } from "@/libs/media/audio";
 import CanvasClip from "@/libs/media/clip";
 
-import useAudioStore from "@/stores/audioStore";
-import useCanvasStore from "@/stores/canvasStore";
-import useSettingStore from "@/stores/settingStore";
-
 const { TabPanel } = Tabs;
-
 Log.setLogLevel(Log.warn); // 隐藏默认 info 日志
 
 /**

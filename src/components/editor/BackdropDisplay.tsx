@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { ColorPickerPanel, Select } from "tdesign-react";
 
+import { useCanvasStore } from "@/stores";
+
 import { DEFAULT_BACKGROUND_COLOR } from "@/libs/common/config";
 import { formatSelectOptions } from "@/libs/common/toolkit";
-
-import useCanvasStore from "@/stores/canvasStore";
 
 import { OptionCard } from "../base";
 

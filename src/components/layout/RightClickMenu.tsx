@@ -2,7 +2,7 @@ import { Group } from "fabric";
 import { useEffect, useRef, useState } from "react";
 
 import { cloneFabricObject } from "@/libs/media/canvas";
-import useCanvasStore from "@/stores/canvasStore";
+import { useCanvasStore } from "@/stores";
 
 const MENU_BUTTON_STYLE =
   "rounded-md flex-between px-2 space-x-4 hover:bg-emerald-100 dark:(hover:bg-dark-50 hover:text-white)";

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Slider } from "tdesign-react";
 
-import useAudioVisualization from "@/hooks/useAudioVisualization";
-import useAudioStore from "@/stores/audioStore";
+import { useAudioVisualization } from "@/hooks";
+import { useAudioStore } from "@/stores";
 
 const AudioControls: React.FC = () => {
   const { audioFile } = useAudioStore();

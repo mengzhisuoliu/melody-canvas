@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Checkbox, ColorPicker, SelectInput, Textarea } from "tdesign-react";
 
 import { pickWithDefaults } from "@/libs/common/toolkit";
-import useCanvasStore from "@/stores/canvasStore";
+import { useCanvasStore } from "@/stores";
 
 import { ActionButton, OptionCard } from "../base";
 import { DEFAULT_TEXT, FONT_LIST, OBJECT_CONFIG } from "./props";

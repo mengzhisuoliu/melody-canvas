@@ -2,9 +2,10 @@ import { FabricImage, Path, Shadow } from "fabric";
 import { useEffect, useMemo, useState } from "react";
 import { ColorPicker, InputNumber, Upload, UploadFile } from "tdesign-react";
 
+import { useCanvasStore } from "@/stores";
+
 import { pickWithDefaults } from "@/libs/common/toolkit";
 import { createPathByRadius, extractRadiusFromPath } from "@/libs/media/canvas";
-import useCanvasStore from "@/stores/canvasStore";
 
 import { ActionButton, OptionCard } from "../base";
 import { DEFAULT_RADIUS, DEFAULT_SHADOW, OBJECT_CONFIG, RADIUS_INPUT } from "./props";

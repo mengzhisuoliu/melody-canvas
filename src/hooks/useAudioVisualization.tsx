@@ -1,9 +1,7 @@
 import { useEffect, useRef } from "react";
 
-import useAudioContext from "@/hooks/useAudioContext";
-
-import useAudioStore from "@/stores/audioStore";
-import useCanvasStore from "@/stores/canvasStore";
+import { useAudioContext } from "@/hooks";
+import { useAudioStore, useCanvasStore } from "@/stores";
 
 const useAudioVisualization = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);

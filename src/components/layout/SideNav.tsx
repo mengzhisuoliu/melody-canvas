@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import useCanvasStore from "@/stores/canvasStore";
+import { useCanvasStore } from "@/stores";
 import { AudioVisualizer, BackdropDisplay, ImageProcessor, TextManager } from "../editor";
 
 interface NavItemProps {

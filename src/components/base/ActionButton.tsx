@@ -1,7 +1,7 @@
 import { FabricObject } from "fabric";
 import { Button } from "tdesign-react";
 
-import useCanvasStore from "@/stores/canvasStore";
+import { useCanvasStore } from "@/stores";
 
 interface ActionButton {
   activeObj: FabricObject | null | undefined;

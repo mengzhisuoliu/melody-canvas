@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ColorPicker, Radio } from "tdesign-react";
 
 import { pickWithDefaults } from "@/libs/common/toolkit";
-import useCanvasStore from "@/stores/canvasStore";
+import { useCanvasStore } from "@/stores";
 
 import { AudioSvgSelect, AudioUploader } from "../audio";
 import { ActionButton, OptionCard } from "../base";

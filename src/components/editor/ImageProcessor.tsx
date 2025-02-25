@@ -2,7 +2,7 @@ import { FabricImage, Path, Shadow } from "fabric";
 import { useEffect, useMemo, useState } from "react";
 import { ColorPicker, InputNumber, Upload, UploadFile } from "tdesign-react";
 
-import { pickValues } from "@/libs/common/toolkit";
+import { pickWithDefaults } from "@/libs/common/toolkit";
 import { createPathByRadius, extractRadiusFromPath } from "@/libs/media/canvas";
 import useCanvasStore from "@/stores/canvasStore";
 
@@ -13,6 +13,7 @@ import type { RadiusOptions, ShadowOptions } from "./types";
 const ImageProcessor: React.FC = () => {
   const { canvasInstance, activeObjects } = useCanvasStore();
 
+  // todo 支持不删除元素就能修改图片
   const [imageFile, setImageFile] = useState<UploadFile[]>([]);
 
   const [radiusOptions, setRadiusOptions] = useState<RadiusOptions>(DEFAULT_RADIUS);
@@ -26,7 +27,7 @@ const ImageProcessor: React.FC = () => {
 
   const activeImage = useMemo(() => {
     const obj = activeObjects[0];
-    if (obj?.subType?.category === "image") {
+    if (obj?.subType === "image") {
       return obj as FabricImage;
     } else {
       resetOptions();
@@ -40,7 +41,7 @@ const ImageProcessor: React.FC = () => {
       const imageURL = activeImage!.getSrc();
       setImageFile([{ url: imageURL }]);
 
-      const shadowData = pickValues(activeImage.shadow as Partial<ShadowOptions>, DEFAULT_SHADOW);
+      const shadowData = pickWithDefaults(activeImage.shadow as Partial<ShadowOptions>, DEFAULT_SHADOW);
       setShadowOptions(shadowData);
 
       const radiusData = extractRadiusFromPath(
@@ -61,7 +62,7 @@ const ImageProcessor: React.FC = () => {
         activeImage.set({
           clipPath: roundedPath
         });
-        canvasInstance?.renderAll();
+        canvasInstance!.renderAll();
       }
 
       return updatedOptions;
@@ -76,7 +77,7 @@ const ImageProcessor: React.FC = () => {
         activeImage.set({
           shadow: new Shadow(updatedOptions)
         });
-        canvasInstance?.renderAll();
+        canvasInstance!.renderAll();
       }
 
       return updatedOptions;
@@ -95,7 +96,7 @@ const ImageProcessor: React.FC = () => {
 
     image.set({
       ...OBJECT_CONFIG,
-      subType: { category: "image" }
+      subType: "image"
     });
     image.scale(scaleFactor);
 
@@ -118,11 +119,10 @@ const ImageProcessor: React.FC = () => {
   };
 
   return (
-    <>
-      <div className="text-sm space-y-6">
-        <div>
-          <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-3">
-            <div className="text-base mt-0.5">File</div>
+      <>
+        <div className="mb-6">
+          <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-4">
+            <div>File</div>
             <ActionButton
               activeObj={activeImage?.group}
               disabled={imageFile.length === 0}
@@ -141,8 +141,8 @@ const ImageProcessor: React.FC = () => {
           />
         </div>
 
-        <div>
-          <div className="font-bold text-base text-emerald-600 dark:text-emerald-400 mb-3">Options</div>
+        <div className="mb-6">
+          <div className="font-bold text-emerald-600 dark:text-emerald-400 mb-3">Options</div>
           <div className="space-y-6">
             {/* 阴影 */}
             <OptionCard
@@ -207,8 +207,7 @@ const ImageProcessor: React.FC = () => {
             </OptionCard>
           </div>
         </div>
-      </div>
-    </>
+      </>
   );
 };
 

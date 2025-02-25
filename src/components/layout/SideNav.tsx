@@ -37,10 +37,10 @@ const SideNav: React.FC = () => {
   ];
 
   useEffect(() => {
-    const activeCategory = activeObjects[0]?.subType?.category;
-    if (!activeCategory) return;
+    const activeType = activeObjects[0]?.subType;
+    if (!activeType) return;
 
-    const matchingNav = navList.find((nav) => nav.id.split("-")[1] === activeCategory);
+    const matchingNav = navList.find((nav) => nav.id.split("-")[1] === activeType);
     if (matchingNav) {
       setActiveNav(matchingNav.id);
     }

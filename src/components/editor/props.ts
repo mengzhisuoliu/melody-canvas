@@ -1,5 +1,5 @@
 import { checkFontAvailability } from "@/libs/common/toolkit";
-import type { RadiusOptions, ShadowOptions, TextOptions } from "./types";
+import type { RadiusOptions, ShadowOptions, TextOptions, VizOptions } from "./types";
 
 export const OBJECT_CONFIG = {
   left: 50,
@@ -37,3 +37,6 @@ export const RADIUS_INPUT = [
 
 export const DEFAULT_RADIUS: RadiusOptions = { tl: 0, tr: 0, bl: 0, br: 0 };
 export const DEFAULT_SHADOW: ShadowOptions = { color: "#ffffff", blur: 0, offsetX: 0, offsetY: 0 };
+
+/* ----- AudioVisualizer ------ */
+export const DEFAULT_VIZ_OPTIONS: VizOptions = { fill: "#ffffff", count: 64 };

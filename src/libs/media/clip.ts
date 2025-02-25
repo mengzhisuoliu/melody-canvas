@@ -1,8 +1,6 @@
 import { IClip } from "@webav/av-cliper";
-import { Canvas, Group } from "fabric";
 
-import { VISUAL_MAP } from "../visualizer";
-import { FrequencyAnalyzer, extractSamples } from "./audio";
+import { BuilderFactory } from '@/visualizers';
 
 class CanvasClip implements IClip {
   ready: IClip["ready"];
@@ -12,19 +10,19 @@ class CanvasClip implements IClip {
     height: 0
   };
 
-  #canvas;
+  #builderFactory;
   #buffer;
-  #analyzer;
+  #canvas;
 
-  constructor(canvas: Canvas, buffer: AudioBuffer) {
-    this.#canvas = canvas;
+  constructor(builderFactory: BuilderFactory, buffer: AudioBuffer) {
+    this.#builderFactory = builderFactory;
     this.#buffer = buffer;
-    this.#analyzer = new FrequencyAnalyzer();
+    this.#canvas = builderFactory.getCanvas();
 
     this.meta = {
       duration: buffer.duration * 1e6, // 单位微秒
-      width: canvas.width,
-      height: canvas.height
+      width: this.#canvas.width,
+      height: this.#canvas.height
     };
     this.ready = Promise.resolve(this.meta);
   }
@@ -38,20 +36,9 @@ class CanvasClip implements IClip {
     video?: VideoFrame;
     state: "success" | "done";
   }> {
-    if (time > this.meta.duration) return { state: "done" }; // 结束条件 -> 避免无限循环
+    if (time > this.meta.duration) return { state: "done" };
 
-    const samples = extractSamples(this.#buffer, time / 1e6);
-    const frequency = this.#analyzer.getFrequency(samples);
-
-    const objects = this.#canvas.getObjects();
-    (Object.keys(VISUAL_MAP) as Array<keyof typeof VISUAL_MAP>).forEach((key) => {
-      const groups = objects.filter((obj) => obj.subType?.variant === key) as Group[];
-    
-      groups.forEach((group) => {
-        VISUAL_MAP[key].draw(frequency, group);
-      });
-    });
-
+    this.#builderFactory.drawAll(this.#buffer, time / 1e6);
     this.#canvas.renderAll();
 
     return {

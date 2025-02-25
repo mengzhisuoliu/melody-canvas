@@ -8,6 +8,9 @@ function App() {
   const globalConfig = merge(enConfig, {
     input: {
       placeholder: ""
+    },
+    select: {
+      placeholder: ""
     }
   });
 

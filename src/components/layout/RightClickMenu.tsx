@@ -1,14 +1,17 @@
+import { Group } from "fabric";
 import { useEffect, useRef, useState } from "react";
-import useCanvasStore from "@/stores/canvasStore";
-import { cloneFabricObject } from "@/libs/media/canvas";
 
-const MENU_BUTTON_STYLE = "rounded-md flex-between px-2 space-x-4 hover:bg-emerald-100 dark:hover:bg-dark-50 dark:hover:text-white";
+import { cloneFabricObject } from "@/libs/media/canvas";
+import useCanvasStore from "@/stores/canvasStore";
+
+const MENU_BUTTON_STYLE =
+  "rounded-md flex-between px-2 space-x-4 hover:bg-emerald-100 dark:(hover:bg-dark-50 hover:text-white)";
 
 /**
  * 自定义右键菜单
  */
 const RightClickMenu = () => {
-  const { canvasInstance, activeObjects } = useCanvasStore();
+  const { canvasInstance, builderFactory, activeObjects } = useCanvasStore();
 
   const menuRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState<boolean>(false);
@@ -64,10 +67,15 @@ const RightClickMenu = () => {
 
   const actions = {
     duplicate: async () => {
-      const clonedObject = await cloneFabricObject(activeObjects[0]);
-      canvasInstance!.add(clonedObject);
-      canvasInstance!.sendObjectToBack(clonedObject);
-      canvasInstance!.renderAll();
+      const activeObject = activeObjects[0]!;
+      if (activeObject.subType === "audio") {
+        builderFactory!.cloneBuilder(activeObject as Group);
+      } else {
+        const clonedObject = await cloneFabricObject(activeObject);
+        canvasInstance!.add(clonedObject);
+        canvasInstance!.sendObjectToBack(clonedObject);
+        canvasInstance!.renderAll();
+      }
     },
     delete: () => {
       activeObjects.forEach((obj) => canvasInstance!.remove(obj));

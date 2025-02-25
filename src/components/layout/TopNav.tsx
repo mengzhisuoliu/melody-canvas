@@ -1,9 +1,9 @@
 import { AudioClip, Combinator, Log, OffscreenSprite } from "@webav/av-cliper";
+import { Canvas } from "fabric";
 import { Button, Tabs } from "tdesign-react";
 
 import { downloadFile } from "@/libs/common/toolkit";
 import { getAudioBuffer } from "@/libs/media/audio";
-import { cloneCanvas } from "@/libs/media/canvas";
 import CanvasClip from "@/libs/media/clip";
 
 import useAudioStore from "@/stores/audioStore";
@@ -19,30 +19,51 @@ Log.setLogLevel(Log.warn); // 隐藏默认 info 日志
  */
 const TopNav: React.FC = () => {
   const { audioFile } = useAudioStore();
-  const { canvasInstance } = useCanvasStore();
+  const { canvasInstance, builderFactory } = useCanvasStore();
   const { themeMode, setThemeMode } = useSettingStore();
 
   const exportVideo = async () => {
-    if (!canvasInstance || !audioFile) return;
+    if (!canvasInstance || !builderFactory || !audioFile) return;
+    canvasInstance.discardActiveObject();
 
-    const canvasCopy = await cloneCanvas(canvasInstance);
+    // 克隆 -> 不影响当前画布
+    const lowerCanvas = document.createElement("canvas");
+    const newCanvas = new Canvas(lowerCanvas, {
+      width: canvasInstance.width,
+      height: canvasInstance.height,
+      backgroundColor: canvasInstance.backgroundColor
+    });
+    const factoryCopy = await builderFactory.clone(newCanvas);
 
+    // 临时画布 -> 隐藏绘制
+    lowerCanvas.classList.add("temp_canvas");
+    lowerCanvas.style.display = "none";
+
+    const upperCanvas = factoryCopy.getCanvas().upperCanvasEl;
+    upperCanvas.classList.add("temp_canvas");
+    upperCanvas.style.display = "none";
+
+    document.body.appendChild(lowerCanvas);
+    document.body.appendChild(upperCanvas);
+
+    // 视频合成器
     const combinator = new Combinator({
-      width: canvasCopy.width,
-      height: canvasCopy.height
+      width: canvasInstance.width,
+      height: canvasInstance.height
     });
 
-    // 画布
+    // 添加画布
     const buffer = await getAudioBuffer(audioFile);
-    const videoClip = new CanvasClip(canvasCopy, buffer);
+    const videoClip = new CanvasClip(factoryCopy, buffer);
     const videoSpr = new OffscreenSprite(videoClip);
     await combinator.addSprite(videoSpr, { main: true });
 
-    // 音频
+    // 添加音频
     const audioClip = new AudioClip(audioFile.stream());
     const audioSpr = new OffscreenSprite(audioClip);
     await combinator.addSprite(audioSpr);
 
+    // 下载
     const blob = await new Response(combinator.output()).blob();
     downloadFile(blob, "output.mp4");
   };
@@ -74,6 +95,7 @@ const TopNav: React.FC = () => {
           theme="primary"
           variant="outline"
           onClick={exportVideo}
+          disabled={!audioFile}
         >
           <div className="flex-center font-bold">
             <div className="i-ri:folder-video-line mr-4"></div>

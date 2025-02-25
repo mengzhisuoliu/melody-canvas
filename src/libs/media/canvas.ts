@@ -1,37 +1,10 @@
-import { Canvas, FabricObject, Path, TSimplePathData } from "fabric";
+import { FabricObject, Path, TSimplePathData } from "fabric";
+
 import { RadiusOptions } from "@/components/editor/types";
-import { STANDARD_LIMIT } from "../common/config";
+import { NORMALIZATION_FACTOR } from "../common/config";
 
-export const getScaledHeight = (objHeight: number, canvasHeight: number) => {
-  return ((objHeight / STANDARD_LIMIT) * canvasHeight) / 4;
-};
-
-export const cloneCanvas = async (source: Canvas) => {
-  const lowerCanvas = document.createElement("canvas");
-  lowerCanvas.classList.add("temp_canvas");
-  lowerCanvas.style.display = "none";
-
-  const newCanvas = new Canvas(lowerCanvas, {
-    width: source.width,
-    height: source.height,
-    backgroundColor: source.backgroundColor
-  });
-
-  await Promise.all(
-    source.getObjects().map(async (object) => {
-      const obj = await cloneFabricObject(object);
-      newCanvas.add(obj);
-    })
-  );
-
-  const upperCanvas = newCanvas.upperCanvasEl;
-  upperCanvas.classList.add("temp_canvas");
-  upperCanvas.style.display = "none";
-
-  document.body.appendChild(lowerCanvas);
-  document.body.appendChild(upperCanvas);
-
-  return newCanvas;
+export const getScaledHeight = (objHeight: number, containerHeight: number) => {
+  return ((objHeight / NORMALIZATION_FACTOR) * containerHeight) / 4;
 };
 
 export const cloneFabricObject = async (source: FabricObject) => {

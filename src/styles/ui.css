@@ -42,6 +42,11 @@ button {
   height: 15px !important;
 }
 
+.t-color-picker__sliders-preview-inner {
+  border: 1px solid var(--td-component-border);
+  border-radius: var(--td-radius-default);
+}
+
 #nav-image .t-input.t-align-left.t-input--prefix {
   height: 24px !important;
   font-size: 0.75rem;
@@ -88,7 +93,17 @@ button {
   width: 28px !important;
 }
 
+/* Select */
+.t-select-option {
+  height: auto !important;
+}
+
 /* SelectInput */
 #nav-text .t-select-input .t-input input {
   font-size: 12px;
+}
+
+/* Ratio */
+#nav-audio .t-radio-group.t-size-s .t-radio-button {
+  padding: 0 4px !important;
 }

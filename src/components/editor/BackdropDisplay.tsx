@@ -30,7 +30,7 @@ const BackdropDisplay: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col space-y-6">
+      <div className="space-y-6">
         {/* 画布比例 */}
         <OptionCard title="Ratio">
           <Select

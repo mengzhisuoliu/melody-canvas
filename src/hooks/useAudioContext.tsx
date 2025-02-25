@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { FrequencyAnalyzer } from "@/libs/media/audio";
 
 type AudioEventListeners = {
   onPlay?: () => void;
@@ -12,13 +11,10 @@ const useAudioContext = (audioRef: React.RefObject<HTMLAudioElement>) => {
   const audioContextRef = useRef<AudioContext | null>(null);
   // 绑定外部的音频事件处理
   const audioListenersRef = useRef<AudioEventListeners>({});
-  // 自定义算法的频率处理器
-  const analyzerRef = useRef<FrequencyAnalyzer | null>(null);
 
   const handleInit = () => {
     if (!audioContextRef.current) {
       audioContextRef.current = new AudioContext();
-      analyzerRef.current = new FrequencyAnalyzer();
     }
   };
 
@@ -32,7 +28,6 @@ const useAudioContext = (audioRef: React.RefObject<HTMLAudioElement>) => {
 
   const handleEnd = () => {
     audioListenersRef.current.onEnd?.();
-    analyzerRef.current?.reset();
   };
 
   useEffect(() => {
@@ -49,11 +44,9 @@ const useAudioContext = (audioRef: React.RefObject<HTMLAudioElement>) => {
       audioRef.current?.removeEventListener("pause", handlePause);
       audioRef.current?.removeEventListener("ended", handleEnd);
     };
-  }, []);
+  }, [audioRef.current]);
 
   return {
-    audioContextRef,
-    analyzerRef,
     audioListenersRef
   };
 };

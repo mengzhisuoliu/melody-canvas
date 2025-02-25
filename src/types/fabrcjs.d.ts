@@ -1,10 +1,9 @@
-import type { FabricObject } from "fabric";
+import type { Group, FabricObject } from "fabric";
+import type { VizShape, VizStyle } from "@/components/editor/types";
 
 declare module "fabric" {
   export interface FabricObject {
-    subType?: {
-      category: "audio" | "image" | "text";
-      variant?: string;
-    };
+    id?: string;
+    subType?: "audio" | "image" | "text";
   }
 }

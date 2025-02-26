@@ -1,7 +1,6 @@
 import { Canvas, Group } from "fabric";
 
-import { pick } from "@/libs/common/toolkit";
-import { cloneFabricObject } from "@/libs/media/canvas";
+import { cloneFabricObject, getObjectTransformations } from "@/libs/media/canvas";
 import Builder from "./Builder";
 
 type BuilderConstructor<T extends Builder> = new (count: number, fill: string) => T;
@@ -38,7 +37,7 @@ class BuilderFactory {
       factoryCopy.addBuilder(builderCopy);
 
       // 再确保原有属性不变
-      const origProps = pick(builder.getGroup(), ["left", "top", "scaleX", "scaleY"]);
+      const origProps = getObjectTransformations(builder.getGroup()!);
       const groupCopy = builderCopy.getGroup();
       groupCopy.set(origProps);
     });
@@ -100,7 +99,7 @@ class BuilderFactory {
     this.addBuilder(builder);
 
     const group = builder.getGroup();
-    const origProps = pick(vizGroup, ["left", "top", "scaleX", "scaleY"]);
+    const origProps = getObjectTransformations(vizGroup);
     group.set(origProps);
 
     this.canvas.remove(vizGroup);

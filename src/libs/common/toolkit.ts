@@ -14,18 +14,6 @@ export const formatSelectOptions = (options: string[]) => {
 };
 
 /**
- * 从对象中提取指定 key 的值
- * @param {T} obj - 源对象
- * @param {K[]} keys - 需要提取的 key
- */
-export const pick = <T extends object, K extends keyof T>(obj: T, keys: K[]) => {
-  return keys.reduce((acc, key) => {
-    acc[key] = obj[key];
-    return acc;
-  }, {} as Pick<T, K>);
-};
-
-/**
  * 根据给定的模板对象，提取源对象中对应的 value
  * 如果源对象中缺失某个 key，则使用模板对象中该 key 的默认值
  * @param {Partial<T>} source - 源对象，包含需要提取的值

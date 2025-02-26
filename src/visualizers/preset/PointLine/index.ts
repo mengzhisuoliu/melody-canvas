@@ -1,8 +1,7 @@
 import { Circle } from "fabric";
 
 import { NORMALIZATION_FACTOR } from "@/libs/common/config";
-import { pick } from "@/libs/common/toolkit";
-import { getScaledHeight } from "@/libs/media/canvas";
+import { getObjectTransformations, getScaledHeight } from "@/libs/media/canvas";
 
 import Builder from "../../core/Builder";
 
@@ -47,9 +46,8 @@ class PointLine extends Builder {
   public init(canvasHeight: number, canvasWidth: number) {
     const circles = this.createElements(canvasWidth, 1);
     this.group.add(...circles);
-
     this.group.set({
-      top: canvasHeight / 4 - this.group.height / 2
+      top: canvasHeight / 4 - this.group.height / 2 // 此时的 top 是相对于 Canvas 顶部
     });
   }
 
@@ -65,7 +63,7 @@ class PointLine extends Builder {
 
       const objHeight = getScaledHeight(frequency[i], canvasHeight);
       circle.set({
-        top: this.group.height / 2 - objHeight
+        top: this.group.height / 2 - objHeight // 此时的 top 是相对于 Group 顶部
       });
     });
   }
@@ -76,8 +74,8 @@ class PointLine extends Builder {
     this.count = count;
     this.analyzer.updateFFTSize(count * 2);
 
-    const origProps = pick(this.group, ["left", "top", "width", "height", "scaleX", "scaleY"]);
-    const elements = this.createElements(origProps.width * origProps.scaleX, origProps.scaleY);
+    const origProps = getObjectTransformations(this.group);
+    const elements = this.createElements(this.group.width * origProps.scaleX, origProps.scaleY);
 
     // 移除原有内容 -> 整体替换
     this.group.remove(...this.group.getObjects());

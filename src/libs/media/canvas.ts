@@ -1,4 +1,5 @@
-import { FabricObject, Path, TSimplePathData } from "fabric";
+import { FabricObject, Path, type TSimplePathData } from "fabric";
+import { pick } from "lodash";
 
 import { RadiusOptions } from "@/components/editor/types";
 import { NORMALIZATION_FACTOR } from "../common/config";
@@ -13,6 +14,10 @@ export const cloneFabricObject = async (source: FabricObject) => {
     newObject.set({ subType: source.subType });
   }
   return newObject;
+};
+
+export const getObjectTransformations = (object: FabricObject) => {
+  return pick(object, ["left", "top", "scaleX", "scaleY", "flipX", "flipY", "angle"]);
 };
 
 /**

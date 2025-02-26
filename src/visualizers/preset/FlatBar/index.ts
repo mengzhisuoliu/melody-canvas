@@ -1,8 +1,6 @@
 import { Rect } from "fabric";
 
-import { pick } from "@/libs/common/toolkit";
-import { getScaledHeight } from "@/libs/media/canvas";
-
+import { getObjectTransformations, getScaledHeight } from "@/libs/media/canvas";
 import Builder from "../../core/Builder";
 
 class FlatBar extends Builder {
@@ -10,7 +8,7 @@ class FlatBar extends Builder {
     super(count, color);
   }
 
-  private createElements(groupWidth: number, groupHeight: number) {
+  private createElement(groupWidth: number, groupHeight: number) {
     const rects: Rect[] = [];
 
     const objWidth = groupWidth / this.count - 2;
@@ -22,7 +20,7 @@ class FlatBar extends Builder {
         width: objWidth,
         height: groupHeight,
         fill: this.fill,
-        originY: "bottom" // 使 top 属性成为 obj「底」到 canvas「顶」的距离
+        originY: "bottom" // 使 top 属性成为 obj「底」到 Canvas「顶」的距离
       });
 
       rects.push(rect);
@@ -34,7 +32,7 @@ class FlatBar extends Builder {
 
   public init(canvasHeight: number, canvasWidth: number) {
     const groupHeight = canvasHeight / 4;
-    const elements = this.createElements(canvasWidth, groupHeight);
+    const elements = this.createElement(canvasWidth, groupHeight);
     this.group.add(...elements);
 
     this.group.set({
@@ -63,11 +61,11 @@ class FlatBar extends Builder {
     this.count = count;
     this.analyzer.updateFFTSize(count * 2);
 
-    const origProps = pick(this.group, ["left", "top", "width", "height", "scaleX", "scaleY"]);
-    const elements = this.createElements(origProps.width * origProps.scaleX, origProps.height * origProps.scaleY);
+    const origProps = getObjectTransformations(this.group);
+    const element = this.createElement(this.group.width * origProps.scaleX, this.group.height * origProps.scaleY);
 
     this.group.remove(...this.group.getObjects());
-    this.group.add(...elements);
+    this.group.add(...element);
 
     this.group.set(origProps);
     this.group.setCoords();

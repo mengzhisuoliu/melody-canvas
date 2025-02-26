@@ -1,4 +1,4 @@
-import { getAudioBuffer } from "@/libs/media/audio";
+import { getAudioBuffer } from "@/libs/media";
 import { useAudioStore } from "@/stores";
 
 const AudioUploader: React.FC = () => {

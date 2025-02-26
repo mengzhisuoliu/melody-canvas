@@ -1,10 +1,12 @@
 import { useState } from "react";
+
+import type { ColorObject, ColorPickerChangeTrigger } from "tdesign-react";
 import { ColorPickerPanel, Select } from "tdesign-react";
 
 import { useCanvasStore } from "@/stores";
 
-import { DEFAULT_BACKGROUND_COLOR } from "@/libs/common/config";
-import { formatSelectOptions } from "@/libs/common/toolkit";
+import { createGradientFromCss } from "@/libs/canvas";
+import { DEFAULT_BACKGROUND_COLOR, formatSelectOptions } from "@/libs/common";
 
 import { OptionCard } from "../base";
 
@@ -15,16 +17,29 @@ const BackdropDisplay: React.FC = () => {
   const { canvasInstance, ratio, setRatio } = useCanvasStore();
   const [backgroundColor, setBackgroundColor] = useState(DEFAULT_BACKGROUND_COLOR);
 
-  const updateBackground = (color: string) => {
-    setBackgroundColor(color);
-
+  const updateBackground = (
+    color: string,
+    context: {
+      color: ColorObject;
+      trigger: ColorPickerChangeTrigger;
+    }
+  ) => {
     /*
       TDesign 疑似把整个函数缓存了
       如果不给 ColorPicker 加 key
       这里的 canvasInstance 一直是 null
      */
     if (!canvasInstance) return;
-    canvasInstance.backgroundColor = color;
+    setBackgroundColor(color);
+
+    if (!context.color.isGradient) {
+      canvasInstance.backgroundColor = color;
+    } else {
+      const cssGradient = context.color.css;
+      canvasInstance.backgroundColor = createGradientFromCss(cssGradient, canvasInstance.width, canvasInstance.height);
+      // todo: 渐变值持久保存
+    }
+
     canvasInstance.renderAll();
   };
 
@@ -50,11 +65,10 @@ const BackdropDisplay: React.FC = () => {
             style={{ width: "100%" }}
             key={canvasInstance?.toString()}
             format="HEX"
-            colorModes={["monochrome"]}
             recentColors={null}
-            swatchColors={null}
+            swatchColors={null} // 预设颜色
             value={backgroundColor}
-            onChange={(color) => updateBackground(color)}
+            onChange={(color, ctx) => updateBackground(color, ctx)}
           />
         </OptionCard>
       </div>

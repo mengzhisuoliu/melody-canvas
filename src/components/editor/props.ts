@@ -1,4 +1,4 @@
-import { checkFontAvailability } from "@/libs/common/toolkit";
+import { checkFontAvailability } from "@/libs/common";
 import type { RadiusOptions, ShadowOptions, TextOptions, VizOptions } from "./types";
 
 export const OBJECT_CONFIG = {

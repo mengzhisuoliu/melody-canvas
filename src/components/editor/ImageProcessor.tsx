@@ -5,8 +5,8 @@ import { ColorPicker, InputNumber, Upload, type UploadFile } from "tdesign-react
 import { useDynamicCss } from "@/hooks";
 import { useCanvasStore } from "@/stores";
 
-import { pickWithDefaults } from "@/libs/common/toolkit";
-import { createPathByRadius, extractRadiusFromPath, getObjectTransformations } from "@/libs/media/canvas";
+import { createPathByRadius, extractRadiusFromPath, getObjectTransformations } from "@/libs/canvas";
+import { pickWithDefaults } from "@/libs/common";
 
 import { ActionButton, OptionCard } from "../base";
 import { DEFAULT_RADIUS, DEFAULT_SHADOW, OBJECT_CONFIG, RADIUS_INPUT } from "./props";

@@ -2,7 +2,7 @@ import { Textbox } from "fabric";
 import { useEffect, useMemo, useState } from "react";
 import { Checkbox, ColorPicker, SelectInput, Textarea } from "tdesign-react";
 
-import { pickWithDefaults } from "@/libs/common/toolkit";
+import { pickWithDefaults } from "@/libs/common";
 import { useCanvasStore } from "@/stores";
 
 import { ActionButton, OptionCard } from "../base";

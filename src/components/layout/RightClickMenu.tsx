@@ -1,7 +1,7 @@
 import { Group } from "fabric";
 import { useEffect, useRef, useState } from "react";
 
-import { cloneFabricObject } from "@/libs/media/canvas";
+import { cloneFabricObject } from "@/libs/canvas";
 import { useCanvasStore } from "@/stores";
 
 const MENU_BUTTON_STYLE =

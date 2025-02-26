@@ -1,7 +1,7 @@
 import { Canvas, FabricObject } from "fabric";
 import { useEffect, useRef, useState } from "react";
 
-import { DEFAULT_BACKGROUND_COLOR, THEME_COLOR } from "@/libs/common/config";
+import { DEFAULT_BACKGROUND_COLOR, THEME_COLOR } from "@/libs/common";
 import { useCanvasStore } from "@/stores";
 
 import RightClickMenu from "./RightClickMenu";

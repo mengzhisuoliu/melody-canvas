@@ -2,7 +2,7 @@ import { IClip } from "@webav/av-cliper";
 
 import { BuilderFactory } from '@/visualizers';
 
-class CanvasClip implements IClip {
+export class CanvasClip implements IClip {
   ready: IClip["ready"];
   meta = {
     duration: 0,
@@ -60,5 +60,3 @@ class CanvasClip implements IClip {
     });
   }
 }
-
-export default CanvasClip;

@@ -1,6 +1,6 @@
 import { Rect } from "fabric";
 
-import { getObjectTransformations, getScaledHeight } from "@/libs/media/canvas";
+import { getObjectTransformations, getScaledHeight } from "@/libs/canvas";
 import Builder from "../../core/Builder";
 
 class FlatBar extends Builder {

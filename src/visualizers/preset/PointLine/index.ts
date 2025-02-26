@@ -1,7 +1,7 @@
 import { Circle } from "fabric";
 
-import { NORMALIZATION_FACTOR } from "@/libs/common/config";
-import { getObjectTransformations, getScaledHeight } from "@/libs/media/canvas";
+import { getObjectTransformations, getScaledHeight } from "@/libs/canvas";
+import { NORMALIZATION_FACTOR } from "@/libs/common";
 
 import Builder from "../../core/Builder";
 

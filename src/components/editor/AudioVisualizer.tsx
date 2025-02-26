@@ -2,7 +2,7 @@ import { Group } from "fabric";
 import { useEffect, useMemo, useState } from "react";
 import { ColorPicker, Radio } from "tdesign-react";
 
-import { pickWithDefaults } from "@/libs/common/toolkit";
+import { pickWithDefaults } from "@/libs/common";
 import { useCanvasStore } from "@/stores";
 
 import { AudioSvgSelect, AudioUploader } from "../audio";

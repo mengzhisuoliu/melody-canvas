@@ -1,5 +1,5 @@
 import FFT from "fft.js";
-import { NORMALIZATION_FACTOR } from "@/libs/common/config";
+import { NORMALIZATION_FACTOR } from "@/libs/common";
 
 class FrequencyAnalyzer {
   private readonly logMultiplier = 20;

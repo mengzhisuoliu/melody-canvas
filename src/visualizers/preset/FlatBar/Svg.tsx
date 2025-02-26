@@ -1,4 +1,4 @@
-import { SVG_STYLE, SVG_WIDTH } from "@/libs/common/config";
+import { SVG_STYLE, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "../../types";
 
 const FlatBarSvg: React.FC<SvgProps> = ({ className }) => {

@@ -1,6 +1,6 @@
 import { Canvas, Group } from "fabric";
 
-import { cloneFabricObject, getObjectTransformations } from "@/libs/media/canvas";
+import { cloneFabricObject, getObjectTransformations } from "@/libs/canvas";
 import Builder from "./Builder";
 
 type BuilderConstructor<T extends Builder> = new (count: number, fill: string) => T;

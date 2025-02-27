@@ -1,9 +1,13 @@
 import { Textbox } from "fabric";
 import { useEffect, useMemo, useState } from "react";
+
+import type { ColorObject, ColorPickerChangeTrigger } from "tdesign-react";
 import { Checkbox, ColorPicker, SelectInput, Textarea } from "tdesign-react";
 
-import { pickWithDefaults } from "@/libs/common";
 import { useCanvasStore } from "@/stores";
+
+import { createGradient } from "@/libs/canvas";
+import { pickWithDefaults } from "@/libs/common";
 
 import { ActionButton, OptionCard } from "../base";
 import { DEFAULT_TEXT, FONT_LIST, OBJECT_CONFIG } from "./props";
@@ -49,6 +53,25 @@ const TextManager: React.FC = () => {
     }
   };
 
+  const updateColor = (
+    colorVal: string,
+    context: {
+      color: ColorObject;
+      trigger: ColorPickerChangeTrigger;
+    }
+  ) => {
+    const isGradient = context.color?.isGradient;
+    const color = isGradient ? context.color.css : colorVal;
+
+    updateTextOptions({ color });
+
+    if (activeText) {
+      const fill = isGradient ? createGradient(color, activeText.width, activeText.height) : colorVal;
+      activeText.set({ fill });
+      canvasInstance!.renderAll();
+    }
+  };
+
   const updateTextOptions = (options: Partial<TextOptions>) => {
     setTextOptions((prev) => {
       const updatedOptions = { ...prev, ...options };
@@ -69,13 +92,19 @@ const TextManager: React.FC = () => {
       ...OBJECT_CONFIG,
       ...textOptions
     });
+    textbox.set({ subType: "text" });
+
+    // 处理渐变
+    const isGradient = textOptions.color.includes("gradient");
+    const fill = isGradient ? createGradient(textOptions.color, textbox.width, textbox.height) : textOptions.color;
+    textbox.set({ fill });
+
     // 禁止变形拉伸
     textbox.setControlsVisibility({
       mt: false,
       mb: false
     });
 
-    textbox.set({ subType: "text" });
     canvasInstance.add(textbox);
     canvasInstance.setActiveObject(textbox);
     canvasInstance.renderAll();
@@ -110,12 +139,11 @@ const TextManager: React.FC = () => {
             <ColorPicker
               key={activeText?.toString()} // TDesign 内部缓存问题
               format="HEX"
-              colorModes={["monochrome"]}
               recentColors={null}
               swatchColors={null}
               inputProps={{ style: { width: "126px" } }}
-              value={textOptions.fill}
-              onChange={(val) => updateTextOptions({ fill: val as string })}
+              value={textOptions.color}
+              onChange={(color, ctx) => updateColor(color, ctx)}
             />
           </OptionCard>
 

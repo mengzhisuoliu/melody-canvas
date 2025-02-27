@@ -21,7 +21,7 @@ export const FONT_LIST = [
 ].filter((font) => checkFontAvailability(font));
 
 export const DEFAULT_TEXT: TextOptions = {
-  fill: "#ffffff",
+  color: "#ffffff",
   fontWeight: 400,
   fontStyle: "normal",
   fontFamily: "Arial"

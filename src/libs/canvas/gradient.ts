@@ -1,13 +1,13 @@
 import { Gradient, type ColorStop } from "fabric";
 import chroma from "chroma-js";
 
-const degreeToCoords = (degree: number, canvasWidth: number, canvasHeight: number) => {
+const degreeToCoords = (degree: number, objWidth: number, objHeight: number) => {
   // 角度 -> 弧度
   const radians = (degree * Math.PI) / 180;
 
-  const centerX = canvasWidth / 2;
-  const centerY = canvasHeight / 2;
-  const length = Math.sqrt(canvasWidth * canvasWidth + canvasHeight * canvasHeight) / 2;
+  const centerX = objWidth / 2;
+  const centerY = objHeight / 2;
+  const length = Math.sqrt(objWidth * objWidth + objHeight * objHeight) / 2;
 
   const x1 = centerX + Math.cos(radians) * length;
   const y1 = centerY + Math.sin(radians) * length;

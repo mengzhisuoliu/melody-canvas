@@ -1,4 +1,4 @@
-import { Textbox } from "fabric";
+import { FabricText, Textbox } from "fabric";
 import { useEffect, useMemo, useState } from "react";
 
 import type { ColorObject, ColorPickerChangeTrigger } from "tdesign-react";
@@ -85,14 +85,24 @@ const TextManager: React.FC = () => {
     });
   };
 
+  const getMaxLineWidth = (text: string) => {
+    const lines = text.split("\n");
+    const widths = lines.map((line) => {
+      const textObj = new FabricText(line, { ...OBJECT_CONFIG, ...textOptions });
+      return textObj.calcTextWidth();
+    });
+    return Math.max(...widths);
+  };
+
   const handleAddText = () => {
     if (!canvasInstance || text === "") return;
 
     const textbox = new Textbox(text, {
       ...OBJECT_CONFIG,
-      ...textOptions
+      ...textOptions,
+      subType: "text",
+      width: getMaxLineWidth(text) // 手动设置宽度 -> 防止初始化换行
     });
-    textbox.set({ subType: "text" });
 
     // 处理渐变
     const isGradient = textOptions.color.includes("gradient");

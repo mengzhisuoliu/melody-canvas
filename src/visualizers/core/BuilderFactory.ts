@@ -3,7 +3,7 @@ import { Canvas, Group } from "fabric";
 import { cloneFabricObject, getObjectTransformations } from "@/libs/canvas";
 import Builder from "./Builder";
 
-type BuilderConstructor<T extends Builder> = new (count: number, color: string) => T;
+type BuilderConstructor<T extends Builder> = new (...args: ConstructorParameters<typeof Builder>) => T;
 
 /**
  * 管理画布上所有的音频可视化元素

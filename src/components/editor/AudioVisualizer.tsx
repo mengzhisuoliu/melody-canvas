@@ -1,5 +1,7 @@
 import { Group } from "fabric";
 import { useEffect, useMemo, useState } from "react";
+
+import type { ColorObject, ColorPickerChangeTrigger } from "tdesign-react";
 import { ColorPicker, Radio } from "tdesign-react";
 
 import { pickWithDefaults } from "@/libs/common";
@@ -33,9 +35,7 @@ const AudioVisualizer: React.FC = () => {
   useEffect(() => {
     if (activeViz?.id) {
       setVizName(activeViz.id.split("-")[0]);
-      const vizEls = activeViz.getObjects();
-      const vizData = pickWithDefaults(vizEls[0] as Partial<VizOptions>, DEFAULT_VIZ_OPTIONS);
-      vizData.count = vizEls.length;
+      const vizData = pickWithDefaults(activeViz, DEFAULT_VIZ_OPTIONS);
       setVizOptions(vizData);
     }
   }, [activeObjects]);
@@ -47,32 +47,39 @@ const AudioVisualizer: React.FC = () => {
     });
   };
 
-  const handleAddViz = async () => {
-    if (!builderFactory) return;
-    const BuilderClass = await builderFactory.createBuilder(vizName);
-    const builder = new BuilderClass(vizOptions.count, vizOptions.fill);
-    builderFactory.addBuilder(builder);
-  };
-
-  const handleSvgSelect = (name: string) => {
+  const updateType = (name: string) => {
     setVizName(name);
     if (activeViz) {
       builderFactory!.updateBuilderType(activeViz, name);
     }
   };
 
-  const handleFillChange = (color: string) => {
-    updateVizOptions({ fill: color });
+  const updateFill = (
+    color: string,
+    context: {
+      color: ColorObject;
+      trigger: ColorPickerChangeTrigger;
+    }
+  ) => {
+    const isGradient = context.color?.isGradient;
+    updateVizOptions({ color: isGradient ? context.color.css : color });
     if (activeViz) {
       builderFactory!.updateBuilderColor(activeViz, color);
     }
   };
 
-  const handleCountChange = (count: number) => {
+  const updateCount = (count: number) => {
     updateVizOptions({ count });
     if (activeViz) {
       builderFactory!.updateBuilderCount(activeViz, count);
     }
+  };
+
+  const handleAddViz = async () => {
+    if (!builderFactory) return;
+    const BuilderClass = await builderFactory.createBuilder(vizName);
+    const builder = new BuilderClass(vizOptions.count, vizOptions.color);
+    builderFactory.addBuilder(builder);
   };
 
   return (
@@ -91,7 +98,7 @@ const AudioVisualizer: React.FC = () => {
 
         <AudioSvgSelect
           name={vizName}
-          onChange={(name) => handleSvgSelect(name)}
+          onChange={(name) => updateType(name)}
         />
       </div>
 
@@ -104,11 +111,10 @@ const AudioVisualizer: React.FC = () => {
             <ColorPicker
               key={activeViz?.toString()} // 不加 key 会莫名陷入死循环
               format="HEX"
-              colorModes={["monochrome"]}
               recentColors={null}
               swatchColors={null}
-              value={vizOptions.fill}
-              onChange={(val) => handleFillChange(val)}
+              value={vizOptions.color}
+              onChange={(color, ctx) => updateFill(color, ctx)}
             />
           </OptionCard>
 
@@ -120,7 +126,7 @@ const AudioVisualizer: React.FC = () => {
             <Radio.Group
               className="space-x-3"
               value={vizOptions.count}
-              onChange={(val) => handleCountChange(val as number)}
+              onChange={(val) => updateCount(val as number)}
             >
               {[8, 16, 32, 64, 128, 256].map((val) => (
                 <div

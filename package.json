@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@webav/av-cliper": "^1.0.7",
+    "chroma-js": "^3.1.2",
     "fabric": "^6.4.3",
     "fft.js": "^4.0.4",
     "react": "^18.3.1",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@iconify/json": "^2.2.258",
+    "@types/chroma-js": "^3.1.1",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.7.5",
     "@types/react": "^18.3.10",

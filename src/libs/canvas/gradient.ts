@@ -1,8 +1,5 @@
 import { Gradient, type ColorStop } from "fabric";
-
-const rgbToHex = (r: number, g: number, b: number) => {
-  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-};
+import chroma from "chroma-js";
 
 const degreeToCoords = (degree: number, canvasWidth: number, canvasHeight: number) => {
   // 角度 -> 弧度
@@ -20,42 +17,60 @@ const degreeToCoords = (degree: number, canvasWidth: number, canvasHeight: numbe
   return { x1, y1, x2, y2 };
 };
 
-const formatColorStops = (css: string) => {
-  const allColorStops: ColorStop[] = [];
+const formatColorStops = (colors: string[], stops: number[]) => {
+  const colorStops: ColorStop[] = [];
 
-  const colorMatches = css.match(/(rgba?\([^)]+\))\s*(\d+%)/g);
-  if (colorMatches) {
-    colorMatches.forEach((input) => {
-      const match = input.match(/^(rgba?\([^)]+\))\s*(\d+%)$/);
-      if (match) {
-        const color = match[1];
-        const offset = match[2];
+  colors.forEach((color, index) => {
+    const offset = stops[index];
+    colorStops.push({ color, offset });
+  });
 
-        const [r, g, b] = color.match(/\d+/g)!.map(Number);
-        const hex = rgbToHex(r, g, b);
-
-        const offsetDecimal = parseFloat(offset) / 100; // 百分比 -> 小数
-
-        allColorStops.push({ color: hex, offset: offsetDecimal });
-      }
-    });
-  }
-
-  return allColorStops;
+  return colorStops;
 };
 
 /**
  * @param css - E.g. `linear-gradient(45deg,rgba(131, 222, 196, 1) 0%,rgb(73, 106, 220) 100%)`
  */
-export const createGradientFromCss = (css: string, canvasWidth: number, canvasHeight: number) => {
-  const degMatch = css.match(/(\d+)deg/);
-  const degree = degMatch ? parseInt(degMatch[1]) : 90;
+const parseGradient = (css: string) => {
+  const regex = /(\d+)deg|rgba?\([^)]+\)|rgb\([^)]+\)|\d+%/g;
+  const matches = css.match(regex);
+
+  const degree = parseFloat(matches?.find((m) => m.includes("deg")) || "90");
+  const colors = matches?.filter((m) => m.includes("rgb") || m.includes("rgba")) || [];
+  const stops = matches?.filter((m) => m.includes("%")).map((s) => parseFloat(s) / 100) || [];
+
+  return { degree, colors, stops };
+};
+
+/**
+ * 基于 css 的 `linear-gradient  创建 Fabric `Gradient` 对象
+ */
+export const createGradient = (cssGradient: string, canvasWidth: number, canvasHeight: number) => {
+  const { degree, colors, stops } = parseGradient(cssGradient);
 
   const gradient = new Gradient({
     type: "linear",
     coords: degreeToCoords(degree, canvasWidth, canvasHeight),
-    colorStops: formatColorStops(css)
+    colorStops: formatColorStops(colors, stops)
   });
 
   return gradient;
 };
+
+/**
+ * 基于 css 的 `linear-gradient` 创建颜色数组
+ */
+export function createGradientMap(cssGradient: string, count: number) {
+  const { colors, stops } = parseGradient(cssGradient);
+
+  const gradient = chroma.scale(colors).domain(stops);
+
+  const colorMap = [];
+  for (let i = 0; i < count; i++) {
+    const position = i / (count - 1);
+    const color = gradient(position).hex();
+    colorMap.push(color);
+  }
+
+  return colorMap;
+}

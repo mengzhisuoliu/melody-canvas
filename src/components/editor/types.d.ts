@@ -21,12 +21,6 @@ export type ShadowOptions = {
 
 // 可以直接 set 给 fabric 对象的属性
 export type VizOptions = {
-  fill: string;
-  count: number;
-};
-
-// 需要额外处理的属性
-export type VizOptionsExtra = {
-  fill: string;
+  color: string;
   count: number;
 };

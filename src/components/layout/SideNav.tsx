@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
+import { useDynamicCss } from "@/hooks";
 import { useCanvasStore } from "@/stores";
+
 import { AudioVisualizer, BackdropDisplay, ImageProcessor, TextManager } from "../editor";
 
 interface NavItemProps {
@@ -35,6 +37,16 @@ const SideNav: React.FC = () => {
     { id: "nav-image", name: "Image", icon: "i-lsicon:picture-outline", component: <ImageProcessor /> },
     { id: "nav-text", name: "Text", icon: "i-iconoir:text-square", component: <TextManager /> }
   ];
+
+  // 可视化元素不支持调整渐变角度
+  useDynamicCss(
+    `
+      .t-color-picker__gradient-degree {
+        display: none;
+      }
+    `,
+    activeNav !== "nav-audio"
+  );
 
   useEffect(() => {
     const activeType = activeObjects[0]?.subType;

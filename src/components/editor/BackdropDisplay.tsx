@@ -5,7 +5,7 @@ import { ColorPickerPanel, Select } from "tdesign-react";
 
 import { useCanvasStore } from "@/stores";
 
-import { createGradientFromCss } from "@/libs/canvas";
+import { createGradient } from "@/libs/canvas";
 import { DEFAULT_BACKGROUND_COLOR, formatSelectOptions } from "@/libs/common";
 
 import { OptionCard } from "../base";
@@ -36,8 +36,7 @@ const BackdropDisplay: React.FC = () => {
       canvasInstance.backgroundColor = color;
     } else {
       const cssGradient = context.color.css;
-      canvasInstance.backgroundColor = createGradientFromCss(cssGradient, canvasInstance.width, canvasInstance.height);
-      // todo: 渐变值持久保存
+      canvasInstance.backgroundColor = createGradient(cssGradient, canvasInstance.width, canvasInstance.height);
     }
 
     canvasInstance.renderAll();

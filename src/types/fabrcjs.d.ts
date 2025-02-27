@@ -1,9 +1,13 @@
-import type { Group, FabricObject } from "fabric";
-import type { VizShape, VizStyle } from "@/components/editor/types";
+import "fabric";
 
 declare module "fabric" {
   export interface FabricObject {
-    id?: string;
     subType?: "audio" | "image" | "text";
+  }
+
+  export interface Group {
+    id?: string;
+    color?: string;
+    count?: number;
   }
 }

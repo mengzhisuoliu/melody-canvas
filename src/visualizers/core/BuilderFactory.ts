@@ -3,7 +3,7 @@ import { Canvas, Group } from "fabric";
 import { cloneFabricObject, getObjectTransformations } from "@/libs/canvas";
 import Builder from "./Builder";
 
-type BuilderConstructor<T extends Builder> = new (count: number, fill: string) => T;
+type BuilderConstructor<T extends Builder> = new (count: number, color: string) => T;
 
 /**
  * 管理画布上所有的音频可视化元素
@@ -31,7 +31,7 @@ class BuilderFactory {
     this.builders.forEach(async (builder) => {
       const vizName = builder.constructor.name;
       const BuilderClass = await factoryCopy.createBuilder(vizName);
-      const builderCopy = new BuilderClass(builder.count, builder.fill);
+      const builderCopy = new BuilderClass(builder.getCount(), builder.getColor());
 
       // 先初始化 Group
       factoryCopy.addBuilder(builderCopy);
@@ -79,6 +79,15 @@ class BuilderFactory {
   public addBuilder(builder: Builder) {
     this.builders.push(builder);
     builder.init(this.canvas.height, this.canvas.width);
+
+    const group = builder.getGroup();
+    group.set({
+      subType: "audio",
+      id: builder.getId(),
+      color: builder.getColor(),
+      count: builder.getCount()
+    });
+
     this.canvas.add(builder.getGroup());
   }
 
@@ -91,11 +100,7 @@ class BuilderFactory {
     // 将原本的 Group 删除，直接创建新的
     const BuilderClass = await this.createBuilder(descriptor);
 
-    const vizObjects = vizGroup.getObjects();
-    const count = vizObjects.length;
-    const fill = vizObjects[0].fill as string;
-
-    const builder = new BuilderClass(count, fill);
+    const builder = new BuilderClass(vizGroup.count || 0, vizGroup.color || "");
     this.addBuilder(builder);
 
     const group = builder.getGroup();
@@ -108,11 +113,13 @@ class BuilderFactory {
 
   public updateBuilderCount(vizGroup: Group, count: number) {
     this.getBuilderByGroup(vizGroup)?.updateCount(count);
+    vizGroup.set({ count });
     this.canvas.requestRenderAll();
   }
 
-  public updateBuilderColor(vizGroup: Group, fill: string) {
-    this.getBuilderByGroup(vizGroup)?.updateFill(fill);
+  public updateBuilderColor(vizGroup: Group, color: string) {
+    this.getBuilderByGroup(vizGroup)?.updateColor(color);
+    vizGroup.set({ color });
     this.canvas.requestRenderAll();
   }
 

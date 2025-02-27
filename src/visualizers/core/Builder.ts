@@ -1,6 +1,7 @@
 import { Group } from "fabric";
 import { cloneDeep } from "lodash";
 
+import { createGradientMap } from "@/libs/canvas";
 import FrequencyAnalyzer from "./FrequencyAnalyzer";
 
 /**
@@ -10,21 +11,25 @@ import FrequencyAnalyzer from "./FrequencyAnalyzer";
  * - 具体实现放在子类
  */
 abstract class Builder {
-  public id: string;
-  public count: number;
-  public fill: string;
-  public group: Group;
-  public analyzer: FrequencyAnalyzer;
+  protected id: string;
 
-  constructor(count: number, fill: string) {
+  protected count: number;
+
+  protected color: string;
+  protected colorMap: string[]; // 用于渐变色
+
+  protected group: Group;
+  protected analyzer: FrequencyAnalyzer;
+
+  constructor(count: number, color: string) {
     this.id = this.generateId();
 
     this.count = count;
-    this.fill = fill;
+
+    this.color = color;
+    this.colorMap = this.generateColorMap();
 
     this.group = new Group();
-    this.group.set({ subType: "audio", id: this.id });
-
     this.analyzer = new FrequencyAnalyzer(count * 2);
   }
 
@@ -54,14 +59,16 @@ abstract class Builder {
 
   public abstract updateCount(count: number): void;
 
-  public getFill(): string {
-    return this.fill;
+  public getColor(): string {
+    return this.color;
   }
 
-  public updateFill(fill: string) {
-    this.fill = fill;
-    this.group.getObjects().forEach((obj) => {
-      obj.set({ fill });
+  public updateColor(color: string) {
+    this.color = color;
+    this.colorMap = this.generateColorMap();
+
+    this.group.getObjects().forEach((obj, index) => {
+      obj.set({ fill: this.colorMap[index] });
     });
   }
 
@@ -71,6 +78,14 @@ abstract class Builder {
 
   public abstract init(canvasHeight: number, canvasWidth: number): void;
   public abstract draw(buffer: AudioBuffer, time: number): void;
+
+  protected generateColorMap() {
+    if (!this.color.includes("gradient")) {
+      return new Array(this.count).fill(this.color);
+    } else {
+      return createGradientMap(this.color, this.count);
+    }
+  }
 }
 
 export default Builder;

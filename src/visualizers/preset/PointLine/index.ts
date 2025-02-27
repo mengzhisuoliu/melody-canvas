@@ -33,7 +33,7 @@ class PointLine extends Builder {
         left: x,
         top: heights[i] * scaledY,
         radius: radius,
-        fill: this.fill,
+        fill: this.colorMap[i],
         originY: "bottom"
       });
       circles.push(circle);
@@ -82,7 +82,10 @@ class PointLine extends Builder {
     this.group.add(...elements);
 
     // 确保原有位置和尺寸等不变
-    this.group.set(origProps);
+    this.group.set({
+      ...origProps,
+      count
+    });
     this.group.setCoords();
   }
 }

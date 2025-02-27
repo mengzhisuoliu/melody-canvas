@@ -47,6 +47,10 @@ button {
   border-radius: var(--td-radius-default);
 }
 
+#nav-audio .t-color-picker__trigger .t-input__wrap {
+  width: 100px;
+}
+
 #nav-image .t-input.t-align-left.t-input--prefix {
   height: 24px !important;
   font-size: 0.75rem;

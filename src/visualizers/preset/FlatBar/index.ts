@@ -19,7 +19,7 @@ class FlatBar extends Builder {
         left: x,
         width: objWidth,
         height: groupHeight,
-        fill: this.fill,
+        fill: this.colorMap[i],
         originY: "bottom" // 使 top 属性成为 obj「底」到 Canvas「顶」的距离
       });
 

@@ -9,10 +9,6 @@ export const downloadFile = (blob: Blob, filename: string) => {
   URL.revokeObjectURL(url);
 };
 
-export const formatSelectOptions = (options: string[]) => {
-  return options.map((item) => ({ label: item, value: item }));
-};
-
 /**
  * 根据给定的模板对象，提取源对象中对应的 value
  * 如果源对象中缺失某个 key，则使用模板对象中该 key 的默认值
@@ -28,7 +24,7 @@ export const pickWithDefaults = <T extends object>(source: Partial<T> | undefine
 };
 
 /**
- * 检查传入的 font-family 是否在当前游览器可用 
+ * 检查传入的 font-family 是否在当前游览器可用
  */
 export const checkFontAvailability = (font: string) => {
   const testString = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -48,4 +44,17 @@ export const checkFontAvailability = (font: string) => {
 
   // 宽度不同说明产生了变化 -> 存在可用字体
   return defaultWidth !== fontWidth;
+};
+
+/**
+ * 归一化（将输入 values 映射到指定的 [min, max] 范围）
+ */
+export const normalize = (values: number[], min: number, max: number) => {
+  const minVal = Math.min(...values);
+  const maxVal = Math.max(...values);
+
+  // 避免除零错误
+  if (maxVal === minVal) return values.map(() => min);
+
+  return values.map((value) => ((value - minVal) / (maxVal - minVal)) * (max - min) + min);
 };

@@ -1,7 +1,8 @@
 import FFT from "fft.js";
-import { NORMALIZATION_FACTOR } from "@/libs/common";
+import { normalize } from "@/libs/common";
 
 class FrequencyAnalyzer {
+  private readonly normFactor = 255;
   private readonly logMultiplier = 20;
   private readonly smoothUp = 0.2;
   private readonly smoothDown = 0.05;
@@ -28,17 +29,6 @@ class FrequencyAnalyzer {
     return samples;
   };
 
-
-  private normalize = (yArr: number[]) => {
-    const shiftedY = yArr.map((v) => v + this.logMultiplier);
-
-    const minVal = Math.min(...shiftedY);
-    const maxVal = Math.max(...shiftedY);
-
-    const range = NORMALIZATION_FACTOR / (maxVal - minVal);
-    return shiftedY.map((v) => Math.min(NORMALIZATION_FACTOR, Math.max(0, (v - minVal) * range)));
-  };
-
   private computeFrequency(samples: Float32Array): number[] {
     const out = this.fft.createComplexArray();
     this.fft.realTransform(out, samples);
@@ -55,21 +45,22 @@ class FrequencyAnalyzer {
 
   public getFrequency(buffer: AudioBuffer, time: number) {
     const samples = this.extractSamples(buffer, time);
-    const rawFrequency = this.computeFrequency(samples);
+    const rawFreq = this.computeFrequency(samples);
 
-    if (this.frequency.length !== rawFrequency.length) {
-      this.frequency = rawFrequency;
+    if (this.frequency.length !== rawFreq.length) {
+      this.frequency = rawFreq;
     }
 
-    for (let i = 0; i < rawFrequency.length; i++) {
-      if (rawFrequency[i] < this.frequency[i]) {
-        this.frequency[i] = rawFrequency[i] * this.smoothDown + this.frequency[i] * (1 - this.smoothDown);
+    for (let i = 0; i < rawFreq.length; i++) {
+      if (rawFreq[i] < this.frequency[i]) {
+        this.frequency[i] = rawFreq[i] * this.smoothDown + this.frequency[i] * (1 - this.smoothDown);
       } else {
-        this.frequency[i] = rawFrequency[i] * this.smoothUp + this.frequency[i] * (1 - this.smoothUp);
+        this.frequency[i] = rawFreq[i] * this.smoothUp + this.frequency[i] * (1 - this.smoothUp);
       }
     }
 
-    return this.normalize(this.frequency);
+    const shiftedFreq = this.frequency.map((v) => v + this.logMultiplier);
+    return normalize(shiftedFreq, 0, this.normFactor);
   }
 
   public updateFFTSize(fftSize: number) {

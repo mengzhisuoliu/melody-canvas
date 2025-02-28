@@ -1,6 +1,6 @@
 import { Rect } from "fabric";
 
-import { getObjectTransformations, getScaledHeight } from "@/libs/canvas";
+import { normalize } from "@/libs/common";
 import Builder from "../../core/Builder";
 
 class FlatBar extends Builder {
@@ -8,7 +8,7 @@ class FlatBar extends Builder {
     super(count, color);
   }
 
-  private createElement(groupWidth: number, groupHeight: number) {
+  protected createElements(groupWidth: number, groupHeight: number) {
     const rects: Rect[] = [];
 
     const objWidth = groupWidth / this.count - 2;
@@ -30,13 +30,14 @@ class FlatBar extends Builder {
     return rects;
   }
 
-  public init(canvasHeight: number, canvasWidth: number) {
+  public init(canvasWidth: number, canvasHeight: number) {
     const groupHeight = canvasHeight / 4;
-    const elements = this.createElement(canvasWidth, groupHeight);
-    this.group.add(...elements);
 
+    const elements = this.createElements(canvasWidth, groupHeight);
+    this.group.add(...elements);
+    
     this.group.set({
-      top: canvasHeight - groupHeight // 矩形的底边与画布底部对齐
+      top: canvasHeight - groupHeight // Group 底部与画布底部对齐
     });
   }
 
@@ -44,31 +45,16 @@ class FlatBar extends Builder {
     const frequency = this.analyzer?.getFrequency(buffer, time);
     if (!frequency) return;
 
+    const objHeights = normalize(frequency, 0, this.group.height);
+
     this.group?.getObjects().forEach((rect, i) => {
       const canvasHeight = this.group?.canvas?.getHeight();
       if (rect.type === "rect" && canvasHeight) {
-        const objHeight = getScaledHeight(frequency[i], canvasHeight);
         rect.set({
-          height: objHeight
+          height: objHeights[i]
         });
       }
     });
-  }
-
-  public updateCount(count: number) {
-    if (!this.group.canvas) return;
-
-    this.count = count;
-    this.analyzer.updateFFTSize(count * 2);
-
-    const origProps = getObjectTransformations(this.group);
-    const element = this.createElement(this.group.width * origProps.scaleX, this.group.height * origProps.scaleY);
-
-    this.group.remove(...this.group.getObjects());
-    this.group.add(...element);
-
-    this.group.set(origProps);
-    this.group.setCoords();
   }
 }
 

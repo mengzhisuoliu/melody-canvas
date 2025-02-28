@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { SVG_WIDTH } from "@/libs/common";
+import { SVG_HEIGHT, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "@/visualizers/types";
 
 const svgModules = import.meta.glob("@/visualizers/preset/*/Svg.tsx");
@@ -63,7 +63,7 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, onChange }) => {
           <svg
             width="100%"
             height="100%"
-            viewBox={`0 0 ${SVG_WIDTH} 175`}
+            viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
             xmlns="http://www.w3.org/2000/svg"
             className="w-full h-full"
           >

@@ -61,6 +61,7 @@ const AudioVisualizer: React.FC = () => {
       trigger: ColorPickerChangeTrigger;
     }
   ) => {
+    // to fix: context 有时候传入的参数结构有误
     const isGradient = context.color?.isGradient;
     updateVizOptions({ color: isGradient ? context.color.css : color });
     if (activeViz) {
@@ -115,6 +116,7 @@ const AudioVisualizer: React.FC = () => {
               swatchColors={null}
               value={vizOptions.color}
               onChange={(color, ctx) => updateFill(color, ctx)}
+              onPaletteBarChange={(ctx) => console.log(ctx)}
             />
           </OptionCard>
 

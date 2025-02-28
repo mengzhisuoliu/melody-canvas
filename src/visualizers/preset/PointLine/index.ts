@@ -1,8 +1,6 @@
 import { Circle } from "fabric";
 
-import { getObjectTransformations, getScaledHeight } from "@/libs/canvas";
-import { NORMALIZATION_FACTOR } from "@/libs/common";
-
+import { normalize } from "@/libs/common";
 import Builder from "../../core/Builder";
 
 class PointLine extends Builder {
@@ -10,32 +8,36 @@ class PointLine extends Builder {
     super(count, color);
   }
 
-  private createElements(groupWidth: number, scaledY: number) {
-    const amplitude = NORMALIZATION_FACTOR / 4;
+  protected createElements(groupWidth: number, groupHeight: number) {
     const frequency = (Math.PI * 8) / this.count;
-    const heights = new Uint8Array(this.count);
-
-    for (let i = 0; i < this.count; i++) {
-      const scaledIndex = i / scaledY;
-      // 加上振幅以确保高度为正数
-      heights[i] = Math.sin(scaledIndex * frequency) * amplitude + amplitude;
-    }
-
     const circles: Circle[] = [];
 
     const radius = 3;
-    const totalSpacing = groupWidth - 2 * radius * this.count;
+    const padding = 2;
+    const totalSpacing = groupWidth - padding * radius * this.count;
     const spacing = totalSpacing / (this.count - 1);
+
+    // 相同的 count 会生成相同的 sinValues
+    const sinValues: number[] = [];
+    for (let i = 0; i < this.count; i++) {
+      sinValues.push(Math.sin(i * frequency));
+    }
+    const normSin = normalize(sinValues, 0, 1);
 
     let x = 0;
     for (let i = 0; i < this.count; i++) {
+      // 但是具体的 y 坐标需要根据 Group 的高度来计算
+      // 这里的减数 (diameter + control stroke width) 是为了避免图形超出 Group 边界 
+      const y = (groupHeight - radius * 2 - 1) * normSin[i];
+
       const circle = new Circle({
         left: x,
-        top: heights[i] * scaledY,
+        top: y,
         radius: radius,
         fill: this.colorMap[i],
-        originY: "bottom"
+        originY: "top"
       });
+
       circles.push(circle);
       x += 2 * radius + spacing;
     }
@@ -43,50 +45,29 @@ class PointLine extends Builder {
     return circles;
   }
 
-  public init(canvasHeight: number, canvasWidth: number) {
-    const circles = this.createElements(canvasWidth, 1);
-    this.group.add(...circles);
+  public init(canvasWidth: number, canvasHeight: number) {
+    const groupHeight = canvasHeight / 4;
+
+    const elements = this.createElements(canvasWidth, groupHeight);
+    this.group.add(...elements);
+
     this.group.set({
-      top: canvasHeight / 4 - this.group.height / 2 // 此时的 top 是相对于 Canvas 顶部
+      top: groupHeight // 此时的 top 是相对于 Canvas 顶部
     });
   }
 
   public draw(buffer: AudioBuffer, time: number) {
     const frequency = this.analyzer?.getFrequency(buffer, time);
-    if (!frequency || !this.group) return;
+    if (!frequency) return;
 
+    const objHeights = normalize(frequency, 0, this.group.height);
+    
     this.group.getObjects().forEach((circle, i) => {
       if (circle.type !== "circle") return;
-
-      const canvasHeight = this.group.canvas?.getHeight();
-      if (!canvasHeight) return;
-
-      const objHeight = getScaledHeight(frequency[i], canvasHeight);
       circle.set({
-        top: this.group.height / 2 - objHeight // 此时的 top 是相对于 Group 顶部
+        top: this.group.height / 2 - objHeights[i] // 此时的 top 是相对于 Group 顶部
       });
     });
-  }
-
-  public updateCount(count: number) {
-    if (!this.group.canvas) return;
-
-    this.count = count;
-    this.analyzer.updateFFTSize(count * 2);
-
-    const origProps = getObjectTransformations(this.group);
-    const elements = this.createElements(this.group.width * origProps.scaleX, origProps.scaleY);
-
-    // 移除原有内容 -> 整体替换
-    this.group.remove(...this.group.getObjects());
-    this.group.add(...elements);
-
-    // 确保原有位置和尺寸等不变
-    this.group.set({
-      ...origProps,
-      count
-    });
-    this.group.setCoords();
   }
 }
 

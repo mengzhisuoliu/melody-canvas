@@ -8,6 +8,7 @@ type BuilderConstructor<T extends Builder> = new (...args: ConstructorParameters
 /**
  * 管理画布上所有的音频可视化元素
  * - 负责直接操作 `Canvas`
+ * - 负责统一给 `Builder` 设置标识符
  */
 class BuilderFactory {
   private canvas: Canvas;
@@ -78,7 +79,7 @@ class BuilderFactory {
 
   public addBuilder(builder: Builder) {
     this.builders.push(builder);
-    builder.init(this.canvas.height, this.canvas.width);
+    builder.init(this.canvas.width, this.canvas.height);
 
     const group = builder.getGroup();
     group.set({

@@ -35,7 +35,7 @@ const TopNav: React.FC = () => {
     lowerCanvas.classList.add("temp_canvas");
     lowerCanvas.style.display = "none";
 
-    const upperCanvas = factoryCopy.getCanvas().upperCanvasEl;
+    const upperCanvas = newCanvas.upperCanvasEl;
     upperCanvas.classList.add("temp_canvas");
     upperCanvas.style.display = "none";
 

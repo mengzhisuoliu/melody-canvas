@@ -1,7 +1,7 @@
-import { Group } from "fabric";
+import { FabricObject, Group } from "fabric";
 import { cloneDeep } from "lodash";
 
-import { createGradientMap } from "@/libs/canvas";
+import { createGradientMap, getObjectTransformations } from "@/libs/canvas";
 import FrequencyAnalyzer from "./FrequencyAnalyzer";
 
 /**
@@ -15,7 +15,7 @@ abstract class Builder {
 
   protected count: number;
 
-  protected color: string;
+  protected color: string; // Hex or CSS linear-gradient
   protected colorMap: string[]; // 用于渐变色
 
   protected group: Group;
@@ -33,17 +33,25 @@ abstract class Builder {
     this.analyzer = new FrequencyAnalyzer(count * 2);
   }
 
-  private generateId(): string {
-    return `${this.constructor.name}-${new Date().getTime()}`;
-  }
-
-  public clone(): Builder {
+  public clone() {
     const builder = cloneDeep(this);
     builder.updateId();
     return builder;
   }
 
-  public getId(): string {
+  private generateId() {
+    return `${this.constructor.name}-${new Date().getTime()}`;
+  }
+
+  protected generateColorMap() {
+    if (!this.color.includes("gradient")) {
+      return new Array(this.count).fill(this.color);
+    } else {
+      return createGradientMap(this.color, this.count);
+    }
+  }
+
+  public getId() {
     return this.id;
   }
 
@@ -53,39 +61,52 @@ abstract class Builder {
     this.group.set({ id: newId });
   }
 
-  public getCount(): number {
+  public getCount() {
     return this.count;
   }
 
-  public abstract updateCount(count: number): void;
+  public updateCount(count: number) {
+    if (!this.group.canvas) return;
 
-  public getColor(): string {
+    this.count = count;
+    this.colorMap = this.generateColorMap();
+
+    this.analyzer.updateFFTSize(count * 2);
+
+    const origProps = getObjectTransformations(this.group);
+
+    const scaledWidth = this.group.width * origProps.scaleX;
+    const scaledHeight = this.group.height * origProps.scaleY;
+    const elements = this.createElements(scaledWidth, scaledHeight);
+
+    this.group.remove(...this.group.getObjects());
+    this.group.add(...elements);
+
+    this.group.set(origProps);
+    this.group.setCoords();
+  }
+
+  public getColor() {
     return this.color;
   }
 
   public updateColor(color: string) {
     this.color = color;
     this.colorMap = this.generateColorMap();
+    console.log(color)
 
     this.group.getObjects().forEach((obj, index) => {
       obj.set({ fill: this.colorMap[index] });
     });
   }
 
-  public getGroup(): Group {
+  public getGroup() {
     return this.group;
   }
 
-  public abstract init(canvasHeight: number, canvasWidth: number): void;
+  protected abstract createElements(groupWidth: number, groupHeight: number): FabricObject[];
+  public abstract init(canvasWidth: number, canvasHeight: number): void;
   public abstract draw(buffer: AudioBuffer, time: number): void;
-
-  protected generateColorMap() {
-    if (!this.color.includes("gradient")) {
-      return new Array(this.count).fill(this.color);
-    } else {
-      return createGradientMap(this.color, this.count);
-    }
-  }
 }
 
 export default Builder;

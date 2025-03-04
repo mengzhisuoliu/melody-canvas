@@ -93,7 +93,6 @@ abstract class Builder {
   public updateColor(color: string) {
     this.color = color;
     this.colorMap = this.generateColorMap();
-    console.log(color)
 
     this.group.getObjects().forEach((obj, index) => {
       obj.set({ fill: this.colorMap[index] });

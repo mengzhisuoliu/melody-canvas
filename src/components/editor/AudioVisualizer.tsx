@@ -116,7 +116,6 @@ const AudioVisualizer: React.FC = () => {
               swatchColors={null}
               value={vizOptions.color}
               onChange={(color, ctx) => updateFill(color, ctx)}
-              onPaletteBarChange={(ctx) => console.log(ctx)}
             />
           </OptionCard>
 

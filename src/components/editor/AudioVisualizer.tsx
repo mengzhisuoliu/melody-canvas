@@ -125,20 +125,20 @@ const AudioVisualizer: React.FC = () => {
             title="Count"
           >
             <Radio.Group
-              className="space-x-3"
+              className="space-x-2"
               value={vizOptions.count}
               onChange={(val) => updateCount(val as number)}
             >
-              {[8, 16, 32, 64, 128, 256].map((val) => (
+              {[32, 64, 128, 256].map((val) => (
                 <div
-                  className="flex-center flex-col space-y-1"
+                  className="flex-center"
                   key={val}
                 >
                   <Radio
                     value={val}
                     style={{ margin: 0 }}
                   ></Radio>
-                  <span className="font-mono text-xs">{val}</span>
+                  <span className="ml-0.5 font-mono text-xs">{val}</span>
                 </div>
               ))}
             </Radio.Group>

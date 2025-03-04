@@ -2,9 +2,19 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+:root[theme-mode="light"] {
+  --scrollbar-color: #42b093 #ffffff;
+}
+
+:root[theme-mode="dark"] {
+  --scrollbar-color: #595959 #cccccc;
+}
+
 *,
 ::placeholder {
   @apply font-mono;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
 }
 
 body {

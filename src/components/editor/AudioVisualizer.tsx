@@ -61,11 +61,13 @@ const AudioVisualizer: React.FC = () => {
       trigger: ColorPickerChangeTrigger;
     }
   ) => {
-    // to fix: context 有时候传入的参数结构有误
+    // to fix: context 有时候传入的参数结构有误 -> context.color 为 undefined
     const isGradient = context.color?.isGradient;
-    updateVizOptions({ color: isGradient ? context.color.css : color });
+    const appliedColor = isGradient ? context.color.css : color;
+
+    updateVizOptions({ color: appliedColor });
     if (activeViz) {
-      builderFactory!.updateBuilderColor(activeViz, color);
+      builderFactory!.updateBuilderColor(activeViz, appliedColor);
     }
   };
 

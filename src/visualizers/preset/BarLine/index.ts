@@ -3,7 +3,10 @@ import { Rect } from "fabric";
 import { normalize } from "@/libs/common";
 import Builder from "../../core/Builder";
 
-class FlatBar extends Builder {
+/**
+ * 柱状线形
+ */
+class BarLine extends Builder {
   constructor(count: number, color: string) {
     super(count, color);
   }
@@ -58,4 +61,4 @@ class FlatBar extends Builder {
   }
 }
 
-export default FlatBar;
+export default BarLine;

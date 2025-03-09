@@ -1,7 +1,7 @@
 import { SVG_STYLE, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "../../types";
 
-const PointLineSvg: React.FC<SvgProps> = ({ className }) => {
+const DotLineSvg: React.FC<SvgProps> = ({ className }) => {
   const count = 25;
   return (
     <>
@@ -23,4 +23,4 @@ const PointLineSvg: React.FC<SvgProps> = ({ className }) => {
   );
 };
 
-export default PointLineSvg;
+export default DotLineSvg;

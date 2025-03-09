@@ -1,7 +1,7 @@
 import { SVG_STYLE, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "../../types";
 
-const FlatBarSvg: React.FC<SvgProps> = ({ className }) => {
+const BarLineSvg: React.FC<SvgProps> = ({ className }) => {
   const barWidth = 30;
   const gap = 5; // 预留左右两侧间隔
   const barCount = Math.floor((SVG_WIDTH + gap) / (barWidth + gap));
@@ -33,4 +33,4 @@ const FlatBarSvg: React.FC<SvgProps> = ({ className }) => {
   );
 };
 
-export default FlatBarSvg;
+export default BarLineSvg;

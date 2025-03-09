@@ -3,7 +3,10 @@ import { Circle } from "fabric";
 import { normalize } from "@/libs/common";
 import Builder from "../../core/Builder";
 
-class PointLine extends Builder {
+/**
+ * 点状线形
+ */
+class DotLine extends Builder {
   constructor(count: number, color: string) {
     super(count, color);
   }
@@ -71,4 +74,4 @@ class PointLine extends Builder {
   }
 }
 
-export default PointLine;
+export default DotLine;

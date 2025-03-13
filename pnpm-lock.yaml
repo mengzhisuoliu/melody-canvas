@@ -57,7 +57,13 @@ importers:
       '@types/web':
         specifier: ^0.0.169
         version: 0.0.169
+      '@unocss/preset-attributify':
+        specifier: ^0.63.4
+        version: 0.63.6
       '@unocss/preset-icons':
+        specifier: ^0.63.4
+        version: 0.63.6
+      '@unocss/preset-uno':
         specifier: ^0.63.4
         version: 0.63.6
       '@unocss/reset':

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { cloneFabricObject } from "@/libs/canvas";
 import { useCanvasStore } from "@/stores";
 
-const MENU_BUTTON_STYLE =
+const MENU_BUTTON_CLASS =
   "rounded-md flex-between px-2 space-x-4 hover:bg-emerald-100 dark:(hover:bg-dark-50 hover:text-white)";
 
 /**
@@ -106,7 +106,7 @@ const RightClickMenu = () => {
 
         {activeObjects.length !== 0 && (
           <button
-            className={MENU_BUTTON_STYLE}
+            className={MENU_BUTTON_CLASS}
             onClick={actions.delete}
           >
             <div className="i-material-symbols:delete"></div>
@@ -117,7 +117,7 @@ const RightClickMenu = () => {
         {activeObjects.length === 1 && (
           <>
             <button
-              className={MENU_BUTTON_STYLE}
+              className={MENU_BUTTON_CLASS}
               onClick={actions.duplicate}
             >
               <div className="i-clarity:clone-solid"></div>
@@ -125,14 +125,14 @@ const RightClickMenu = () => {
             </button>
             <span className="h-0.4 bg-dark-50 mx-1"></span>
             <button
-              className={MENU_BUTTON_STYLE}
+              className={MENU_BUTTON_CLASS}
               onClick={actions.bringToFront}
             >
               <div className="i-material-symbols:vertical-align-top"></div>
               <div>Bring to Front</div>
             </button>
             <button
-              className={MENU_BUTTON_STYLE}
+              className={MENU_BUTTON_CLASS}
               onClick={actions.sendToBack}
             >
               <div className="i-material-symbols:vertical-align-bottom"></div>

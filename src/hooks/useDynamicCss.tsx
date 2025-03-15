@@ -1,11 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 const useDynamicCss = (css: string, shouldRemove: boolean) => {
   const styleElRef = useRef<HTMLStyleElement | null>(null);
 
   useEffect(() => {
     if (!styleElRef.current) {
-      const styleElement = document.createElement('style');
+      const styleElement = document.createElement("style");
       styleElement.innerHTML = css;
       styleElRef.current = styleElement;
     } else {

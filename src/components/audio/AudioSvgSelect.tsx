@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { SVG_HEIGHT, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "@/visualizers/types";
 
-const svgModules = import.meta.glob("@/visualizers/preset/*/Svg.tsx");
+const svgModules = import.meta.glob("@/visualizers/builder/*/Svg.tsx");
 
 interface AudioSvgSelectProps {
   name: string;

@@ -71,7 +71,7 @@ class BuilderFactory {
         return this.builderMap.get(name) as BuilderConstructor<T>;
       }
 
-      const module = await import(`../preset/${name}/index.ts`);
+      const module = await import(`../builder/${name}/index.ts`);
       const BuilderClass = module.default as BuilderConstructor<T>;
       this.builderMap.set(name, BuilderClass);
       return BuilderClass;

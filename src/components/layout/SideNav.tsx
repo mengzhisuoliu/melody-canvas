@@ -70,7 +70,7 @@ const SideNav: React.FC = () => {
             {/* Logo */}
             <div m="b-6">
               <img
-                src="favicon.png"
+                src="/image/favicon.png"
                 className="w-10 h-10 mx-auto rounded-lg shadow-md"
               />
               <div className="py-2 font-sans font-bold text-sm text-emerald-800 dark:text-white">Melody Canvas</div>

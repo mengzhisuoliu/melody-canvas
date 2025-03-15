@@ -17,6 +17,10 @@ class BuilderFactory {
   private builderMap = new Map<string, BuilderConstructor<Builder>>();
   private builders: Builder[] = [];
 
+  private getBuilderByGroup(vizGroup: Group) {
+    return this.builders.find((builder) => builder.getId() === vizGroup.id);
+  }
+
   public constructor(canvas: Canvas) {
     this.canvas = canvas;
   }
@@ -32,7 +36,7 @@ class BuilderFactory {
     this.builders.forEach(async (builder) => {
       const vizName = builder.constructor.name;
       const BuilderClass = await factoryCopy.createBuilder(vizName);
-      const builderCopy = new BuilderClass(builder.getCount(), builder.getColor());
+      const builderCopy = new BuilderClass(builder.getCount(), builder.getColor(), builder.getShape());
 
       // 先初始化 Group
       factoryCopy.addBuilder(builderCopy);
@@ -61,19 +65,19 @@ class BuilderFactory {
     this.addBuilder(builder.clone());
   }
 
-  public async createBuilder<T extends Builder>(descriptor: string) {
-    const loadBuilder = async (descriptor: string) => {
-      if (this.builderMap.has(descriptor)) {
-        return this.builderMap.get(descriptor) as BuilderConstructor<T>;
+  public async createBuilder<T extends Builder>(name: string) {
+    const loadBuilder = async (name: string) => {
+      if (this.builderMap.has(name)) {
+        return this.builderMap.get(name) as BuilderConstructor<T>;
       }
 
-      const module = await import(`../preset/${descriptor}/index.ts`);
+      const module = await import(`../preset/${name}/index.ts`);
       const BuilderClass = module.default as BuilderConstructor<T>;
-      this.builderMap.set(descriptor, BuilderClass);
+      this.builderMap.set(name, BuilderClass);
       return BuilderClass;
     };
 
-    const BuilderClass = await loadBuilder(descriptor);
+    const BuilderClass = await loadBuilder(name);
     return BuilderClass;
   }
 
@@ -86,22 +90,25 @@ class BuilderFactory {
       subType: "audio",
       id: builder.getId(),
       color: builder.getColor(),
-      count: builder.getCount()
+      count: builder.getCount(),
+      shape: builder.getShape()
     });
 
     this.canvas.add(builder.getGroup());
   }
 
   public drawAll(buffer: AudioBuffer, time: number) {
-    this.builders.forEach((builder) => builder.draw(buffer, time));
-    this.canvas.renderAll();
+    this.builders.forEach((builder) => builder.prepareDraw(buffer, time));
+    this.canvas.requestRenderAll();
   }
 
-  public async updateBuilderType(vizGroup: Group, descriptor: string) {
+  public async updateBuilderType(vizGroup: Group, name: string) {
     // 将原本的 Group 删除，直接创建新的
-    const BuilderClass = await this.createBuilder(descriptor);
+    const BuilderClass = await this.createBuilder(name);
 
-    const builder = new BuilderClass(vizGroup.count || 0, vizGroup.color || "");
+    const { count, color, shape } = vizGroup;
+    const builder = new BuilderClass(count!, color!, shape!);
+
     this.addBuilder(builder);
 
     const group = builder.getGroup();
@@ -124,8 +131,9 @@ class BuilderFactory {
     this.canvas.requestRenderAll();
   }
 
-  private getBuilderByGroup(vizGroup: Group) {
-    return this.builders.find((builder) => builder.getId() === vizGroup.id);
+  public updateBuilderShape(vizGroup: Group, shape: string) {
+    this.getBuilderByGroup(vizGroup)?.updateShape(shape);
+    vizGroup.set({ shape });
   }
 }
 

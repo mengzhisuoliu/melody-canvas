@@ -7,10 +7,11 @@ import Builder from "../../core/Builder";
  * 柱状环形
  */
 class BarCircle extends Builder {
-  private readonly barHeight = 20;
+  private readonly barHeight = 25;
+  private readonly groupPadding = 20;
 
-  constructor(count: number, color: string) {
-    super(count, color);
+  constructor(count: number, color: string, shape: string) {
+    super(count, color, shape);
   }
 
   protected createElements(groupWidth: number, groupHeight: number) {
@@ -50,16 +51,15 @@ class BarCircle extends Builder {
       top: canvasHeight / 2,
       left: canvasWidth / 2,
       originX: "center",
-      originY: "center"
+      originY: "center",
+      width: this.group.width + this.groupPadding,
+      height: this.group.height + this.groupPadding
     });
   }
 
-  public draw(buffer: AudioBuffer, time: number) {
-    const frequency = this.analyzer?.getFrequency(buffer, time);
-    if (!frequency) return;
-
-    const MIN_SCALE = 0.5;
-    const MAX_SCALE = 2.5;
+  protected draw(frequency: number[]) {
+    const MIN_SCALE = 0.1;
+    const MAX_SCALE = 2;
 
     const objHeights = normalize(frequency, MIN_SCALE, MAX_SCALE);
 
@@ -68,7 +68,7 @@ class BarCircle extends Builder {
 
       const freqIndex = Math.floor((i / this.count) * objHeights.length);
       const scale = objHeights[freqIndex];
-      const newHeight = this.barHeight * scale;
+      const newHeight = this.barHeight * scale - this.groupPadding;
 
       bar.set({
         height: newHeight

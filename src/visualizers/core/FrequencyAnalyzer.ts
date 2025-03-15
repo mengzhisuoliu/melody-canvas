@@ -1,13 +1,10 @@
 import FFT from "fft.js";
+
 import { normalize } from "@/libs/common";
+import { applyShaper } from "./FrequencyShaper";
 
 class FrequencyAnalyzer {
-  private readonly normFactor = 255;
-  private readonly logMultiplier = 20;
-  private readonly smoothUp = 0.2;
-  private readonly smoothDown = 0.05;
-
-  private fft: FFT;
+  private fft;
   private frequency: number[] = [];
 
   constructor(fftSize: number) {
@@ -29,21 +26,25 @@ class FrequencyAnalyzer {
     return samples;
   };
 
-  private computeFrequency(samples: Float32Array): number[] {
-    const out = this.fft.createComplexArray();
-    this.fft.realTransform(out, samples);
+  private computeFrequency(samples: Float32Array) {
+    // Hann 窗 -> 避免频谱泄露
+    for (let i = 0; i < samples.length; i++) {
+      samples[i] *= 0.5 * (1 - Math.cos((2 * Math.PI * i) / (samples.length - 1)));
+    }
+
+    // 傅里叶变换 -> 时域转频域
+    const complexSamples = this.fft.createComplexArray();
+    this.fft.realTransform(complexSamples, samples);
 
     return Array.from({ length: this.fft.size / 2 + 1 }, (_, i) => {
-      const real = out[2 * i];
-      const imag = out[2 * i + 1];
-      const magnitude = Math.sqrt(real * real + imag * imag);
-
-      const logMag = this.logMultiplier * Math.log10(magnitude);
-      return isFinite(logMag) ? logMag : 0;
+      const real = complexSamples[2 * i];
+      const imag = complexSamples[2 * i + 1];
+      const magnitude = Math.sqrt(real * real + imag * imag) / this.fft.size;
+      return 20 * Math.log10(magnitude);
     });
   }
 
-  public getFrequency(buffer: AudioBuffer, time: number) {
+  public getFrequency(buffer: AudioBuffer, time: number, shape: string) {
     const samples = this.extractSamples(buffer, time);
     const rawFreq = this.computeFrequency(samples);
 
@@ -51,16 +52,23 @@ class FrequencyAnalyzer {
       this.frequency = rawFreq;
     }
 
+    const SMOOTH_UP = 0.2;
+    const SMOOTH_DOWN = 0.05;
+
+    // 平滑化 -> 避免激烈跳动
     for (let i = 0; i < rawFreq.length; i++) {
       if (rawFreq[i] < this.frequency[i]) {
-        this.frequency[i] = rawFreq[i] * this.smoothDown + this.frequency[i] * (1 - this.smoothDown);
+        this.frequency[i] = rawFreq[i] * SMOOTH_DOWN + this.frequency[i] * (1 - SMOOTH_DOWN);
       } else {
-        this.frequency[i] = rawFreq[i] * this.smoothUp + this.frequency[i] * (1 - this.smoothUp);
+        this.frequency[i] = rawFreq[i] * SMOOTH_UP + this.frequency[i] * (1 - SMOOTH_UP);
       }
     }
 
-    const shiftedFreq = this.frequency.map((v) => v + this.logMultiplier);
-    return normalize(shiftedFreq, 0, this.normFactor);
+    // 可选的波形转换算法
+    const shapedFreq = applyShaper(shape, this.frequency);
+
+    // 归一化
+    return normalize(shapedFreq, 0, 255);
   }
 
   public updateFFTSize(fftSize: number) {

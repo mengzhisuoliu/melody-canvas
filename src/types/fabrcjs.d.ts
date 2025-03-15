@@ -7,7 +7,8 @@ declare module "fabric" {
 
   export interface Group {
     id?: string;
-    color?: string;
     count?: number;
+    color?: string;
+    shape?: string;
   }
 }

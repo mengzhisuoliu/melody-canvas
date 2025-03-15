@@ -1,12 +1,12 @@
 import { FabricImage, FabricObjectProps, Path, Shadow } from "fabric";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ColorPicker, InputNumber, Upload, type UploadFile } from "tdesign-react";
 
 import { useDynamicCss } from "@/hooks";
 import { useCanvasStore } from "@/stores";
 
 import { createPathByRadius, extractRadiusFromPath, getObjectTransformations } from "@/libs/canvas";
-import { pickWithDefaults } from "@/libs/common";
+import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 
 import { ActionButton, OptionCard } from "../base";
 import { DEFAULT_RADIUS, DEFAULT_SHADOW, OBJECT_CONFIG, RADIUS_INPUT } from "./props";
@@ -201,7 +201,7 @@ const ImageProcessor: React.FC = () => {
                 colorModes={["monochrome"]}
                 recentColors={null}
                 swatchColors={null}
-                inputProps={{ style: { width: "88px" } }}
+                inputProps={{ style: INPUT_STYLE }}
                 value={shadowOptions.color}
                 onChange={(val) => updateShadow({ color: val })}
               />

@@ -9,8 +9,8 @@ import Builder from "../../core/Builder";
 class DotCircle extends Builder {
   private readonly dotRadius = 2;
 
-  constructor(count: number, color: string) {
-    super(count, color);
+  constructor(count: number, color: string, shape: string) {
+    super(count, color, shape);
   }
 
   protected createElements(groupWidth: number, groupHeight: number) {
@@ -52,15 +52,12 @@ class DotCircle extends Builder {
     });
   }
 
-  public draw(buffer: AudioBuffer, time: number) {
-    const frequency = this.analyzer?.getFrequency(buffer, time);
-    if (!frequency) return;
-
+  protected draw(frequency: number[]) {
     const MIN_SCALE = 0.5;
     const MAX_SCALE = 1;
 
     const objHeights = normalize(frequency, MIN_SCALE, MAX_SCALE);
-    const orbitRadius = this.calcOrbitRadius(this.group.width || 0, this.group.height || 0);
+    const orbitRadius = this.calcOrbitRadius(this.group.width, this.group.height);
 
     this.group.getObjects().forEach((circle, i) => {
       if (circle.type !== "circle") return;

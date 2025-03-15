@@ -2,10 +2,11 @@ import { Group } from "fabric";
 import { useEffect, useMemo, useState } from "react";
 
 import type { ColorObject, ColorPickerChangeTrigger } from "tdesign-react";
-import { ColorPicker, Radio } from "tdesign-react";
+import { ColorPicker, Radio, Select } from "tdesign-react";
 
 import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 import { useCanvasStore } from "@/stores";
+import { shaperMap } from "@/visualizers";
 
 import { AudioSvgSelect, AudioUploader } from "../audio";
 import { ActionButton, OptionCard } from "../base";
@@ -15,7 +16,7 @@ import type { VizOptions } from "./types";
 const AudioVisualizer: React.FC = () => {
   const { activeObjects, builderFactory } = useCanvasStore();
 
-  const [vizName, setVizName] = useState<string>("");
+  const [vizType, setVizType] = useState<string>("");
   const [vizOptions, setVizOptions] = useState<VizOptions>(DEFAULT_VIZ_OPTIONS);
 
   const resetOptions = () => {
@@ -34,7 +35,7 @@ const AudioVisualizer: React.FC = () => {
 
   useEffect(() => {
     if (activeViz?.id) {
-      setVizName(activeViz.id.split("-")[0]);
+      setVizType(activeViz.id.split("-")[0]);
       const vizData = pickWithDefaults(activeViz, DEFAULT_VIZ_OPTIONS);
       setVizOptions(vizData);
     }
@@ -47,10 +48,10 @@ const AudioVisualizer: React.FC = () => {
     });
   };
 
-  const updateType = (name: string) => {
-    setVizName(name);
+  const updateType = (type: string) => {
+    setVizType(type);
     if (activeViz) {
-      builderFactory!.updateBuilderType(activeViz, name);
+      builderFactory!.updateBuilderType(activeViz, type);
     }
   };
 
@@ -78,10 +79,18 @@ const AudioVisualizer: React.FC = () => {
     }
   };
 
+  const updateShaper = (shaper: string) => {
+    updateVizOptions({ shape: shaper });
+    if (activeViz) {
+      builderFactory!.updateBuilderShape(activeViz, shaper);
+    }
+  };
+
   const handleAddViz = async () => {
     if (!builderFactory) return;
-    const BuilderClass = await builderFactory.createBuilder(vizName);
-    const builder = new BuilderClass(vizOptions.count, vizOptions.color);
+    const BuilderClass = await builderFactory.createBuilder(vizType);
+    const { count, color, shape: shaper } = vizOptions;
+    const builder = new BuilderClass(count, color, shaper);
     builderFactory.addBuilder(builder);
   };
 
@@ -100,7 +109,7 @@ const AudioVisualizer: React.FC = () => {
         </div>
 
         <AudioSvgSelect
-          name={vizName}
+          name={vizType}
           onChange={(name) => updateType(name)}
         />
       </div>
@@ -109,19 +118,6 @@ const AudioVisualizer: React.FC = () => {
         <div className="font-bold text-emerald-600 dark:text-emerald-400 mb-3">Options</div>
 
         <div className="space-y-6">
-          {/* 颜色 */}
-          <OptionCard title="Color">
-            <ColorPicker
-              key={activeViz?.toString()} // 不加 key 会莫名陷入死循环
-              format="HEX"
-              recentColors={null}
-              swatchColors={null}
-              inputProps={{ style: INPUT_STYLE }}
-              value={vizOptions.color}
-              onChange={(color, ctx) => updateFill(color, ctx)}
-            />
-          </OptionCard>
-
           {/* 数量 */}
           <OptionCard
             vertical
@@ -145,6 +141,29 @@ const AudioVisualizer: React.FC = () => {
                 </div>
               ))}
             </Radio.Group>
+          </OptionCard>
+
+          {/* 颜色 */}
+          <OptionCard title="Color">
+            <ColorPicker
+              key={activeViz?.toString()} // 不加 key 会莫名陷入死循环
+              format="HEX"
+              recentColors={null}
+              swatchColors={null}
+              inputProps={{ style: INPUT_STYLE }}
+              value={vizOptions.color}
+              onChange={(color, ctx) => updateFill(color, ctx)}
+            />
+          </OptionCard>
+
+          {/* 算法 */}
+          <OptionCard title="Shape">
+            <Select
+              style={INPUT_STYLE}
+              options={Object.keys(shaperMap).map((item) => ({ label: item, value: item }))}
+              value={vizOptions.shape}
+              onChange={(type) => updateShaper(type as string)}
+            />
           </OptionCard>
         </div>
       </div>

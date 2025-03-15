@@ -7,8 +7,8 @@ import Builder from "../../core/Builder";
  * 柱状线形
  */
 class BarLine extends Builder {
-  constructor(count: number, color: string) {
-    super(count, color);
+  constructor(count: number, color: string, shape: string) {
+    super(count, color, shape);
   }
 
   protected createElements(groupWidth: number, groupHeight: number) {
@@ -38,16 +38,13 @@ class BarLine extends Builder {
 
     const elements = this.createElements(canvasWidth, groupHeight);
     this.group.add(...elements);
-    
+
     this.group.set({
       top: canvasHeight - groupHeight // Group 底部与画布底部对齐
     });
   }
 
-  public draw(buffer: AudioBuffer, time: number) {
-    const frequency = this.analyzer?.getFrequency(buffer, time);
-    if (!frequency) return;
-
+  protected draw(frequency: number[]) {
     const objHeights = normalize(frequency, 0, this.group.height);
 
     this.group?.getObjects().forEach((rect, i) => {

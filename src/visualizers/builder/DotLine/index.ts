@@ -7,8 +7,8 @@ import Builder from "../../core/Builder";
  * 点状线形
  */
 class DotLine extends Builder {
-  constructor(count: number, color: string) {
-    super(count, color);
+  constructor(count: number, color: string, shape: string) {
+    super(count, color, shape);
   }
 
   protected createElements(groupWidth: number, groupHeight: number) {
@@ -30,7 +30,7 @@ class DotLine extends Builder {
     let x = 0;
     for (let i = 0; i < this.count; i++) {
       // 但是具体的 y 坐标需要根据 Group 的高度来计算
-      // 这里的减数 (diameter + control stroke width) 是为了避免图形超出 Group 边界 
+      // 这里的减数 (diameter + control stroke width) 是为了避免图形超出 Group 边界
       const y = (groupHeight - radius * 2 - 1) * normSin[i];
 
       const circle = new Circle({
@@ -59,12 +59,9 @@ class DotLine extends Builder {
     });
   }
 
-  public draw(buffer: AudioBuffer, time: number) {
-    const frequency = this.analyzer?.getFrequency(buffer, time);
-    if (!frequency) return;
-
+  protected draw(frequency: number[]) {
     const objHeights = normalize(frequency, 0, this.group.height);
-    
+
     this.group.getObjects().forEach((circle, i) => {
       if (circle.type !== "circle") return;
       circle.set({

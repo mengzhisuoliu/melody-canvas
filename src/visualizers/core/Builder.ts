@@ -2,7 +2,9 @@ import { FabricObject, Group } from "fabric";
 import { cloneDeep } from "lodash";
 
 import { createGradientMap, getObjectTransformations } from "@/libs/canvas";
+
 import FrequencyAnalyzer from "./FrequencyAnalyzer";
+import { DEFAULT_SHAPE } from "./FrequencyShaper";
 
 /**
  * 构造各种可视化元素
@@ -18,10 +20,12 @@ abstract class Builder {
   protected color: string; // Hex or CSS linear-gradient
   protected colorMap: string[]; // 用于渐变色
 
-  protected group: Group;
-  protected analyzer: FrequencyAnalyzer;
+  protected group = new Group();
 
-  constructor(count: number, color: string) {
+  protected analyzer: FrequencyAnalyzer;
+  protected shape: string;
+
+  constructor(count: number, color: string, shape: string) {
     this.id = this.generateId();
 
     this.count = count;
@@ -29,8 +33,8 @@ abstract class Builder {
     this.color = color;
     this.colorMap = this.generateColorMap();
 
-    this.group = new Group();
     this.analyzer = new FrequencyAnalyzer(count * 2);
+    this.shape = shape;
   }
 
   public clone() {
@@ -103,9 +107,24 @@ abstract class Builder {
     return this.group;
   }
 
+  public getShape() {
+    return this.shape;
+  }
+
+  public updateShape(shape = DEFAULT_SHAPE) {
+    this.shape = shape;
+  }
+
+  public prepareDraw(buffer: AudioBuffer, time: number) {
+    const frequency = this.analyzer?.getFrequency(buffer, time, this.shape);
+    if (!frequency) return;
+
+    this.draw(frequency);
+  }
+
   protected abstract createElements(groupWidth: number, groupHeight: number): FabricObject[];
   public abstract init(canvasWidth: number, canvasHeight: number): void;
-  public abstract draw(buffer: AudioBuffer, time: number): void;
+  protected abstract draw(frequency: number[]): void;
 }
 
 export default Builder;

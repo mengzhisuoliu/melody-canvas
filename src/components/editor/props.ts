@@ -1,4 +1,5 @@
 import { checkFontAvailability } from "@/libs/common";
+import { DEFAULT_SHAPE } from "@/visualizers";
 import type { RadiusOptions, ShadowOptions, TextOptions, VizOptions } from "./types";
 
 export const OBJECT_CONFIG = {
@@ -39,4 +40,4 @@ export const DEFAULT_RADIUS: RadiusOptions = { tl: 0, tr: 0, bl: 0, br: 0 };
 export const DEFAULT_SHADOW: ShadowOptions = { color: "#ffffff", blur: 0, offsetX: 0, offsetY: 0 };
 
 /* ----- AudioVisualizer ------ */
-export const DEFAULT_VIZ_OPTIONS: VizOptions = { color: "#ffffff", count: 64 };
+export const DEFAULT_VIZ_OPTIONS: VizOptions = { color: "#ffffff", count: 64, shape: DEFAULT_SHAPE };

@@ -6,7 +6,7 @@ import { ColorPickerPanel, Select } from "tdesign-react";
 import { useCanvasStore } from "@/stores";
 
 import { createGradient } from "@/libs/canvas";
-import { DEFAULT_BACKGROUND_COLOR } from "@/libs/common";
+import { DEFAULT_BACKGROUND_COLOR, INPUT_STYLE } from "@/libs/common";
 
 import { OptionCard } from "../base";
 
@@ -48,7 +48,7 @@ const BackdropDisplay: React.FC = () => {
         {/* 画布比例 */}
         <OptionCard title="Ratio">
           <Select
-            style={{ width: "65%" }}
+            style={INPUT_STYLE}
             options={["16:9", "9:16", "1:1"].map((item) => ({ label: item, value: item }))}
             value={ratio}
             onChange={(ratio) => setRatio(ratio as string)}

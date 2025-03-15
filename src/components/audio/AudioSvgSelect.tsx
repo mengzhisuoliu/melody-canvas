@@ -25,8 +25,8 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, onChange }) => {
       }
       setSvgList(loadedSvgList);
 
-      const firstKey = Object.keys(loadedSvgList)[0];
-      onChange(firstKey);
+      const firstSvg = Object.keys(loadedSvgList)[0];
+      onChange(firstSvg);
     };
 
     loadSvgList();
@@ -78,7 +78,7 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, onChange }) => {
 
       {/* 下拉框 */}
       <div
-        className={`absolute max-h-56 top-27 z-50 w-[110%] overflow-y-auto bg-white dark:bg-dark-800 rounded p-2 shadow-md ${isOpen ? "dropdown-open" : "dropdown-closed"}`}
+        className={`absolute max-h-80 top-27 z-50 w-[110%] overflow-y-auto bg-white dark:bg-dark-800 rounded p-2 shadow-md ${isOpen ? "dropdown-open" : "dropdown-closed"}`}
       >
         {Object.keys(svgList).map((key) => {
           const SvgPath = svgList[key];

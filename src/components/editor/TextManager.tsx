@@ -7,7 +7,7 @@ import { Checkbox, ColorPicker, SelectInput, Textarea } from "tdesign-react";
 import { useCanvasStore } from "@/stores";
 
 import { createGradient } from "@/libs/canvas";
-import { pickWithDefaults } from "@/libs/common";
+import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 
 import { ActionButton, OptionCard } from "../base";
 import { DEFAULT_TEXT, FONT_LIST, OBJECT_CONFIG } from "./props";
@@ -151,7 +151,7 @@ const TextManager: React.FC = () => {
               format="HEX"
               recentColors={null}
               swatchColors={null}
-              inputProps={{ style: { width: "126px" } }}
+              inputProps={{ style: INPUT_STYLE }}
               value={textOptions.color}
               onChange={(color, ctx) => updateColor(color, ctx)}
             />
@@ -181,11 +181,11 @@ const TextManager: React.FC = () => {
               placeholder="Select or Input"
               allowInput
               clearable
-              style={{ width: "75%" }}
+              style={INPUT_STYLE}
               onInputChange={(font) => updateTextOptions({ fontFamily: font })}
               onPopupVisibleChange={(visible) => setPopupVisible(visible)}
               panel={
-                <ul className="">
+                <ul>
                   {FONT_LIST.map((font) => (
                     <li
                       key={font}

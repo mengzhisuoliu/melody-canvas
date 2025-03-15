@@ -1,4 +1,4 @@
-import { SVG_STYLE, SVG_WIDTH } from "@/libs/common";
+import { SVG_CLASS, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "../../types";
 
 const DotLineSvg: React.FC<SvgProps> = ({ className }) => {
@@ -11,7 +11,7 @@ const DotLineSvg: React.FC<SvgProps> = ({ className }) => {
         const cy = 100 + 20 * Math.sin((i * Math.PI) / 4);
         return (
           <circle
-            className={`${SVG_STYLE} ${className || ""}`}
+            className={`${SVG_CLASS} ${className || ""}`}
             key={i}
             cx={cx}
             cy={cy}

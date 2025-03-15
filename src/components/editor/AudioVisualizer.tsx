@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ColorObject, ColorPickerChangeTrigger } from "tdesign-react";
 import { ColorPicker, Radio } from "tdesign-react";
 
-import { pickWithDefaults } from "@/libs/common";
+import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 import { useCanvasStore } from "@/stores";
 
 import { AudioSvgSelect, AudioUploader } from "../audio";
@@ -116,6 +116,7 @@ const AudioVisualizer: React.FC = () => {
               format="HEX"
               recentColors={null}
               swatchColors={null}
+              inputProps={{ style: INPUT_STYLE }}
               value={vizOptions.color}
               onChange={(color, ctx) => updateFill(color, ctx)}
             />

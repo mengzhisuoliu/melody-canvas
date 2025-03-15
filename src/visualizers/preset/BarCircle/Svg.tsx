@@ -1,4 +1,4 @@
-import { SVG_HEIGHT, SVG_STYLE, SVG_WIDTH } from "@/libs/common";
+import { SVG_HEIGHT, SVG_CLASS, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "../../types";
 
 const BarCircleSvg: React.FC<SvgProps> = ({ className }) => {
@@ -26,7 +26,7 @@ const BarCircleSvg: React.FC<SvgProps> = ({ className }) => {
         return (
           <rect
             key={i}
-            className={`${SVG_STYLE} ${className || ""}`}
+            className={`${SVG_CLASS} ${className || ""}`}
             width={barWidth}
             height={barHeight}
             x={startX - barWidth / 2}

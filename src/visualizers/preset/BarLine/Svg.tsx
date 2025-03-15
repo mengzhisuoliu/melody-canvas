@@ -1,4 +1,4 @@
-import { SVG_STYLE, SVG_WIDTH } from "@/libs/common";
+import { SVG_CLASS, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "../../types";
 
 const BarLineSvg: React.FC<SvgProps> = ({ className }) => {
@@ -20,7 +20,7 @@ const BarLineSvg: React.FC<SvgProps> = ({ className }) => {
 
         return (
           <rect
-            className={`${SVG_STYLE} ${className || ""}`}
+            className={`${SVG_CLASS} ${className || ""}`}
             key={i}
             width={barWidth}
             height={height}

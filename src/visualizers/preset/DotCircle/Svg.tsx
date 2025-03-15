@@ -1,4 +1,4 @@
-import { SVG_HEIGHT, SVG_STYLE, SVG_WIDTH } from "@/libs/common";
+import { SVG_HEIGHT, SVG_CLASS, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "../../types";
 
 const DotCircleSvg: React.FC<SvgProps> = ({ className }) => {
@@ -20,7 +20,7 @@ const DotCircleSvg: React.FC<SvgProps> = ({ className }) => {
     <>
       {points.map((point, i) => (
         <circle
-          className={`${SVG_STYLE} ${className || ""}`}
+          className={`${SVG_CLASS} ${className || ""}`}
           key={i}
           cx={point.x}
           cy={point.y}

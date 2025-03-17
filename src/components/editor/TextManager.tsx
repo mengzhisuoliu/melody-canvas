@@ -25,32 +25,29 @@ const TextManager: React.FC = () => {
     setTextOptions(DEFAULT_TEXT);
   };
 
-  const activeText = useMemo(() => {
-    const obj = activeObjects[0];
-    if (obj?.subType === "text") {
-      return obj as Textbox;
-    } else {
-      resetOptions();
-      return null;
-    }
+  const activeTextList = useMemo(() => {
+    return activeObjects.filter((obj) => obj?.subType === "text") as Textbox[];
   }, [activeObjects]);
 
   useEffect(() => {
-    if (activeText) {
-      const textInput = activeText.text;
-      const textData = pickWithDefaults(activeText as Partial<TextOptions>, DEFAULT_TEXT);
+    if (activeTextList.length > 0) {
+      const firstText = activeTextList[0];
+      const textInput = firstText.text;
+      const textData = pickWithDefaults(firstText as Partial<TextOptions>, DEFAULT_TEXT);
 
       setText(textInput);
       setTextOptions(textData);
+    } else {
+      resetOptions();
     }
-  }, [activeObjects]);
+  }, [activeTextList]);
 
   const updateText = (text: string) => {
     setText(text);
-    if (activeText) {
-      activeText.set({ text });
-      canvasInstance!.renderAll();
-    }
+    activeTextList.forEach((textObj) => {
+      textObj.set({ text });
+    });
+    canvasInstance?.renderAll();
   };
 
   const updateColor = (
@@ -65,21 +62,21 @@ const TextManager: React.FC = () => {
 
     updateTextOptions({ color });
 
-    if (activeText) {
-      const fill = isGradient ? createGradient(color, activeText.width, activeText.height) : colorVal;
-      activeText.set({ fill });
-      canvasInstance!.renderAll();
-    }
+    activeTextList.forEach((textObj) => {
+      const fill = isGradient ? createGradient(color, textObj.width, textObj.height) : colorVal;
+      textObj.set({ fill });
+    });
+    canvasInstance?.renderAll();
   };
 
   const updateTextOptions = (options: Partial<TextOptions>) => {
     setTextOptions((prev) => {
       const updatedOptions = { ...prev, ...options };
 
-      if (activeText) {
-        activeText.set(updatedOptions);
-        canvasInstance!.renderAll();
-      }
+      activeTextList.forEach((textObj) => {
+        textObj.set(updatedOptions);
+      });
+      canvasInstance?.renderAll();
 
       return updatedOptions;
     });
@@ -128,7 +125,7 @@ const TextManager: React.FC = () => {
         <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-4">
           <div>Content</div>
           <ActionButton
-            activeObj={activeText}
+            activeObjs={activeTextList}
             disabled={text === ""}
             onAdd={handleAddText}
           />
@@ -138,6 +135,7 @@ const TextManager: React.FC = () => {
           placeholder="Input something..."
           value={text}
           onChange={(val) => updateText(val)}
+          disabled={activeTextList.length > 1}
         />
       </div>
 
@@ -147,7 +145,7 @@ const TextManager: React.FC = () => {
           {/* 颜色 */}
           <OptionCard title="Color">
             <ColorPicker
-              key={activeText?.toString()} // TDesign 内部缓存问题
+              key={activeTextList.length > 0 ? activeTextList[0].toString() : undefined} // TDesign 内部缓存问题
               format="HEX"
               recentColors={null}
               swatchColors={null}

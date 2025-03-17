@@ -23,36 +23,29 @@ const AudioVisualizer: React.FC = () => {
     setVizOptions(DEFAULT_VIZ_OPTIONS);
   };
 
-  const activeViz = useMemo(() => {
-    const obj = activeObjects[0];
-    if (obj?.subType === "audio") {
-      return obj as Group;
-    } else {
-      resetOptions();
-      return null;
-    }
+  const activeVizList = useMemo(() => {
+    return activeObjects.filter((obj) => obj?.subType === "audio") as Group[];
   }, [activeObjects]);
 
   useEffect(() => {
-    if (activeViz?.id) {
-      setVizType(activeViz.id.split("-")[0]);
-      const vizData = pickWithDefaults(activeViz, DEFAULT_VIZ_OPTIONS);
+    if (activeVizList.length > 0) {
+      setVizType(activeVizList[0].id!.split("-")[0]);
+      const vizData = pickWithDefaults(activeVizList[0], DEFAULT_VIZ_OPTIONS);
       setVizOptions(vizData);
+    } else {
+      resetOptions();
     }
-  }, [activeObjects]);
+  }, [activeVizList]);
 
   const updateVizOptions = (options: Partial<VizOptions>) => {
-    setVizOptions((prev) => {
-      const updatedOptions = { ...prev, ...options };
-      return updatedOptions;
-    });
+    setVizOptions((prev) => ({ ...prev, ...options }));
   };
 
   const updateType = (type: string) => {
     setVizType(type);
-    if (activeViz) {
-      builderFactory!.updateBuilderType(activeViz, type);
-    }
+    activeVizList.forEach((viz) => {
+      builderFactory!.updateBuilderType(viz, type);
+    });
   };
 
   const updateFill = (
@@ -67,23 +60,23 @@ const AudioVisualizer: React.FC = () => {
     const appliedColor = isGradient ? context.color.css : color;
 
     updateVizOptions({ color: appliedColor });
-    if (activeViz) {
-      builderFactory!.updateBuilderColor(activeViz, appliedColor);
-    }
-  };
-
-  const updateCount = (count: number) => {
-    updateVizOptions({ count });
-    if (activeViz) {
-      builderFactory!.updateBuilderCount(activeViz, count);
-    }
+    activeVizList.forEach((viz) => {
+      builderFactory!.updateBuilderColor(viz, appliedColor);
+    });
   };
 
   const updateShaper = (shaper: string) => {
     updateVizOptions({ shape: shaper });
-    if (activeViz) {
-      builderFactory!.updateBuilderShape(activeViz, shaper);
-    }
+    activeVizList.forEach((viz) => {
+      builderFactory!.updateBuilderShape(viz, shaper);
+    });
+  };
+
+  const updateCount = (count: number) => {
+    updateVizOptions({ count });
+    activeVizList.forEach((viz) => {
+      builderFactory!.updateBuilderCount(viz, count);
+    });
   };
 
   const handleAddViz = async () => {
@@ -102,7 +95,7 @@ const AudioVisualizer: React.FC = () => {
         <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-4">
           <div>Element</div>
           <ActionButton
-            activeObj={activeViz}
+            activeObjs={activeVizList}
             disabled={false}
             onAdd={handleAddViz}
           />
@@ -116,9 +109,28 @@ const AudioVisualizer: React.FC = () => {
 
       <div className="mb-6">
         <div className="font-bold text-emerald-600 dark:text-emerald-400 mb-3">Options</div>
-
         <div className="space-y-6">
-          {/* 数量 */}
+          <OptionCard title="Color">
+            <ColorPicker
+              key={activeVizList.map((v) => v.id).join(",")}
+              format="HEX"
+              recentColors={null}
+              swatchColors={null}
+              inputProps={{ style: INPUT_STYLE }}
+              value={vizOptions.color}
+              onChange={(color, ctx) => updateFill(color, ctx)}
+            />
+          </OptionCard>
+
+          <OptionCard title="Shape">
+            <Select
+              style={INPUT_STYLE}
+              options={Object.keys(shaperMap).map((item) => ({ label: item, value: item }))}
+              value={vizOptions.shape}
+              onChange={(type) => updateShaper(type as string)}
+            />
+          </OptionCard>
+
           <OptionCard
             vertical
             title="Count"
@@ -141,29 +153,6 @@ const AudioVisualizer: React.FC = () => {
                 </div>
               ))}
             </Radio.Group>
-          </OptionCard>
-
-          {/* 颜色 */}
-          <OptionCard title="Color">
-            <ColorPicker
-              key={activeViz?.toString()} // 不加 key 会莫名陷入死循环
-              format="HEX"
-              recentColors={null}
-              swatchColors={null}
-              inputProps={{ style: INPUT_STYLE }}
-              value={vizOptions.color}
-              onChange={(color, ctx) => updateFill(color, ctx)}
-            />
-          </OptionCard>
-
-          {/* 算法 */}
-          <OptionCard title="Shape">
-            <Select
-              style={INPUT_STYLE}
-              options={Object.keys(shaperMap).map((item) => ({ label: item, value: item }))}
-              value={vizOptions.shape}
-              onChange={(type) => updateShaper(type as string)}
-            />
           </OptionCard>
         </div>
       </div>

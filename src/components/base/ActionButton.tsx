@@ -3,28 +3,35 @@ import { Button } from "tdesign-react";
 
 import { useCanvasStore } from "@/stores";
 
-interface ActionButton {
-  activeObj: FabricObject | null | undefined;
+interface ActionButtonProps {
+  activeObjs: FabricObject[];
   disabled: boolean;
   onAdd: () => void;
 }
 
-const ActionButton: React.FC<ActionButton> = ({ activeObj, disabled, onAdd }) => {
+const ActionButton: React.FC<ActionButtonProps> = ({ activeObjs, disabled, onAdd }) => {
   const { canvasInstance } = useCanvasStore();
 
-  const action = activeObj
-    ? {
-        theme: "danger" as const,
-        icon: "i-ri:subtract-fill",
-        text: "Delete",
-        onClick: () => canvasInstance?.remove(activeObj)
-      }
-    : {
-        theme: "success" as const,
-        icon: "i-ri:add-fill",
-        text: "New",
-        onClick: onAdd
-      };
+  const action =
+    activeObjs?.length === 1
+      ? {
+          theme: "danger" as const,
+          icon: "i-ri:subtract-fill",
+          text: "Delete",
+          onClick: () => {
+            activeObjs!.forEach((obj) => {
+              canvasInstance!.remove(obj);
+            });
+          }
+        }
+      : {
+          theme: "success" as const,
+          icon: "i-ri:add-fill",
+          text: "New",
+          onClick: onAdd
+        };
+
+  if (activeObjs.length > 1) return;
 
   return (
     <Button

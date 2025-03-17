@@ -5,7 +5,7 @@ import { ColorPicker, InputNumber, Upload, type UploadFile } from "tdesign-react
 import { useCanvasStore } from "@/stores";
 
 import { createPathByRadius, extractRadiusFromPath, getObjectTransformations } from "@/libs/canvas";
-import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
+import { pickWithDefaults } from "@/libs/common";
 
 import { ActionButton, OptionCard } from "../base";
 import { DEFAULT_RADIUS, DEFAULT_SHADOW, OBJECT_CONFIG, RADIUS_INPUT } from "./props";
@@ -15,7 +15,6 @@ const ImageProcessor: React.FC = () => {
   const { canvasInstance, activeObjects } = useCanvasStore();
 
   const [imageFile, setImageFile] = useState<UploadFile | null>(null);
-
   const [radiusOptions, setRadiusOptions] = useState<RadiusOptions>(DEFAULT_RADIUS);
   const [shadowOptions, setShadowOptions] = useState<ShadowOptions>(DEFAULT_SHADOW);
 
@@ -25,14 +24,8 @@ const ImageProcessor: React.FC = () => {
     setShadowOptions(DEFAULT_SHADOW);
   };
 
-  const activeImage = useMemo(() => {
-    const obj = activeObjects[0];
-    if (obj?.subType === "image") {
-      return obj as FabricImage;
-    } else {
-      resetOptions();
-      return null;
-    }
+  const activeImgList = useMemo(() => {
+    return activeObjects.filter((obj) => obj?.subType === "image") as FabricImage[];
   }, [activeObjects]);
 
   const ImgPreviewTrigger: React.FC = () => {
@@ -50,22 +43,20 @@ const ImageProcessor: React.FC = () => {
   };
 
   useEffect(() => {
-    if (activeImage) {
-      // 展示选中物体的参数
-      const imageUrl = activeImage.getSrc();
+    if (activeImgList.length > 0) {
+      const firstImage = activeImgList[0];
+      const imageUrl = firstImage.getSrc();
       setImageFile({ url: imageUrl });
 
-      const shadowData = pickWithDefaults(activeImage.shadow as Partial<ShadowOptions>, DEFAULT_SHADOW);
+      const shadowData = pickWithDefaults(firstImage.shadow as Partial<ShadowOptions>, DEFAULT_SHADOW);
       setShadowOptions(shadowData);
 
-      const radiusData = extractRadiusFromPath(
-        (activeImage.clipPath as Path).path,
-        activeImage.width,
-        activeImage.height
-      );
+      const radiusData = extractRadiusFromPath((firstImage.clipPath as Path).path, firstImage.width, firstImage.height);
       setRadiusOptions(radiusData);
+    } else {
+      resetOptions();
     }
-  }, [activeImage]);
+  }, [activeImgList]);
 
   const createFabricImg = async (url: string, options?: Partial<FabricObjectProps>) => {
     const image = await FabricImage.fromURL(url);
@@ -87,9 +78,9 @@ const ImageProcessor: React.FC = () => {
       image.set(options);
     }
 
-    canvasInstance!.add(image);
-    canvasInstance!.setActiveObject(image);
-    canvasInstance!.renderAll();
+    canvasInstance?.add(image);
+    canvasInstance?.setActiveObject(image);
+    canvasInstance?.renderAll();
   };
 
   const updateImageFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,21 +90,21 @@ const ImageProcessor: React.FC = () => {
     const imageUrl = URL.createObjectURL(file);
     setImageFile({ url: imageUrl });
 
-    const origProps = getObjectTransformations(activeImage!);
+    const origProps = getObjectTransformations(activeImgList[0]);
     await createFabricImg(imageUrl, origProps);
 
-    canvasInstance!.remove(activeImage!);
+    canvasInstance?.remove(activeImgList[0]);
   };
 
   const updateRadius = (options: Partial<RadiusOptions>) => {
     setRadiusOptions((prev) => {
       const updatedOptions = { ...prev, ...options };
 
-      if (activeImage) {
-        const roundedPath = createPathByRadius(activeImage.width, activeImage.height, updatedOptions);
-        activeImage.set({ clipPath: roundedPath });
-        canvasInstance!.renderAll();
-      }
+      activeImgList.forEach((img) => {
+        const roundedPath = createPathByRadius(img.width, img.height, updatedOptions);
+        img.set({ clipPath: roundedPath });
+      });
+      canvasInstance?.renderAll();
 
       return updatedOptions;
     });
@@ -122,12 +113,8 @@ const ImageProcessor: React.FC = () => {
   const updateShadow = (options: Partial<ShadowOptions>) => {
     setShadowOptions((prev) => {
       const updatedOptions = { ...prev, ...options };
-
-      if (activeImage) {
-        activeImage.set({ shadow: new Shadow(updatedOptions) });
-        canvasInstance!.renderAll();
-      }
-
+      activeImgList.forEach((img) => img.set({ shadow: new Shadow(updatedOptions) }));
+      canvasInstance?.renderAll();
       return updatedOptions;
     });
   };
@@ -146,7 +133,7 @@ const ImageProcessor: React.FC = () => {
         <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-4">
           <div>File</div>
           <ActionButton
-            activeObj={activeImage}
+            activeObjs={activeImgList}
             disabled={!imageFile}
             onAdd={handleAddImage}
           />
@@ -160,7 +147,7 @@ const ImageProcessor: React.FC = () => {
           showImageFileName={false}
           files={imageFile ? [imageFile] : []}
           onChange={(files) => setImageFile(files[0])}
-          {...(activeImage ? { imageViewerProps: { trigger: <ImgPreviewTrigger /> } } : {})}
+          {...(activeImgList.length === 1 ? { imageViewerProps: { trigger: <ImgPreviewTrigger /> } } : {})}
         />
       </div>
 
@@ -178,7 +165,7 @@ const ImageProcessor: React.FC = () => {
                 colorModes={["monochrome"]}
                 recentColors={null}
                 swatchColors={null}
-                inputProps={{ style: INPUT_STYLE }}
+                inputProps={{ style: { width: "88px" } }}
                 value={shadowOptions.color}
                 onChange={(val) => updateShadow({ color: val })}
               />
@@ -231,8 +218,8 @@ const ImageProcessor: React.FC = () => {
         </div>
       </div>
 
-      {/*  选中状态下隐藏 Upload 组件原有的删除按钮 -> 交给 Trigger 处理 */}
-      {activeImage && (
+      {/* 选中状态下隐藏 Upload 组件原有的删除按钮 -> 交给 Trigger 处理 */}
+      {activeImgList && (
         <style>
           {`
             .t-upload__card-mask-item {

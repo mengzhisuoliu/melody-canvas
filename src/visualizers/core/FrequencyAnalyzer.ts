@@ -40,7 +40,9 @@ class FrequencyAnalyzer {
       const real = complexSamples[2 * i];
       const imag = complexSamples[2 * i + 1];
       const magnitude = Math.sqrt(real * real + imag * imag) / this.fft.size;
-      return 20 * Math.log10(magnitude);
+
+      const logMag = 20 * Math.log10(magnitude);
+      return isFinite(logMag) ? logMag : 0;
     });
   }
 

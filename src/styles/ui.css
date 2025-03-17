@@ -121,3 +121,8 @@ button {
 #nav-audio .t-radio-group.t-size-s .t-radio-button {
   padding: 0 4px !important;
 }
+
+/* Dialog */
+.t-dialog__mask {
+  backdrop-filter: blur(1.5px);
+}

@@ -2,7 +2,6 @@ import { FabricImage, FabricObjectProps, Path, Shadow } from "fabric";
 import { useEffect, useMemo, useState } from "react";
 import { ColorPicker, InputNumber, Upload, type UploadFile } from "tdesign-react";
 
-import { useDynamicCss } from "@/hooks";
 import { useCanvasStore } from "@/stores";
 
 import { createPathByRadius, extractRadiusFromPath, getObjectTransformations } from "@/libs/canvas";
@@ -35,28 +34,6 @@ const ImageProcessor: React.FC = () => {
       return null;
     }
   }, [activeObjects]);
-
-  // 选中状态下隐藏 Upload 组件原有的删除按钮 -> 交给 Trigger 处理
-  useDynamicCss(
-    `
-      .t-upload__card-mask-item {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-  
-      .t-upload__card-mask-item-divider {
-        display: none;
-      }
-  
-      .t-upload__card-mask-item-divider ~ * {
-        display: none;
-      }
-    `,
-    !activeImage
-  );
 
   const ImgPreviewTrigger: React.FC = () => {
     return (
@@ -253,6 +230,29 @@ const ImageProcessor: React.FC = () => {
           </OptionCard>
         </div>
       </div>
+
+      {/*  选中状态下隐藏 Upload 组件原有的删除按钮 -> 交给 Trigger 处理 */}
+      {activeImage && (
+        <style>
+          {`
+            .t-upload__card-mask-item {
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+        
+            .t-upload__card-mask-item-divider {
+              display: none;
+            }
+        
+            .t-upload__card-mask-item-divider ~ * {
+              display: none;
+            }
+          `}
+        </style>
+      )}
     </>
   );
 };

@@ -7,11 +7,13 @@ const svgModules = import.meta.glob("@/visualizers/builder/*/Svg.tsx");
 
 interface AudioSvgSelectProps {
   name: string;
+  disabled?: boolean;
   onChange(name: string): void;
 }
 
-const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, onChange }) => {
+const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, disabled, onChange }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
+
   const [isOpen, setIsOpen] = useState(false);
   const [svgList, setSvgList] = useState<{ [key: string]: React.FC<SvgProps> }>({});
 
@@ -44,6 +46,7 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, onChange }) => {
   }, []);
 
   const handleSvgSelect = (name: string) => {
+    if (disabled) return;
     onChange(name);
     setIsOpen(false);
   };
@@ -56,8 +59,10 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, onChange }) => {
       ref={dropdownRef}
     >
       <div
-        className={`cursor-pointer w-full flex-between bg-white dark:bg-dark-400 rounded-md p-4 border border-dashed ${isOpen ? "border-emerald-600" : "border-stone-400"} `}
-        onClick={() => setIsOpen(!isOpen)}
+        className={`cursor-pointer w-full flex-between bg-white dark:bg-dark-400 rounded-md p-4 border border-dashed ${
+          isOpen ? "border-emerald-600" : "border-stone-400"
+        } ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
       >
         {SelectedSvgPath && (
           <svg

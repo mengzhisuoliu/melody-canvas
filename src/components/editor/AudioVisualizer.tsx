@@ -16,7 +16,7 @@ import type { VizOptions } from "./types";
 const AudioVisualizer: React.FC = () => {
   const { activeObjects, builderFactory } = useCanvasStore();
 
-  const [vizType, setVizType] = useState<string>("");
+  const [vizName, setVizName] = useState<string>("");
   const [vizOptions, setVizOptions] = useState<VizOptions>(DEFAULT_VIZ_OPTIONS);
 
   const resetOptions = () => {
@@ -29,7 +29,7 @@ const AudioVisualizer: React.FC = () => {
 
   useEffect(() => {
     if (activeVizList.length > 0) {
-      setVizType(activeVizList[0].id!.split("-")[0]);
+      setVizName(activeVizList[0].id!.split("-")[0]);
       const vizData = pickWithDefaults(activeVizList[0], DEFAULT_VIZ_OPTIONS);
       setVizOptions(vizData);
     } else {
@@ -41,8 +41,8 @@ const AudioVisualizer: React.FC = () => {
     setVizOptions((prev) => ({ ...prev, ...options }));
   };
 
-  const updateType = (type: string) => {
-    setVizType(type);
+  const updateName = (type: string) => {
+    setVizName(type);
     activeVizList.forEach((viz) => {
       builderFactory!.updateBuilderType(viz, type);
     });
@@ -81,7 +81,7 @@ const AudioVisualizer: React.FC = () => {
 
   const handleAddViz = async () => {
     if (!builderFactory) return;
-    const BuilderClass = await builderFactory.createBuilder(vizType);
+    const BuilderClass = await builderFactory.createBuilder(vizName);
     const { count, color, shape: shaper } = vizOptions;
     const builder = new BuilderClass(count, color, shaper);
     builderFactory.addBuilder(builder);
@@ -102,8 +102,9 @@ const AudioVisualizer: React.FC = () => {
         </div>
 
         <AudioSvgSelect
-          name={vizType}
-          onChange={(name) => updateType(name)}
+          name={vizName}
+          disabled={activeVizList.length > 1}
+          onChange={(name) => updateName(name)}
         />
       </div>
 

@@ -108,6 +108,10 @@ abstract class Builder {
     return this.group;
   }
 
+  public updateGroup(group: Group) {
+    this.group = group;
+  }
+
   public getShape() {
     return this.shape;
   }

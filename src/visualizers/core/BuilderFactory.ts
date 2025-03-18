@@ -62,7 +62,15 @@ class BuilderFactory {
   public async cloneBuilder(vizGroup: Group) {
     const builder = this.getBuilderByGroup(vizGroup);
     if (!builder) return;
-    this.addBuilder(builder.clone());
+
+    const builderCopy = builder.clone();
+    this.builders.push(builderCopy);
+
+    const groupCopy = (await cloneFabricObject(vizGroup)) as Group;
+    groupCopy.set({ id: builderCopy.getId() });
+    builderCopy.updateGroup(groupCopy);
+
+    this.canvas.add(groupCopy);
   }
 
   public async createBuilder<T extends Builder>(name: string) {

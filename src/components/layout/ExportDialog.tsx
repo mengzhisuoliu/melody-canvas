@@ -1,11 +1,11 @@
-import { AudioClip, Combinator, Log, OffscreenSprite } from "@webav/av-cliper";
-Log.setLogLevel(Log.warn); // 隐藏默认 info 日志
-
 import { Canvas } from "fabric";
 import { useState } from "react";
 
 import { Badge, Button, Dialog, Divider, List } from "tdesign-react";
 const { ListItem } = List;
+
+import { AudioClip, Combinator, Log, OffscreenSprite } from "@webav/av-cliper";
+Log.setLogLevel(Log.warn); // 隐藏默认 info 日志
 
 import { useAudioStore, useCanvasStore } from "@/stores";
 
@@ -16,8 +16,7 @@ import LoadingOverlay from "../base/LoadingOverlay";
 
 type ClipTask = {
   id: string;
-  completed: boolean;
-  blob?: Blob;
+  blob: Blob | null;
 };
 
 const ExportDialog: React.FC = () => {
@@ -60,7 +59,7 @@ const ExportDialog: React.FC = () => {
 
     /* 最起码要等 Canvas 与 Audio 克隆完才能关闭弹窗继续编辑 */
     const taskId = `${audioFile.name.split(".")[0]}-${Date.now()}`;
-    setClipQueue((prev) => [...prev, { id: taskId, completed: false }]);
+    setClipQueue((prev) => [...prev, { id: taskId, blob: null }]);
 
     setLoadingVisible(false);
 
@@ -81,7 +80,7 @@ const ExportDialog: React.FC = () => {
 
     // 导出
     const blob = await new Response(combinator.output()).blob();
-    setClipQueue((prev) => prev.map((task) => (task.id === taskId ? { ...task, completed: true, blob } : task)));
+    setClipQueue((prev) => prev.map((task) => (task.id === taskId ? { ...task, blob } : task)));
     canvasClip.destroy();
   };
 
@@ -144,14 +143,12 @@ const ExportDialog: React.FC = () => {
               <ListItem
                 key={task.id}
                 action={
-                  task.completed ? (
+                  task.blob ? (
                     <div
                       className="text-2xl i-line-md:download-outline-loop cursor-pointer"
                       onClick={() => {
-                        if (task.blob) {
-                          downloadFile(task.blob, `${task.id}.mp4`);
-                          setClipQueue((prev) => prev.filter((clip) => clip.id !== task.id));
-                        }
+                        downloadFile(task.blob!, `${task.id}.mp4`);
+                        setClipQueue((prev) => prev.filter((clip) => clip.id !== task.id));
                       }}
                     ></div>
                   ) : (

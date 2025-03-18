@@ -45,14 +45,11 @@ const SideNav: React.FC = () => {
     if (matchingNav) {
       setActiveNav(matchingNav.id);
     }
-  }, [activeObjects]);
+  }, [activeObjects[0]]);
 
   return (
     <>
-      <div
-        className="w-24 h-screen left-0 space-x-10 border-r-2 border-emerald-700 bg-emerald-50 flex"
-        dark="bg-dark-900 border-dark-200"
-      >
+      <div className="w-24 h-screen left-0 space-x-10 border-r-2 border-emerald-700 bg-emerald-50 dark:(bg-dark-900 border-dark-200)">
         {/* 左侧栏 */}
         <nav className="w-24">
           <div className="px-2 py-4 flex flex-col items-center text-center">
@@ -81,10 +78,7 @@ const SideNav: React.FC = () => {
         </nav>
 
         {/* 对应的子组件 */}
-        <div
-          className="h-[90vh] w-[18vw] border-2 border-emerald-500 bg-green-50 rounded-md absolute left-18 top-2 p-4"
-          dark="bg-dark-400 border-dark-200"
-        >
+        <div className="h-[90vh] w-[18vw] rounded-md absolute left-18 top-2 p-4 border-2 border-emerald-500 bg-green-50 dark:(bg-dark-400 border-dark-200)">
           {navList.map((nav) => (
             <div
               key={nav.id}

@@ -11,7 +11,7 @@ class DotCircle extends Builder {
     return "DotCircle";
   }
 
-  private readonly dotRadius = 2;
+  private dotRadius = 8 - Math.log2(this.count);
 
   constructor(count: number, color: string, shape: string) {
     super(count, color, shape);
@@ -58,26 +58,28 @@ class DotCircle extends Builder {
 
   protected draw(frequency: number[]) {
     const MIN_SCALE = 0.5;
-    const MAX_SCALE = 1;
+    const MAX_SCALE = 2.25;
+    const PADDING = 10;
 
     const objHeights = normalize(frequency, MIN_SCALE, MAX_SCALE);
-    const orbitRadius = this.calcOrbitRadius(this.group.width, this.group.height);
+    const orbitRadius = this.calcOrbitRadius(this.group.width, this.group.height) - PADDING;
 
     this.group.getObjects().forEach((circle, i) => {
       if (circle.type !== "circle") return;
 
       const angle = this.calcAngle(i);
       const freqIndex = Math.floor((i / this.count) * objHeights.length);
-      const radiusScale = objHeights[freqIndex];
-      const newRadius = orbitRadius * radiusScale;
+      const scaleValue = objHeights[freqIndex];
 
-      // 新位置相对于 Group 中心
-      const newX = newRadius * Math.cos(angle);
-      const newY = newRadius * Math.sin(angle);
+      const x = orbitRadius * Math.cos(angle);
+      const y = orbitRadius * Math.sin(angle);
 
       circle.set({
-        left: newX,
-        top: newY
+        left: x,
+        top: y,
+        radius: this.dotRadius * scaleValue,
+        scaleX: scaleValue,
+        scaleY: scaleValue
       });
     });
   }

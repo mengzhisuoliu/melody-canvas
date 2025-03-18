@@ -133,7 +133,6 @@ const ImageProcessor: React.FC = () => {
         <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-4">
           <div>File</div>
           <ActionButton
-            activeObjs={activeImgList}
             disabled={!imageFile}
             onAdd={handleAddImage}
           />

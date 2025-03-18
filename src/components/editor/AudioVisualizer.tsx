@@ -48,7 +48,7 @@ const AudioVisualizer: React.FC = () => {
     });
   };
 
-  const updateFill = (
+  const updateColor = (
     color: string,
     context: {
       color: ColorObject;
@@ -94,16 +94,12 @@ const AudioVisualizer: React.FC = () => {
       <div className="mb-6">
         <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-4">
           <div>Element</div>
-          <ActionButton
-            activeObjs={activeVizList}
-            disabled={false}
-            onAdd={handleAddViz}
-          />
+          <ActionButton onAdd={handleAddViz} />
         </div>
 
         <AudioSvgSelect
           name={vizName}
-          disabled={activeVizList.length > 1}
+          disabled={activeObjects.length > 1}
           onChange={(name) => updateName(name)}
         />
       </div>
@@ -119,7 +115,7 @@ const AudioVisualizer: React.FC = () => {
               swatchColors={null}
               inputProps={{ style: INPUT_STYLE }}
               value={vizOptions.color}
-              onChange={(color, ctx) => updateFill(color, ctx)}
+              onChange={(color, ctx) => updateColor(color, ctx)}
             />
           </OptionCard>
 

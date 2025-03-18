@@ -7,6 +7,10 @@ import Builder from "../../core/Builder";
  * 柱状环形
  */
 class BarCircle extends Builder {
+  public get name() {
+    return "BarCircle";
+  }
+
   private readonly barHeight = 25;
   private readonly groupPadding = 20;
 

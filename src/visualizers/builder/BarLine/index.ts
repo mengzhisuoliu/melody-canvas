@@ -7,6 +7,10 @@ import Builder from "../../core/Builder";
  * 柱状线形
  */
 class BarLine extends Builder {
+  public get name() {
+    return "BarLine";
+  }
+
   constructor(count: number, color: string, shape: string) {
     super(count, color, shape);
   }

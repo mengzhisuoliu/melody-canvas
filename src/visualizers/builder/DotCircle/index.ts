@@ -7,6 +7,10 @@ import Builder from "../../core/Builder";
  * 点状环形
  */
 class DotCircle extends Builder {
+  public get name() {
+    return "DotCircle";
+  }
+
   private readonly dotRadius = 2;
 
   constructor(count: number, color: string, shape: string) {

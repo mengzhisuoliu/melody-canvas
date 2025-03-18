@@ -7,6 +7,10 @@ import Builder from "../../core/Builder";
  * 点状线形
  */
 class DotLine extends Builder {
+  public get name() {
+    return "DotLine";
+  }
+
   constructor(count: number, color: string, shape: string) {
     super(count, color, shape);
   }

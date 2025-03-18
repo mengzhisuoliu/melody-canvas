@@ -13,6 +13,7 @@ import { DEFAULT_SHAPE } from "./FrequencyShaper";
  * - 具体实现放在子类
  */
 abstract class Builder {
+  abstract get name(): string;
   protected id: string;
 
   protected count: number;
@@ -44,7 +45,7 @@ abstract class Builder {
   }
 
   private generateId() {
-    return `${this.constructor.name}-${new Date().getTime()}`;
+    return `${this.name}-${new Date().getTime()}`;
   }
 
   protected generateColorMap() {

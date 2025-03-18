@@ -1,18 +1,18 @@
-import { SVG_HEIGHT, SVG_CLASS, SVG_WIDTH } from "@/libs/common";
+import { SVG_CLASS, SVG_HEIGHT, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "../../types";
 
 const DotCircleSvg: React.FC<SvgProps> = ({ className }) => {
-  const radius = 60;
-  const count = 30;
-  const angleStep = (2 * Math.PI) / count;
+  const RADIUS = 60;
+  const COUNT = 30;
 
+  const angleStep = (2 * Math.PI) / COUNT;
   const centerX = SVG_WIDTH / 2; 
   const centerY = SVG_HEIGHT / 2;
 
-  const points = Array.from({ length: count }).map((_, index) => {
+  const points = Array.from({ length: COUNT }).map((_, index) => {
     const angle = index * angleStep;
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
+    const x = centerX + RADIUS * Math.cos(angle);
+    const y = centerY + RADIUS * Math.sin(angle);
     return { x, y };
   });
   

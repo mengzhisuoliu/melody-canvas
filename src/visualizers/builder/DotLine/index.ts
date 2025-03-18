@@ -19,9 +19,10 @@ class DotLine extends Builder {
     const frequency = (Math.PI * 8) / this.count;
     const circles: Circle[] = [];
 
-    const radius = 3;
-    const padding = 2;
-    const totalSpacing = groupWidth - padding * radius * this.count;
+    const RADIUS = 3;
+    const PADDING = 2;
+
+    const totalSpacing = groupWidth - PADDING * RADIUS * this.count;
     const spacing = totalSpacing / (this.count - 1);
 
     // 相同的 count 会生成相同的 sinValues
@@ -35,18 +36,18 @@ class DotLine extends Builder {
     for (let i = 0; i < this.count; i++) {
       // 但是具体的 y 坐标需要根据 Group 的高度来计算
       // 这里的减数 (diameter + control stroke width) 是为了避免图形超出 Group 边界
-      const y = (groupHeight - radius * 2 - 1) * normSin[i];
+      const y = (groupHeight - RADIUS * 2 - 1) * normSin[i];
 
       const circle = new Circle({
         left: x,
         top: y,
-        radius: radius,
+        radius: RADIUS,
         fill: this.colorMap[i],
         originY: "top"
       });
 
       circles.push(circle);
-      x += 2 * radius + spacing;
+      x += 2 * RADIUS + spacing;
     }
 
     return circles;

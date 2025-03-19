@@ -4,9 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import type { ColorObject, ColorPickerChangeTrigger } from "tdesign-react";
 import { ColorPicker, Radio, Select } from "tdesign-react";
 
-import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 import { useCanvasStore } from "@/stores";
 import { shaperMap } from "@/visualizers";
+
+import { GRADIENT_PRESET } from "@/libs/canvas";
+import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 
 import { AudioSvgSelect, AudioUploader } from "../audio";
 import { ActionButton, OptionCard } from "../base";
@@ -109,10 +111,10 @@ const AudioVisualizer: React.FC = () => {
         <div className="space-y-6">
           <OptionCard title="Color">
             <ColorPicker
-              key={activeVizList.map((v) => v.id).join(",")}
+              key={activeVizList.map((v) => v.id).join("")}
               format="HEX"
               recentColors={null}
-              swatchColors={null}
+              swatchColors={GRADIENT_PRESET}
               inputProps={{ style: INPUT_STYLE }}
               value={vizOptions.color}
               onChange={(color, ctx) => updateColor(color, ctx)}

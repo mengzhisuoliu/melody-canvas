@@ -6,7 +6,7 @@ import { Checkbox, ColorPicker, SelectInput, Textarea } from "tdesign-react";
 
 import { useCanvasStore } from "@/stores";
 
-import { createGradient } from "@/libs/canvas";
+import { createGradient, GRADIENT_PRESET } from "@/libs/canvas";
 import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 
 import { ActionButton, OptionCard } from "../base";
@@ -147,7 +147,7 @@ const TextManager: React.FC = () => {
               key={activeTextList.length > 0 ? activeTextList[0].toString() : undefined} // TDesign 内部缓存问题
               format="HEX"
               recentColors={null}
-              swatchColors={null}
+              swatchColors={GRADIENT_PRESET}
               inputProps={{ style: INPUT_STYLE }}
               value={textOptions.color}
               onChange={(color, ctx) => updateColor(color, ctx)}

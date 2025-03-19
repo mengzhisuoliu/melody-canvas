@@ -5,7 +5,7 @@ import { ColorPickerPanel, Select } from "tdesign-react";
 
 import { useCanvasStore } from "@/stores";
 
-import { createGradient } from "@/libs/canvas";
+import { GRADIENT_PRESET, createGradient } from "@/libs/canvas";
 import { DEFAULT_BACKGROUND_COLOR, INPUT_STYLE } from "@/libs/common";
 
 import { OptionCard } from "../base";
@@ -65,7 +65,7 @@ const BackdropDisplay: React.FC = () => {
             key={canvasInstance?.toString()}
             format="HEX"
             recentColors={null}
-            swatchColors={null} // 预设颜色
+            swatchColors={GRADIENT_PRESET}
             value={backgroundColor}
             onChange={(color, ctx) => updateBackground(color, ctx)}
           />

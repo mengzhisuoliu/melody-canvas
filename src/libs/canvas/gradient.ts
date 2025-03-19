@@ -16,6 +16,15 @@ const DIRECTION_MAP: Record<string, number> = {
   "to left top": 315
 };
 
+export const GRADIENT_PRESET = [
+  "linear-gradient(to right, #d7d2cc 0%, #304352 100%)",
+  "linear-gradient(to right, #fddb92 0%, #d1fdff 100%)",
+  "linear-gradient(to right, #92fe9d 0%, #00c9ff 100%)",
+  "linear-gradient(to right, #69EACB 0%, #d883ff 100%)",
+  "linear-gradient(to right, #9CECFB 0%, #0052D4 100%)",
+  "linear-gradient(to right, #BA5370 0%, #F4E2D8 100%)"
+];
+
 /**
  * @param css - E.g. `linear-gradient(45deg,rgba(131, 222, 196, 1) 0%,rgb(73, 106, 220) 100%)`
  */

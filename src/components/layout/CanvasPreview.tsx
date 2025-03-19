@@ -79,10 +79,10 @@ const CanvasPreview: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="absolute border-4 border-emerald-800 dark:border-dark-50 flex-center"
+      className="absolute border-3 border-emerald-500 dark:border-dark-50 flex-center"
       style={{
         transform: "translate(-50%, -50%)",
-        left: "calc(50% + 12.5vw)",
+        left: "calc(50% + 14.5vw)",
         top: "calc(50% - 3px)",
         width: `calc(60vh * ${canvasRatio.width} / ${canvasRatio.height})`,
         height: "60vh"

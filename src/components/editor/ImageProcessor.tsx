@@ -145,8 +145,15 @@ const ImageProcessor: React.FC = () => {
           autoUpload={false}
           showImageFileName={false}
           files={imageFile ? [imageFile] : []}
+          disabled={activeObjects.length > 0}
           onChange={(files) => setImageFile(files[0])}
-          {...(activeImgList.length === 1 ? { imageViewerProps: { trigger: <ImgPreviewTrigger /> } } : {})}
+          // 确保选中物体只是一个 FabricImage
+          {...(activeObjects.length === 1 &&
+            activeImgList.length === 1 && {
+              imageViewerProps: {
+                trigger: <ImgPreviewTrigger />
+              }
+            })}
         />
       </div>
 

@@ -27,6 +27,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ disabled, onAdd }) => {
           theme: "success" as const,
           icon: "i-ri:add-fill",
           text: "New",
+          disabled: disabled,
           onClick: onAdd
         };
 
@@ -37,7 +38,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ disabled, onAdd }) => {
       suffix={<div className={action.icon}></div>}
       onClick={action.onClick}
       theme={action.theme}
-      disabled={disabled}
+      {...(action.disabled && { disabled: action.disabled })}
     >
       <span className="font-bold">{action.text}</span>
     </Button>

@@ -84,8 +84,8 @@ const AudioVisualizer: React.FC = () => {
   const handleAddViz = async () => {
     if (!builderFactory) return;
     const BuilderClass = await builderFactory.createBuilder(vizName);
-    const { count, color, shape: shaper } = vizOptions;
-    const builder = new BuilderClass(count, color, shaper);
+    const { count, color, shape } = vizOptions;
+    const builder = new BuilderClass(count, color, shape);
     builderFactory.addBuilder(builder);
   };
 

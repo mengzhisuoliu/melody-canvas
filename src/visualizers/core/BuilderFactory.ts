@@ -5,6 +5,8 @@ import Builder from "./Builder";
 
 type BuilderConstructor<T extends Builder> = new (...args: ConstructorParameters<typeof Builder>) => T;
 
+const builderModules = import.meta.glob("@/visualizers/builder/*/index.ts");
+
 /**
  * 管理画布上所有的音频可视化元素
  * - 负责直接操作 `Canvas`
@@ -13,16 +15,28 @@ type BuilderConstructor<T extends Builder> = new (...args: ConstructorParameters
 class BuilderFactory {
   private canvas: Canvas;
 
-  // 存储已通过动态 import 的组件
   private builderMap = new Map<string, BuilderConstructor<Builder>>();
   private builders: Builder[] = [];
 
-  private getBuilderByGroup(vizGroup: Group) {
-    return this.builders.find((builder) => builder.getId() === vizGroup.id);
-  }
-
   public constructor(canvas: Canvas) {
     this.canvas = canvas;
+    this.loadAllBuilders();
+  }
+
+  private async loadAllBuilders() {
+    for (const path in builderModules) {
+      const match = path.match(/\/builder\/([^/]+)\/index\.ts$/);
+      const name = match?.[1];
+      if (name) {
+        const module = (await builderModules[path]()) as { default: BuilderConstructor<Builder> };
+        const BuilderClass = module.default;
+        this.builderMap.set(name, BuilderClass);
+      }
+    }
+  }
+
+  private getBuilderByGroup(vizGroup: Group) {
+    return this.builders.find((builder) => builder.getId() === vizGroup.id);
   }
 
   public getCanvas() {
@@ -34,7 +48,7 @@ class BuilderFactory {
 
     // 克隆可视化元素
     this.builders.forEach(async (builder) => {
-      const vizName = builder.constructor.name;
+      const vizName = builder.name;
       const BuilderClass = await factoryCopy.createBuilder(vizName);
       const builderCopy = new BuilderClass(builder.getCount(), builder.getColor(), builder.getShape());
 
@@ -73,20 +87,11 @@ class BuilderFactory {
     this.canvas.add(groupCopy);
   }
 
-  public async createBuilder<T extends Builder>(name: string) {
-    const loadBuilder = async (name: string) => {
-      if (this.builderMap.has(name)) {
-        return this.builderMap.get(name) as BuilderConstructor<T>;
-      }
-
-      const module = await import(`../builder/${name}/index.ts`);
-      const BuilderClass = module.default as BuilderConstructor<T>;
-      this.builderMap.set(name, BuilderClass);
-      return BuilderClass;
-    };
-
-    const BuilderClass = await loadBuilder(name);
-    return BuilderClass;
+  public async createBuilder(name: string) {
+    if (!this.builderMap.has(name)) {
+      await this.loadAllBuilders();
+    }
+    return this.builderMap.get(name)!;
   }
 
   public addBuilder(builder: Builder) {

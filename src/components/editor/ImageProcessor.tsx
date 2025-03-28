@@ -130,7 +130,10 @@ const ImageProcessor: React.FC = () => {
   return (
     <>
       <div className="mb-6">
-        <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-4">
+        <div
+          className="flex-between font-bold text-emerald-600 mb-4"
+          dark="text-emerald-400"
+        >
           <div>File</div>
           <ActionButton
             disabled={!imageFile}
@@ -158,7 +161,12 @@ const ImageProcessor: React.FC = () => {
       </div>
 
       <div className="mb-6">
-        <div className="font-bold text-emerald-600 dark:text-emerald-400 mb-3">Options</div>
+        <div
+          className="font-bold text-emerald-600 mb-3"
+          dark="text-emerald-400"
+        >
+          Options
+        </div>
         <div className="space-y-6">
           {/* 阴影 */}
           <OptionCard

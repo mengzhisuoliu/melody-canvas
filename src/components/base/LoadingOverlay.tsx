@@ -14,7 +14,8 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ visible }) => {
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="w-2 h-12 rounded-md bg-emerald-400 dark:bg-emerald-200"
+              className="w-2 h-12 rounded-md bg-emerald-400"
+              dark="bg-emerald-200"
               style={{
                 animation: `bounce 1.2s ${i * 0.2}s infinite ease-in-out`,
               }}

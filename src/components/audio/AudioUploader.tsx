@@ -2,7 +2,7 @@ import { getAudioBuffer } from "@/libs/media";
 import { useAudioStore } from "@/stores";
 
 const DEFAULT_AUDIO = "/audio/Super Mario.mp3";
-const TEXT_CLASS = "text-emerald-800 dark:text-white hover:text-emerald-500 dark:hover:text-emerald-300";
+const TEXT_CLASS = "text-emerald-800 hover:text-emerald-500 dark:(text-white hover:text-emerald-300)";
 
 const AudioUploader: React.FC = () => {
   const { audioFile, setAudioFile, setAudioBuffer } = useAudioStore();
@@ -27,7 +27,7 @@ const AudioUploader: React.FC = () => {
     if (!audioFile)
       return (
         <>
-          <span text="lg">Upload a File</span>
+          <span className="text-lg">Upload a File</span>
           <div className="i-line-md:uploading-loop text-2xl ml-4"></div>
         </>
       );

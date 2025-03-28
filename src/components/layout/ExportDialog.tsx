@@ -107,7 +107,10 @@ const ExportDialog: React.FC = () => {
         visible={dialogVisible}
         onClose={() => setDialogVisible(false)}
       >
-        <p className="font-bold dark:text-white">
+        <p
+          className="font-bold"
+          dark="text-white"
+        >
           {queueIsFull
             ? "The queue is full. Wait until complete or download a file to free up space."
             : "Click the button below to render."}

@@ -94,7 +94,10 @@ const AudioVisualizer: React.FC = () => {
       <AudioUploader />
 
       <div className="mb-6">
-        <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-4">
+        <div
+          className="flex-between font-bold text-emerald-600 mb-4"
+          dark="text-emerald-400"
+        >
           <div>Element</div>
           <ActionButton onAdd={handleAddViz} />
         </div>
@@ -107,7 +110,12 @@ const AudioVisualizer: React.FC = () => {
       </div>
 
       <div className="mb-6">
-        <div className="font-bold text-emerald-600 dark:text-emerald-400 mb-3">Options</div>
+        <div
+          className="font-bold text-emerald-600 mb-3"
+          dark="text-emerald-400"
+        >
+          Options
+        </div>
         <div className="space-y-6">
           <OptionCard title="Color">
             <ColorPicker

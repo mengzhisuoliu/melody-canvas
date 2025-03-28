@@ -122,7 +122,10 @@ const TextManager: React.FC = () => {
   return (
     <>
       <div className="mb-6">
-        <div className="flex-between font-bold text-emerald-600 dark:text-emerald-400 mb-4">
+        <div
+          className="flex-between font-bold text-emerald-600 mb-4"
+          dark="text-emerald-400"
+        >
           <div>Content</div>
           <ActionButton
             disabled={text === ""}
@@ -139,7 +142,12 @@ const TextManager: React.FC = () => {
       </div>
 
       <div className="mb-6">
-        <div className="font-bold text-base text-emerald-600 dark:text-emerald-400 mb-3">Options</div>
+        <div
+          className="font-bold text-base text-emerald-600 mb-3"
+          dark="text-emerald-400"
+        >
+          Options
+        </div>
         <div className="space-y-6">
           {/* 颜色 */}
           <OptionCard title="Color">
@@ -160,7 +168,7 @@ const TextManager: React.FC = () => {
               checked={textOptions.fontWeight === 900}
               onChange={(checked) => updateTextOptions({ fontWeight: checked ? 900 : 400 })}
             >
-              <span font="bold">Bold</span>
+              <span className="font-bold">Bold</span>
             </Checkbox>
             <Checkbox
               checked={textOptions.fontStyle === "italic"}
@@ -186,7 +194,8 @@ const TextManager: React.FC = () => {
                   {FONT_LIST.map((font) => (
                     <li
                       key={font}
-                      className="text-xs cursor-pointer p-1 rounded-md hover:bg-emerald-50 dark:hover:bg-dark-800"
+                      className="text-xs cursor-pointer p-1 rounded-md hover:bg-emerald-50"
+                      dark="hover:bg-dark-800"
                       style={{ fontFamily: font }}
                       onClick={() => {
                         updateTextOptions({ fontFamily: font });

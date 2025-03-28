@@ -82,7 +82,8 @@ const AudioControls: React.FC = () => {
         <button
           disabled={!audioFile}
           onClick={togglePlay}
-          className="w-12 aspect-square rounded-full bg-emerald-700 border border-emerald-800 dark:bg-emerald-300 flex-center"
+          className="w-12 aspect-square rounded-full bg-emerald-700 border border-emerald-800 flex-center"
+          dark="bg-emerald-300"
         >
           <div
             className={`w-5 h-5 bg-white ${!audioFile || audioRef.current?.paused ? "i-solar:play-bold" : "i-solar:pause-bold"}`}
@@ -97,7 +98,10 @@ const AudioControls: React.FC = () => {
           <div
             className={`text-2xl ${volume === 0 || !audioFile ? "i-lsicon:volume-mute-outline" : "i-lsicon:volume-outline"}`}
           ></div>
-          <div className="h-40 absolute bottom-14 -ml-3 w-12 pt-5 rounded-md flex-center flex-col opacity-0 group-hover:opacity-100 bg-[#42b093] dark:bg-dark-500 border-2 border-emerald-800 dark:border-dark-50">
+          <div
+            className="h-40 absolute bottom-14 -ml-3 w-12 pt-5 rounded-md flex-center flex-col opacity-0 group-hover:opacity-100 bg-[#42b093] border-2 border-emerald-800"
+            dark="bg-dark-500 border-dark-50"
+          >
             <Slider
               layout="vertical"
               min={0}

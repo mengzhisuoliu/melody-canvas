@@ -59,9 +59,10 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, disabled, onChang
       ref={dropdownRef}
     >
       <div
-        className={`cursor-pointer w-full flex-between bg-white dark:bg-dark-400 rounded-md p-4 border border-dashed ${
+        className={`cursor-pointer w-full flex-between bg-white rounded-md p-4 border border-dashed ${
           isOpen ? "border-emerald-600" : "border-stone-400"
         } ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+        dark="bg-dark-400"
         onClick={() => !disabled && setIsOpen(!isOpen)}
       >
         {SelectedSvgPath && (
@@ -83,7 +84,11 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, disabled, onChang
 
       {/* 下拉框 */}
       <div
-        className={`absolute max-h-80 top-27 z-50 w-[110%] overflow-y-auto bg-white dark:bg-dark-800 rounded p-2 shadow-md ${isOpen ? "dropdown-open" : "dropdown-closed"}`}
+        className={`absolute max-h-80 top-27 z-50 w-[110%] overflow-y-auto bg-white rounded p-2 shadow-md ${
+          isOpen ? "dropdown-open" : "dropdown-closed"
+        }
+          `}
+        dark="bg-dark-800"
       >
         {Object.keys(svgList).map((key) => {
           const SvgPath = svgList[key];
@@ -91,7 +96,10 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, disabled, onChang
           return (
             <button
               key={key}
-              className={`h-16 w-full rounded-md ${isSelected ? "pointer-events-none bg-emerald-50 dark:bg-dark-200" : "cursor-pointer"}`}
+              className={`h-16 w-full rounded-md ${
+                isSelected ? "pointer-events-none bg-emerald-50 dark:bg-dark-200" : "cursor-pointer"
+              }
+              `}
               onClick={() => handleSvgSelect(key)}
             >
               <svg

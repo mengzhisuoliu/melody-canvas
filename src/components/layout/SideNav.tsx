@@ -48,17 +48,25 @@ const SideNav: React.FC = () => {
 
   return (
     <>
-      <div className="w-24 h-screen left-0 space-x-10 border-r-2 border-emerald-700 bg-emerald-50 dark:(bg-dark-900 border-dark-200)">
+      <div
+        className="w-24 h-screen left-0 space-x-10 border-r-2 border-emerald-700 bg-emerald-50"
+        dark="border-dark-50 bg-dark-500"
+      >
         {/* 左侧栏 */}
         <nav className="w-24">
           <div className="px-2 py-4 flex-center flex-col text-center">
             {/* Logo */}
-            <div m="b-6">
+            <div className="mb-6">
               <img
                 src="/image/favicon.png"
                 className="w-10 h-10 mx-auto rounded-lg shadow-md"
               />
-              <div className="py-2 font-sans font-bold text-sm text-emerald-800 dark:text-white">Melody Canvas</div>
+              <div
+                className="py-2 font-sans font-bold text-sm text-emerald-800"
+                dark="text-white"
+              >
+                Melody Canvas
+              </div>
             </div>
 
             {/* 按钮组 */}
@@ -77,7 +85,10 @@ const SideNav: React.FC = () => {
         </nav>
 
         {/* 对应的子组件 */}
-        <div className="h-[90vh] w-[20vw] rounded-md absolute left-18 top-2 p-4 border-2 border-emerald-500 bg-green-50 dark:(bg-dark-400 border-dark-200)">
+        <div
+          className="h-[90vh] w-[20vw] rounded-md absolute left-18 top-2 p-4 border-2 border-emerald-500 bg-green-50"
+          dark="border-dark-50 bg-dark-400"
+        >
           {navList.map((nav) => (
             <div
               key={nav.id}

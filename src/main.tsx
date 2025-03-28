@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import "@unocss/reset/tailwind.css";
-import 'tdesign-react/es/style/index.css';
+import "tdesign-react/es/style/index.css";
 import "virtual:uno.css";
 
 import "@/styles/theme.css";

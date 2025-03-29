@@ -12,8 +12,8 @@ export const BREAK_POINTS = {
   md: "(min-width: 768px)",
   lg: "(min-width: 1024px)",
   xl: "(min-width: 1280px)",
-  "max-sm": "(max-width: 639px)",
-  "max-md": "(max-width: 767px)",
-  "max-lg": "(max-width: 1023px)",
-  "max-xl": "(max-width: 1279px)"
+  "max-sm": "(max-width: 640px)",
+  "max-md": "(max-width: 768px)",
+  "max-lg": "(max-width: 1024px)",
+  "max-xl": "(max-width: 1280px)"
 };

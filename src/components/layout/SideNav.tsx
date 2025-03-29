@@ -47,7 +47,7 @@ const SideNav: React.FC = () => {
   const navRef = useRef<HTMLDivElement>(null);
 
   const [activeNav, setActiveNav] = useState<string>(navList[0].id);
-  const [panelHidden, setPanelHidden] = useState(!isMobileOrTablet);
+  const [panelHidden, setPanelHidden] = useState(isMobileOrTablet);
 
   useEffect(() => {
     const activeType = activeObjects[0]?.subType;
@@ -60,10 +60,8 @@ const SideNav: React.FC = () => {
   }, [activeObjects[0]]);
 
   useEffect(() => {
-    if (!isMobileOrTablet) {
-      setPanelHidden(false);
-      return;
-    }
+    setPanelHidden(isMobileOrTablet);
+    if (!isMobileOrTablet) return;
 
     /* 小屏幕情况下，点击侧边栏之外的区域自动关闭 */
     const handleClickOutside = (event: MouseEvent) => {
@@ -100,8 +98,7 @@ const SideNav: React.FC = () => {
           <div className="h-full px-2 py-4 flex flex-col items-center text-center">
             {/* Logo */}
             <a
-              className="mb-6"
-              max-lg="flex-center mb-32"
+              className="mb-10"
               href="https://github.com/RylanBot/melody-canvas"
               target="_blank"
             >

@@ -1,5 +1,5 @@
 interface OptionCardProps {
-  title: string;
+  title: React.ReactNode;
   children: React.ReactNode;
   vertical?: boolean;
 }

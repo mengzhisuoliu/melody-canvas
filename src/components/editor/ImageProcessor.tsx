@@ -1,6 +1,6 @@
 import { FabricImage, FabricObjectProps, Path, Shadow } from "fabric";
 import { useEffect, useMemo, useState } from "react";
-import { ColorPicker, InputNumber, Upload, type UploadFile } from "tdesign-react";
+import { Checkbox, ColorPicker, InputNumber, Upload, type UploadFile } from "tdesign-react";
 
 import { useCanvasStore } from "@/stores";
 
@@ -15,6 +15,7 @@ const ImageProcessor: React.FC = () => {
   const { canvasInstance, activeObjects } = useCanvasStore();
 
   const [imageFile, setImageFile] = useState<UploadFile | null>(null);
+  const [isRadiusUniform, setIsRadiusUniform] = useState<boolean>(true);
   const [radiusOptions, setRadiusOptions] = useState<RadiusOptions>(DEFAULT_RADIUS);
   const [shadowOptions, setShadowOptions] = useState<ShadowOptions>(DEFAULT_SHADOW);
 
@@ -39,6 +40,19 @@ const ImageProcessor: React.FC = () => {
           onChange={updateImageFile}
         />
       </label>
+    );
+  };
+
+  const RadiusModeCheckbox: React.FC = () => {
+    return (
+      <div className="flex-between">
+        Radius
+        <Checkbox
+          checked={isRadiusUniform}
+          onChange={setIsRadiusUniform}
+          label="Uniform"
+        />
+      </div>
     );
   };
 
@@ -98,7 +112,13 @@ const ImageProcessor: React.FC = () => {
 
   const updateRadius = (options: Partial<RadiusOptions>) => {
     setRadiusOptions((prev) => {
-      const updatedOptions = { ...prev, ...options };
+      let updatedOptions = { ...prev, ...options };
+
+      if (isRadiusUniform) {
+        // 四个角一起变化
+        const uniformValue = options.tl ?? options.tr ?? options.bl ?? options.br ?? 0;
+        updatedOptions = { tl: uniformValue, tr: uniformValue, bl: uniformValue, br: uniformValue };
+      }
 
       activeImgList.forEach((img) => {
         const roundedPath = createPathByRadius(img.width, img.height, updatedOptions);
@@ -213,7 +233,7 @@ const ImageProcessor: React.FC = () => {
           {/* 弧度 */}
           <OptionCard
             vertical
-            title="Rounded Corner"
+            title={<RadiusModeCheckbox />}
           >
             <div className="grid grid-cols-2 gap-2">
               {RADIUS_INPUT.map(({ key, icon }) => (

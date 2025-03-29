@@ -1,7 +1,7 @@
 import { getAudioBuffer } from "@/libs/media";
 import { useAudioStore } from "@/stores";
 
-const DEFAULT_AUDIO = "/audio/Super Mario.mp3";
+const DEFAULT_AUDIO = "/audio/Ghost Duet.m4a";
 const TEXT_CLASS = "text-emerald-800 hover:text-emerald-500 dark:(text-white hover:text-emerald-300)";
 
 const AudioUploader: React.FC = () => {
@@ -75,7 +75,7 @@ const AudioUploader: React.FC = () => {
           className={`text-xs ${TEXT_CLASS}`}
           onClick={loadDefaultAudio}
         >
-          No local audio? Try the default here!
+          No audio? Try the default here!
         </button>
       )}
     </div>

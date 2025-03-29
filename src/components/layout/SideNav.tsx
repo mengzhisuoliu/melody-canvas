@@ -65,7 +65,11 @@ const SideNav: React.FC = () => {
 
     /* 小屏幕情况下，点击侧边栏之外的区域自动关闭 */
     const handleClickOutside = (event: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+      // TDesign 的 Popup 直接挂在 body 上，避免和它冲突
+      const portalWrappers = document.querySelectorAll(".t-portal-wrapper");
+      const isInsideWrapper = Array.from(portalWrappers).some((wrapper) => wrapper.contains(event.target as Node));
+
+      if (!navRef.current?.contains(event.target as Node) && !isInsideWrapper) {
         setPanelHidden(true);
       }
     };

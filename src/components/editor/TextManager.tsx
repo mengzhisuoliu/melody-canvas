@@ -156,7 +156,7 @@ const TextManager: React.FC = () => {
               format="HEX"
               recentColors={null}
               swatchColors={GRADIENT_PRESET}
-              inputProps={{ style: INPUT_STYLE }}
+              inputProps={{ style: INPUT_STYLE, readonly: true }}
               value={textOptions.color}
               onChange={(color, ctx) => updateColor(color, ctx)}
             />

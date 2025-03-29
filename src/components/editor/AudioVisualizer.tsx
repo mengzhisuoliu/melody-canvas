@@ -57,7 +57,9 @@ const AudioVisualizer: React.FC = () => {
       trigger: ColorPickerChangeTrigger;
     }
   ) => {
-    // to fix: context 有时候传入的参数结构有误 -> context.color 为 undefined
+    /* to fix: context.color 有时为 undefined
+      input onBlur 会触发 onChange 事件，但没能正确传入 context
+      临时利用 readonly 属性解决 */
     const isGradient = context.color?.isGradient;
     const appliedColor = isGradient ? context.color.css : color;
 
@@ -123,7 +125,7 @@ const AudioVisualizer: React.FC = () => {
               format="HEX"
               recentColors={null}
               swatchColors={GRADIENT_PRESET}
-              inputProps={{ style: INPUT_STYLE }}
+              inputProps={{ style: INPUT_STYLE, readonly: true}}
               value={vizOptions.color}
               onChange={(color, ctx) => updateColor(color, ctx)}
             />

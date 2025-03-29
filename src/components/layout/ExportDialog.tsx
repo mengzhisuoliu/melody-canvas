@@ -7,6 +7,7 @@ const { ListItem } = List;
 import { AudioClip, Combinator, Log, OffscreenSprite } from "@webav/av-cliper";
 Log.setLogLevel(Log.warn); // 隐藏默认 info 日志
 
+import { useMediaBreakpoint } from "@/hooks";
 import { useAudioStore, useCanvasStore } from "@/stores";
 
 import { downloadFile } from "@/libs/common";
@@ -20,6 +21,8 @@ type ClipTask = {
 };
 
 const ExportDialog: React.FC = () => {
+  const isMobileOrTablet = useMediaBreakpoint("max-lg");
+
   const { audioFile } = useAudioStore();
   const { canvasInstance, builderFactory } = useCanvasStore();
 
@@ -86,7 +89,10 @@ const ExportDialog: React.FC = () => {
 
   return (
     <>
-      <Badge count={clipQueue.length}>
+      <Badge
+        className="max-lg:scale-80"
+        count={clipQueue.length}
+      >
         <Button
           theme="primary"
           variant="outline"
@@ -101,6 +107,7 @@ const ExportDialog: React.FC = () => {
       </Badge>
 
       <Dialog
+        {...(isMobileOrTablet && { width: "325px" })}
         placement="center"
         confirmBtn={null}
         cancelBtn={null}

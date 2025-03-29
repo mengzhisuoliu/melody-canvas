@@ -1,8 +1,9 @@
+import merge from "lodash/merge";
 import { ConfigProvider } from "tdesign-react";
 import enConfig from "tdesign-react/es/locale/en_US";
-import merge from "lodash/merge";
 
-import DashBoard from "@/pages/DashBoard";
+import { AudioControls } from "@/components/audio";
+import { CanvasPreview, SideNav, TopNav } from "@/components/layout";
 
 function App() {
   const globalConfig = merge(enConfig, {
@@ -17,7 +18,10 @@ function App() {
   return (
     <>
       <ConfigProvider globalConfig={globalConfig}>
-        <DashBoard />
+        <TopNav />
+        <SideNav />
+        <CanvasPreview />
+        <AudioControls />
       </ConfigProvider>
     </>
   );

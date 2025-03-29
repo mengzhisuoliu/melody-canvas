@@ -1,8 +1,10 @@
 import { Canvas, FabricObject } from "fabric";
 import { useEffect, useRef, useState } from "react";
 
-import { DEFAULT_BACKGROUND_COLOR, THEME_COLOR } from "@/libs/common";
+import { useMediaBreakpoint } from "@/hooks";
 import { useCanvasStore } from "@/stores";
+
+import { DEFAULT_BACKGROUND_COLOR, THEME_COLOR } from "@/libs/common";
 
 import RightClickMenu from "./RightClickMenu";
 
@@ -10,6 +12,7 @@ import RightClickMenu from "./RightClickMenu";
  * 视频预览区域
  */
 const CanvasPreview: React.FC = () => {
+  const isMobileOrTablet = useMediaBreakpoint("max-lg");
   const { createCanvas, disposeCanvas, canvasInstance, ratio } = useCanvasStore();
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -76,18 +79,24 @@ const CanvasPreview: React.FC = () => {
     };
   }, [canvasInstance, ratio]);
 
+  useEffect(() => {
+    const baseSize = isMobileOrTablet ? "65vw" : "60vh";
+
+    const width = isMobileOrTablet ? baseSize : `calc(${baseSize} * ${canvasRatio.width} / ${canvasRatio.height})`;
+    const height = isMobileOrTablet ? `calc(${baseSize} * ${canvasRatio.height} / ${canvasRatio.width})` : baseSize;
+    const top = "calc(50%)";
+    const left = isMobileOrTablet ? "calc(50% + 9vw)" : `calc(50% + 14.5vw)`;
+
+    Object.entries({ width, height, top, left }).forEach(([key, value]) => {
+      containerRef.current?.style.setProperty(key, value);
+    });
+  }, [isMobileOrTablet, canvasRatio]);
+
   return (
     <div
       ref={containerRef}
-      className="absolute border-3 border-emerald-500 flex-center"
+      className="absolute border-3 border-emerald-500 flex-center transform translate-x-[-50%] translate-y-[-50%]"
       dark="border-dark-50"
-      style={{
-        transform: "translate(-50%, -50%)",
-        left: "calc(50% + 14.5vw)",
-        top: "calc(50% - 3px)",
-        width: `calc(60vh * ${canvasRatio.width} / ${canvasRatio.height})`,
-        height: "60vh"
-      }}
     >
       <canvas ref={canvasRef}></canvas>
       <RightClickMenu />

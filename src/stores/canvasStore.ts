@@ -2,6 +2,7 @@ import type { Canvas, FabricObject } from "fabric";
 import { create } from "zustand";
 
 import { BuilderFactory } from "@/visualizers";
+import { BREAK_POINTS } from "@/libs/common";
 
 interface CanvasState {
   canvasInstance: Canvas | null;
@@ -22,7 +23,7 @@ const useCanvasStore = create<CanvasStore>((set, get) => ({
   canvasInstance: null,
   activeObjects: [],
   builderFactory: null,
-  ratio: "16:9",
+  ratio: window.matchMedia(BREAK_POINTS['max-lg']).matches ? "9:16" : "16:9",
   createCanvas: (canvasInstance) => {
     set({ canvasInstance });
     set({ builderFactory: new BuilderFactory(canvasInstance) });

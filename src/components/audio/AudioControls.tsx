@@ -75,8 +75,9 @@ const AudioControls: React.FC = () => {
       />
 
       <div
-        className="w-screen h-15 absolute bottom-0 bg-[#42b093] border-t-2 border-emerald-800 flex items-center justify-between px-6"
-        dark="bg-dark-500 border-dark-50"
+        className="w-screen h-15 absolute bottom-0 bg-[#42b093] border-t-2 border-emerald-800 flex items-center justify-between px-6 z-50"
+        dark="bg-dark-500 border-dark-100"
+        max-lg="h-10"
       >
         {/* 播放按钮 */}
         <button
@@ -87,6 +88,7 @@ const AudioControls: React.FC = () => {
         >
           <div
             className={`w-5 h-5 bg-white ${!audioFile || audioRef.current?.paused ? "i-solar:play-bold" : "i-solar:pause-bold"}`}
+            max-lg="w-3 h-3"
           ></div>
         </button>
 
@@ -97,10 +99,11 @@ const AudioControls: React.FC = () => {
         >
           <div
             className={`text-2xl ${volume === 0 || !audioFile ? "i-lsicon:volume-mute-outline" : "i-lsicon:volume-outline"}`}
+            max-lg="text-lg"
           ></div>
           <div
             className="h-40 absolute bottom-14 -ml-3 w-12 pt-5 rounded-md flex-center flex-col opacity-0 group-hover:opacity-100 bg-[#42b093] border-2 border-emerald-800"
-            dark="bg-dark-500 border-dark-50"
+            dark="bg-dark-500 border-dark-100"
           >
             <Slider
               layout="vertical"
@@ -118,7 +121,10 @@ const AudioControls: React.FC = () => {
 
         {/* 时间 */}
         <div className="flex items-center justify-between ml-1 mr-4">
-          <span className="text-white text-sm mx-4 whitespace-nowrap">
+          <span
+            className="text-white text-sm mx-4 whitespace-nowrap"
+            max-lg="text-xs"
+          >
             {formatTime(currentTime)} / {formatTime(duration)}
           </span>
         </div>

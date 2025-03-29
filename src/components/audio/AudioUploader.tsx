@@ -27,7 +27,7 @@ const AudioUploader: React.FC = () => {
     if (!audioFile)
       return (
         <>
-          <span className="text-lg">Upload a File</span>
+          <span className="lg:text-lg">Upload a File</span>
           <div className="i-line-md:uploading-loop text-2xl ml-4"></div>
         </>
       );
@@ -47,7 +47,10 @@ const AudioUploader: React.FC = () => {
   };
 
   return (
-    <div className="mb-8">
+    <div
+      className="mb-8"
+      max-lg="mb-3"
+    >
       {/* 音频上传 */}
       <label className={`flex-center px-2 py-1 ${TEXT_CLASS}`}>
         <div className="w-full h-6 whitespace-nowrap flex-between">{renderAudioComp()}</div>

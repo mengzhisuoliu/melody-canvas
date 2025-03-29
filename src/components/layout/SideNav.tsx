@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { useMediaBreakpoint } from "@/hooks";
 import { useCanvasStore } from "@/stores";
+
 import { AudioVisualizer, BackdropDisplay, ImageProcessor, TextManager } from "../editor";
 
 interface NavItemProps {
@@ -12,29 +14,40 @@ interface NavItemProps {
 
 const NavItem: React.FC<NavItemProps> = ({ icon, name, isActive, onClick }) => (
   <button
-    className={`w-16 h-16 rounded-md flex-center flex-col p-1 font-bold border-2 border-dotted text-emerald-800  border-emerald-800 dark:(text-emerald-200 border-emerald-200) ${
-      isActive ? "pointer-events-none bg-emerald-100 dark:bg-dark-300" : "hover:(bg-emerald-100 dark:bg-dark-200)"
+    className={`w-14 h-14 rounded-md flex-center flex-col font-bold border-2 border-dotted text-emerald-800  border-emerald-800 dark:(text-emerald-200 border-emerald-200) ${
+      isActive ? "lg:pointer-events-none bg-emerald-100 dark:bg-dark-300" : "hover:(bg-emerald-100 dark:bg-dark-200)"
     }`}
+    max-lg="p-0 border-0"
     onClick={onClick}
   >
     <div className={`${icon} text-2xl my-1`} />
-    <span className="text-xs">{name}</span>
+    <span
+      className="text-[10px]"
+      max-lg="hidden"
+    >
+      {name}
+    </span>
   </button>
 );
+
+const navList = [
+  { id: "nav-audio", name: "Audio", icon: "i-icon-park-outline:electric-wave", component: <AudioVisualizer /> },
+  { id: "nav-backdrop", name: "Backdrop", icon: "i-geo:turf-size", component: <BackdropDisplay /> },
+  { id: "nav-image", name: "Image", icon: "i-lsicon:picture-outline", component: <ImageProcessor /> },
+  { id: "nav-text", name: "Text", icon: "i-iconoir:text-square", component: <TextManager /> }
+];
 
 /**
  * 左侧边栏
  */
 const SideNav: React.FC = () => {
+  const isMobileOrTablet = useMediaBreakpoint("max-lg");
   const { activeObjects } = useCanvasStore();
-  const [activeNav, setActiveNav] = useState<string>("nav-audio");
 
-  const navList = [
-    { id: "nav-audio", name: "Audio", icon: "i-icon-park-outline:electric-wave", component: <AudioVisualizer /> },
-    { id: "nav-backdrop", name: "Backdrop", icon: "i-geo:turf-size", component: <BackdropDisplay /> },
-    { id: "nav-image", name: "Image", icon: "i-lsicon:picture-outline", component: <ImageProcessor /> },
-    { id: "nav-text", name: "Text", icon: "i-iconoir:text-square", component: <TextManager /> }
-  ];
+  const navRef = useRef<HTMLDivElement>(null);
+
+  const [activeNav, setActiveNav] = useState<string>(navList[0].id);
+  const [panelHidden, setPanelHidden] = useState(!isMobileOrTablet);
 
   useEffect(() => {
     const activeType = activeObjects[0]?.subType;
@@ -46,28 +59,64 @@ const SideNav: React.FC = () => {
     }
   }, [activeObjects[0]]);
 
+  useEffect(() => {
+    if (!isMobileOrTablet) {
+      setPanelHidden(false);
+      return;
+    }
+
+    /* 小屏幕情况下，点击侧边栏之外的区域自动关闭 */
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setPanelHidden(true);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isMobileOrTablet]);
+
+  const handleNavClick = (navId: string) => {
+    /* 小屏幕情况下，点击同一个 nav 时进行切换显示或隐藏 */
+    if (isMobileOrTablet && activeNav === navId) {
+      setPanelHidden((prevPanelHidden) => !prevPanelHidden);
+    } else {
+      setPanelHidden(false);
+      setActiveNav(navId);
+    }
+  };
+
   return (
     <>
       <div
-        className="w-24 h-screen left-0 space-x-10 border-r-2 border-emerald-700 bg-emerald-50"
-        dark="border-dark-50 bg-dark-500"
+        ref={navRef}
+        className="w-18 h-screen top-0 space-x-10 border-r-2 border-emerald-700 bg-emerald-50"
+        dark="border-dark-100 bg-dark-500"
       >
         {/* 左侧栏 */}
-        <nav className="w-24">
-          <div className="px-2 py-4 flex-center flex-col text-center">
+        <nav className="w-full h-screen">
+          <div className="h-full px-2 py-4 flex flex-col items-center text-center">
             {/* Logo */}
-            <div className="mb-6">
+            <a
+              className="mb-6"
+              max-lg="flex-center mb-32"
+              href="https://github.com/RylanBot/melody-canvas"
+              target="_blank"
+            >
               <img
                 src="/image/favicon.png"
-                className="w-10 h-10 mx-auto rounded-lg shadow-md"
+                className="w-8 h-8 mx-auto rounded-lg shadow-md"
               />
-              <div
-                className="py-2 font-sans font-bold text-sm text-emerald-800"
+              <p
+                className="py-2 font-sans font-bold text-xs text-emerald-800"
                 dark="text-white"
+                max-lg="hidden"
               >
                 Melody Canvas
-              </div>
-            </div>
+              </p>
+            </a>
 
             {/* 按钮组 */}
             <div className="flex flex-col space-y-8">
@@ -77,22 +126,25 @@ const SideNav: React.FC = () => {
                   icon={item.icon}
                   name={item.name}
                   isActive={activeNav === item.id}
-                  onClick={() => setActiveNav(item.id)}
+                  onClick={() => handleNavClick(item.id)}
                 />
               ))}
             </div>
           </div>
         </nav>
 
-        {/* 对应的子组件 */}
         <div
-          className="h-[90vh] w-[20vw] rounded-md absolute left-18 top-2 p-4 border-2 border-emerald-500 bg-green-50"
-          dark="border-dark-50 bg-dark-400"
+          className="absolute left-12 top-2 z-10"
+          hidden={panelHidden}
         >
+          {/* 对应的子组件 */}
           {navList.map((nav) => (
             <div
               key={nav.id}
               id={nav.id}
+              className="h-[90vh] w-64 rounded-md p-4 border-2 border-emerald-500 bg-green-50"
+              dark="border-dark-50 bg-dark-400"
+              max-lg="overflow-y-auto"
               hidden={nav.id !== activeNav}
             >
               {nav.component}

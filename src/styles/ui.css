@@ -52,6 +52,10 @@ button {
   height: 15px !important;
 }
 
+[theme-mode="light"] .t-color-picker__panel {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1) !important;
+}
+
 .t-color-picker__sliders-preview-inner {
   border: 1px solid var(--td-component-border);
   border-radius: var(--td-radius-default);

@@ -110,6 +110,10 @@ class BuilderFactory {
     this.canvas.add(builder.getGroup());
   }
 
+  public removeBuilder(vizGroup: Group) {
+    this.builders = this.builders.filter((builder) => builder.getId() !== vizGroup.id);
+  }
+
   public drawAll(buffer: AudioBuffer, time: number) {
     this.builders.forEach((builder) => builder.prepareDraw(buffer, time));
     this.canvas.requestRenderAll();

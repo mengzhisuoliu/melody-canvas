@@ -1,4 +1,6 @@
+import type { Group } from "fabric";
 import { Button } from "tdesign-react";
+
 import { useCanvasStore } from "@/stores";
 
 interface ActionButtonProps {
@@ -7,7 +9,7 @@ interface ActionButtonProps {
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({ disabled, onAdd }) => {
-  const { canvasInstance, activeObjects } = useCanvasStore();
+  const { canvasInstance, activeObjects, builderFactory } = useCanvasStore();
 
   const action =
     activeObjects.length >= 1
@@ -18,6 +20,9 @@ const ActionButton: React.FC<ActionButtonProps> = ({ disabled, onAdd }) => {
           onClick: () => {
             activeObjects!.forEach((obj) => {
               canvasInstance!.remove(obj);
+              if (obj.subType === "audio") {
+                builderFactory!.removeBuilder(obj as Group);
+              }
             });
             canvasInstance!.discardActiveObject();
             canvasInstance!.renderAll();

@@ -1,4 +1,4 @@
-import { Group } from "fabric";
+import type { Group } from "fabric";
 import { useEffect, useRef, useState } from "react";
 
 import { cloneFabricObject } from "@/libs/canvas";
@@ -78,8 +78,14 @@ const RightClickMenu = () => {
       }
     },
     delete: () => {
-      activeObjects.forEach((obj) => canvasInstance!.remove(obj));
-      canvasInstance!.discardActiveObject();
+      activeObjects.forEach((obj) => {
+        canvasInstance!.remove(obj);
+        canvasInstance!.discardActiveObject();
+
+        if (obj.subType === "audio") {
+          builderFactory!.removeBuilder(obj as Group);
+        }
+      });
     },
     bringToFront: () => {
       canvasInstance!.bringObjectToFront(activeObjects[0]);

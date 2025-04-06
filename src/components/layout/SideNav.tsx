@@ -41,7 +41,7 @@ const navList = [
  */
 const SideNav: React.FC = () => {
   const isMobileOrTablet = useMediaBreakpoint("max-lg");
-  const { activeObjects } = useCanvasStore();
+  const { canvasInstance, activeObjects } = useCanvasStore();
 
   const navRef = useRef<HTMLDivElement>(null);
 
@@ -87,6 +87,9 @@ const SideNav: React.FC = () => {
       setPanelHidden(false);
       setActiveNav(navId);
     }
+
+    canvasInstance?.discardActiveObject();
+    canvasInstance?.renderAll();
   };
 
   return (

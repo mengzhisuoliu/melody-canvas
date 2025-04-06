@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
+import { AudioVisualizer, BackdropDisplay, ImageProcessor, TextManager } from "@/editors";
 import { useMediaBreakpoint } from "@/hooks";
 import { useCanvasStore } from "@/stores";
-
-import { AudioVisualizer, BackdropDisplay, ImageProcessor, TextManager } from "../editor";
 
 interface NavItemProps {
   icon: string;

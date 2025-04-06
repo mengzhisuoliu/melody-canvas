@@ -8,7 +8,7 @@ import { useCanvasStore } from "@/stores";
 import { GRADIENT_PRESET, createGradient } from "@/libs/canvas";
 import { DEFAULT_BACKGROUND_COLOR, INPUT_STYLE } from "@/libs/common";
 
-import { OptionCard } from "../base";
+import { OptionCard } from "@/components/base";
 
 /**
  * 画布背景

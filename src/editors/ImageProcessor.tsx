@@ -7,7 +7,8 @@ import { useCanvasStore } from "@/stores";
 import { createPathByRadius, extractRadiusFromPath, getObjectTransformations } from "@/libs/canvas";
 import { pickWithDefaults } from "@/libs/common";
 
-import { ActionButton, OptionCard } from "../base";
+import { ActionButton, OptionCard } from "@/components/base";
+
 import { DEFAULT_RADIUS, DEFAULT_SHADOW, OBJECT_CONFIG, RADIUS_INPUT } from "./props";
 import type { RadiusOptions, ShadowOptions } from "./types";
 

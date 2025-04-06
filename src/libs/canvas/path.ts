@@ -1,5 +1,5 @@
 import { Path, type TSimplePathData } from "fabric";
-import type { RadiusOptions } from "@/components/editor/types";
+import type { RadiusOptions } from "@/editors/types";
 
 /**
  * @see https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial/Paths

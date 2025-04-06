@@ -9,7 +9,8 @@ import { useCanvasStore } from "@/stores";
 import { createGradient, GRADIENT_PRESET } from "@/libs/canvas";
 import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 
-import { ActionButton, OptionCard } from "../base";
+import { ActionButton, OptionCard } from "@/components/base";
+
 import { DEFAULT_TEXT, FONT_LIST, OBJECT_CONFIG } from "./props";
 import type { TextOptions } from "./types";
 

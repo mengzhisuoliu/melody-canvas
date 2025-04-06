@@ -10,8 +10,9 @@ import { shaperMap } from "@/visualizers";
 import { GRADIENT_PRESET } from "@/libs/canvas";
 import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 
-import { AudioSvgSelect, AudioUploader } from "../audio";
-import { ActionButton, OptionCard } from "../base";
+import { AudioSvgSelect, AudioUploader } from "@/components/audio";
+import { ActionButton, OptionCard } from "@/components/base";
+
 import { DEFAULT_VIZ_OPTIONS } from "./props";
 import type { VizOptions } from "./types";
 

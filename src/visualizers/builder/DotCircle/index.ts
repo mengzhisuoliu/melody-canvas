@@ -11,6 +11,7 @@ class DotCircle extends Builder {
     return "DotCircle";
   }
 
+  /* 点的初始半径，根据元素数量调整，元素越多半径越小，避免重叠 */
   private dotRadius = 8 - Math.log2(this.count);
 
   constructor(count: number, color: string, shape: string) {
@@ -23,6 +24,8 @@ class DotCircle extends Builder {
 
     for (let i = 0; i < this.count; i++) {
       const angle = this.calcAngle(i);
+
+      /* 极坐标转笛卡尔坐标：x = r * cos(θ)，y = r * sin(θ) */
       const x = groupWidth / 2 + orbitRadius * Math.cos(angle);
       const y = groupHeight / 2 + orbitRadius * Math.sin(angle);
 
@@ -47,7 +50,6 @@ class DotCircle extends Builder {
     const elements = this.createElements(groupSize, groupSize);
     this.group.add(...elements);
 
-    // 水平垂直居中
     this.group.set({
       top: canvasHeight / 2,
       left: canvasWidth / 2,
@@ -85,13 +87,23 @@ class DotCircle extends Builder {
   }
 
   /* ----- 通用的计算逻辑 ----- */
+
+  /**
+   * 计算大圆半径（所有小圆点围绕形成的整体）
+   */
   private calcOrbitRadius(groupWidth: number, groupHeight: number) {
     return (Math.min(groupWidth, groupHeight) - this.dotRadius * 2 - 1) / 2;
   }
 
+  /**
+   * 计算第 i 个元素在圆周上的角度（弧度制）
+   * - 可以理解为大圆被均匀分成 `this.count` 份
+   * - 所有小圆点均匀分布，范围为 [0, 2π)
+   */
   private calcAngle(index: number) {
     return (index / this.count) * Math.PI * 2;
   }
+
   /* ------------------------- */
 }
 

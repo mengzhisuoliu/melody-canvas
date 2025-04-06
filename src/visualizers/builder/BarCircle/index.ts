@@ -25,8 +25,11 @@ class BarCircle extends Builder {
 
     for (let i = 0; i < this.count; i++) {
       const angle = (i / this.count) * Math.PI * 2;
+
       const x = groupWidth / 2 + orbitRadius * Math.cos(angle);
       const y = groupHeight / 2 + orbitRadius * Math.sin(angle);
+
+      /* 比 DotCircle 多出来的一个步骤 -> 小圆点没有方向性，而矩形有明确的朝向，需要旋转 */
       const rotationAngle = (angle * 180) / Math.PI + 90;
 
       const bar = new Rect({

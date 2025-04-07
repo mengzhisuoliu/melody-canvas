@@ -80,16 +80,38 @@ const CanvasPreview: React.FC = () => {
   }, [canvasInstance, ratio]);
 
   useEffect(() => {
-    const baseSize = isMobileOrTablet ? "65vw" : "60vh";
+    const calcCanvasPosition = () => {
+      const baseSize = isMobileOrTablet ? "65vw" : "60vh";
 
-    const width = isMobileOrTablet ? baseSize : `calc(${baseSize} * ${canvasRatio.width} / ${canvasRatio.height})`;
-    const height = isMobileOrTablet ? `calc(${baseSize} * ${canvasRatio.height} / ${canvasRatio.width})` : baseSize;
-    const top = "calc(50%)";
-    const left = isMobileOrTablet ? "calc(50% + 9vw)" : `calc(50% + 14.5vw)`;
+      const width = isMobileOrTablet ? baseSize : `calc(${baseSize} * ${canvasRatio.width} / ${canvasRatio.height})`;
+      const height = isMobileOrTablet ? `calc(${baseSize} * ${canvasRatio.height} / ${canvasRatio.width})` : baseSize;
+      const top = "calc(50%)";
 
-    Object.entries({ width, height, top, left }).forEach(([key, value]) => {
-      containerRef.current?.style.setProperty(key, value);
-    });
+      // 居中在剩余区域
+      const adjustedLeft = (navWidth: number) => {
+        return `calc(((${window.innerWidth}px - ${navWidth}px) / 2) + ${navWidth}px)`;
+      };
+
+      const sideNavWidth = document.getElementById("side-nav")!.clientWidth;
+      const navPanelWidth = document.getElementById("nav-audio")!.clientWidth;
+
+      const PC_NAV_WIDTH = sideNavWidth + navPanelWidth! + 20;
+      const MOBILE_NAV_WIDTH = sideNavWidth + 5;
+
+      const left = adjustedLeft(isMobileOrTablet ? MOBILE_NAV_WIDTH : PC_NAV_WIDTH);
+
+      Object.entries({ width, height, top, left }).forEach(([key, value]) => {
+        containerRef.current?.style.setProperty(key, value);
+      });
+    };
+
+    calcCanvasPosition();
+
+    const observer = new ResizeObserver(calcCanvasPosition);
+    observer.observe(containerRef.current!);
+    return () => {
+      observer.disconnect();
+    };
   }, [isMobileOrTablet, canvasRatio]);
 
   return (

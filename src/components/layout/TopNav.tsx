@@ -14,7 +14,7 @@ const TopNav: React.FC = () => {
     <>
       <div
         className="absolute top-5 right-8 z-10 flex-center space-x-10"
-        max-lg="space-x-2"
+        max-lg="space-x-2 right-4"
       >
         {/* 主题切换 */}
         <Tabs

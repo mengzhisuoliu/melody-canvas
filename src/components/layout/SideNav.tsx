@@ -95,6 +95,7 @@ const SideNav: React.FC = () => {
   return (
     <>
       <div
+        id="side-nav"
         ref={navRef}
         className="w-18 h-screen top-0 space-x-10 border-r-2 border-emerald-700 bg-emerald-50"
         dark="border-dark-100 bg-dark-500"

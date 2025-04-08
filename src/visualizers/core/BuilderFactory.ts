@@ -133,6 +133,7 @@ class BuilderFactory {
     group.set(origProps);
 
     this.canvas.remove(vizGroup);
+    this.removeBuilder(vizGroup);
     this.canvas.setActiveObject(group);
   }
 

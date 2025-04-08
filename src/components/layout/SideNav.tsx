@@ -49,10 +49,7 @@ const SideNav: React.FC = () => {
   const [panelHidden, setPanelHidden] = useState(isMobileOrTablet);
 
   useEffect(() => {
-    const activeType = activeObjects[0]?.subType;
-    if (!activeType) return;
-
-    const matchingNav = navList.find((nav) => nav.id.split("-")[1] === activeType);
+    const matchingNav = navList.find((nav) => isSubTypeMatch(nav.id));
     if (matchingNav) {
       setActiveNav(matchingNav.id);
     }
@@ -79,6 +76,10 @@ const SideNav: React.FC = () => {
     };
   }, [isMobileOrTablet]);
 
+  const isSubTypeMatch = (navId: string) => {
+    return navId.split("-")[1] === activeObjects[0]?.subType;
+  };
+
   const handleNavClick = (navId: string) => {
     /* 小屏幕情况下，点击同一个 nav 时进行切换显示或隐藏 */
     if (isMobileOrTablet && activeNav === navId) {
@@ -88,8 +89,10 @@ const SideNav: React.FC = () => {
       setActiveNav(navId);
     }
 
-    canvasInstance?.discardActiveObject();
-    canvasInstance?.renderAll();
+    if (!isSubTypeMatch(navId)) {
+      canvasInstance?.discardActiveObject();
+      canvasInstance?.renderAll();
+    }
   };
 
   return (

@@ -13,7 +13,7 @@ import { useAudioStore, useCanvasStore } from "@/stores";
 import { downloadFile } from "@/libs/common";
 import { CanvasClip, getAudioBuffer } from "@/libs/media";
 
-import LoadingOverlay from "../base/LoadingOverlay";
+import { LoadingOverlay } from "../base";
 
 type ClipTask = {
   id: string;

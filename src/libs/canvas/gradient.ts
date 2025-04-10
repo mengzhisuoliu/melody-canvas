@@ -76,7 +76,7 @@ const formatColorStops = (colors: string[], stops: number[]) => {
 };
 
 /**
- * 基于 css 的 `linear-gradient  创建 Fabric `Gradient` 对象
+ * 基于 css 的 `linear-gradient` 创建 Fabric `Gradient` 对象
  */
 export const createGradient = (cssGradient: string, canvasWidth: number, canvasHeight: number) => {
   const { degree, colors, stops } = parseGradient(cssGradient);

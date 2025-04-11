@@ -18,9 +18,11 @@ class FrequencyAnalyzer {
     const endIndex = startIndex + this.fft.size;
 
     let samples = allSamples.slice(startIndex, endIndex);
-    const delta = samples.length - this.fft.size;
-    if (delta < 0) {
-      samples = new Float32Array(this.fft.size).fill(0);
+
+    if (samples.length < this.fft.size) {
+      const padded = new Float32Array(this.fft.size);
+      padded.set(samples); // zero padding
+      samples = padded;
     }
 
     return samples;

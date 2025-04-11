@@ -92,8 +92,8 @@ const CanvasPreview: React.FC = () => {
         return `calc(((${window.innerWidth}px - ${navWidth}px) / 2) + ${navWidth}px)`;
       };
 
-      const sideNavWidth = document.getElementById("side-nav")!.clientWidth;
-      const navPanelWidth = document.getElementById("nav-audio")!.clientWidth;
+      const sideNavWidth = document.getElementById("side-nav")?.clientWidth || 256;
+      const navPanelWidth = document.getElementById("nav-audio")?.clientWidth || 72;
 
       const PC_NAV_WIDTH = sideNavWidth + navPanelWidth! + 20;
       const MOBILE_NAV_WIDTH = sideNavWidth + 5;
@@ -107,9 +107,12 @@ const CanvasPreview: React.FC = () => {
 
     calcCanvasPosition();
 
+    window.addEventListener("resize", calcCanvasPosition);
     const observer = new ResizeObserver(calcCanvasPosition);
     observer.observe(containerRef.current!);
+
     return () => {
+      window.removeEventListener("resize", calcCanvasPosition);
       observer.disconnect();
     };
   }, [isMobileOrTablet, canvasRatio]);

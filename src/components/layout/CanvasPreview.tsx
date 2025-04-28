@@ -92,10 +92,10 @@ const CanvasPreview: React.FC = () => {
         return `calc(((${window.innerWidth}px - ${navWidth}px) / 2) + ${navWidth}px)`;
       };
 
-      const sideNavWidth = document.getElementById("side-nav")?.clientWidth || 256;
-      const navPanelWidth = document.getElementById("nav-audio")?.clientWidth || 72;
+      const sideNavWidth = document.getElementById("side-nav")?.clientWidth || 72;
+      const navPanelWidth = document.getElementById("nav-audio")?.clientWidth || 256;
 
-      const PC_NAV_WIDTH = sideNavWidth + navPanelWidth! + 20;
+      const PC_NAV_WIDTH = sideNavWidth + navPanelWidth + 20;
       const MOBILE_NAV_WIDTH = sideNavWidth + 5;
 
       const left = adjustedLeft(isMobileOrTablet ? MOBILE_NAV_WIDTH : PC_NAV_WIDTH);

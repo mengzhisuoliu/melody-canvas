@@ -196,7 +196,8 @@ const ImageProcessor: React.FC = () => {
           >
             <div className="grid grid-cols-2 gap-2">
               <ColorPicker
-                format="HEX"
+                key={activeImgList.toString()}
+                format="CSS"
                 colorModes={["monochrome"]}
                 recentColors={null}
                 swatchColors={null}

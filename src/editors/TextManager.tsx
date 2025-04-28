@@ -153,11 +153,11 @@ const TextManager: React.FC = () => {
           {/* 颜色 */}
           <OptionCard title="Color">
             <ColorPicker
-              key={activeTextList.length > 0 ? activeTextList[0].toString() : undefined} // TDesign 内部缓存问题
-              format="HEX"
+              key={activeTextList.toString()}
+              format="CSS"
               recentColors={null}
               swatchColors={GRADIENT_PRESET}
-              inputProps={{ style: INPUT_STYLE, readonly: true }}
+              inputProps={{ style: INPUT_STYLE }}
               value={textOptions.color}
               onChange={(color, ctx) => updateColor(color, ctx)}
             />

@@ -24,11 +24,6 @@ const BackdropDisplay: React.FC = () => {
       trigger: ColorPickerChangeTrigger;
     }
   ) => {
-    /*
-      TDesign 疑似把整个函数缓存了
-      如果不给 ColorPicker 加 key
-      这里的 canvasInstance 一直是 null
-     */
     if (!canvasInstance) return;
     setBackgroundColor(color);
 
@@ -63,7 +58,7 @@ const BackdropDisplay: React.FC = () => {
           <ColorPickerPanel
             style={{ width: "100%" }}
             key={canvasInstance?.toString()}
-            format="HEX"
+            format="CSS"
             recentColors={null}
             swatchColors={GRADIENT_PRESET}
             value={backgroundColor}

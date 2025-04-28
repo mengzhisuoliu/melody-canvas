@@ -32,7 +32,7 @@ const parseGradient = (css: string) => {
   const regex = /(\d+)deg|to\s+\w+(?:\s+\w+)?|rgba?\([^)]+\)|#[0-9a-fA-F]{3,8}|\d+%/g;
   const cssMatches = css.match(regex);
 
-  let degree = 90;
+  let degree = 180;
   const degMatch = cssMatches?.find((m) => m.includes("deg"));
 
   if (degMatch) {
@@ -50,7 +50,7 @@ const parseGradient = (css: string) => {
 
 const degreeToCoords = (degree: number, objWidth: number, objHeight: number) => {
   // 角度 -> 弧度
-  const radians = (degree * Math.PI) / 180;
+  const radians = ((degree - 270) * Math.PI) / 180;
 
   const centerX = objWidth / 2;
   const centerY = objHeight / 2;

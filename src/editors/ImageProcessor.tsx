@@ -75,8 +75,7 @@ const ImageProcessor: React.FC = () => {
 
   const createFabricImg = async (url: string, options?: Partial<FabricObjectProps>) => {
     const image = await FabricImage.fromURL(url);
-    const width = image.width;
-    const height = image.height;
+    const { width, height } = image;
     const scaleFactor = 200 / height;
 
     image.set({ ...OBJECT_CONFIG, subType: "image" });

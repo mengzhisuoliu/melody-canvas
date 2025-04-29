@@ -25,7 +25,7 @@ export const DEFAULT_TEXT: TextOptions = {
   color: "#ffffff",
   fontWeight: 400,
   fontStyle: "normal",
-  fontFamily: "Arial"
+  fontFamily: FONT_LIST[0]
 };
 
 /* ----- ImageProcessor ------ */

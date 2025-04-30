@@ -1,3 +1,5 @@
+export const TEMP_CANVAS_KEY = "temp_canvas";
+
 export const THEME_COLOR = "#63debb";
 export const DEFAULT_BACKGROUND_COLOR = "#000000";
 

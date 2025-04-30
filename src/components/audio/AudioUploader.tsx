@@ -60,9 +60,7 @@ const AudioUploader: React.FC = () => {
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];
-            if (file) {
-              parseAudio(file);
-            }
+            if (file) parseAudio(file);
           }}
         />
       </label>

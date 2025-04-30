@@ -2,9 +2,7 @@ import { FabricObject, Group } from "fabric";
 import { cloneDeep } from "lodash";
 
 import { createGradientMap, getObjectTransformations } from "@/libs/canvas";
-
 import FrequencyAnalyzer from "./FrequencyAnalyzer";
-import { DEFAULT_SHAPE } from "./FrequencyShaper";
 
 /**
  * 构造各种可视化元素
@@ -13,7 +11,7 @@ import { DEFAULT_SHAPE } from "./FrequencyShaper";
  * - 具体实现放在子类
  */
 abstract class Builder {
-  abstract get name(): string;
+  public abstract get name(): string;
   protected id: string;
 
   protected count: number;
@@ -116,7 +114,7 @@ abstract class Builder {
     return this.shape;
   }
 
-  public updateShape(shape = DEFAULT_SHAPE) {
+  public updateShape(shape: string) {
     this.shape = shape;
   }
 

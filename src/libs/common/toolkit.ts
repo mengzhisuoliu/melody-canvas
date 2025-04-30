@@ -27,23 +27,39 @@ export const pickWithDefaults = <T extends object>(source: Partial<T> | undefine
  * 检查传入的 font-family 是否在当前游览器可用
  */
 export const checkFontAvailability = (font: string) => {
-  const testString = "abcdefghijklmnopqrstuvwxyz0123456789";
-  const testElement = document.createElement("span");
+  const defaultFont = "Arial";
+  if (font.toLowerCase() === defaultFont.toLowerCase()) return true;
 
-  testElement.style.fontSize = "12px";
-  testElement.style.visibility = "hidden";
-  testElement.textContent = testString;
+  const testChar = "a";
+  const canvasWidth = 100;
+  const canvasHeight = 100;
+  const fontSize = 100;
 
-  document.body.appendChild(testElement);
-  const defaultWidth = testElement.offsetWidth;
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  if (!context) return false;
 
-  testElement.style.fontFamily = font;
-  const fontWidth = testElement.offsetWidth;
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
 
-  document.body.removeChild(testElement);
+  context.textAlign = "center";
+  context.fillStyle = "black";
+  context.textBaseline = "middle";
 
-  // 宽度不同说明产生了变化 -> 存在可用字体
-  return defaultWidth !== fontWidth;
+  const getFontPixels = (font: string) => {
+    context.clearRect(0, 0, canvasWidth, canvasHeight);
+    context.font = `${fontSize}px ${font}, ${defaultFont}`;
+    context.fillText(testChar, canvasWidth / 2, canvasHeight / 2);
+
+    const imageData = context.getImageData(0, 0, canvasWidth, canvasHeight).data;
+    return Array.from(imageData).filter((value) => value !== 0);
+  };
+
+  const defaultFontPixels = getFontPixels(defaultFont);
+  const testFontPixels = getFontPixels(font);
+
+  // 像素数据不同 -> 传入的字体被正确渲染 -> 存在可用字体
+  return defaultFontPixels.join("") !== testFontPixels.join("");
 };
 
 /**

@@ -13,8 +13,10 @@ export const FONT_LIST = [
   "Arial",
   "Impact",
   "Comic Sans MS",
+  "Hanzipen SC",
   // 衬线 serif
   "FangSong",
+  "STSong",
   "STZhongsong",
   "Times New Roman",
   // 等宽 monospace
@@ -25,7 +27,7 @@ export const DEFAULT_TEXT: TextOptions = {
   color: "#ffffff",
   fontWeight: 400,
   fontStyle: "normal",
-  fontFamily: "Arial"
+  fontFamily: FONT_LIST[0]
 };
 
 /* ----- ImageProcessor ------ */

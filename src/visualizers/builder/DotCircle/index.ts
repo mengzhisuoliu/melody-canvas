@@ -11,7 +11,7 @@ class DotCircle extends Builder {
     return "DotCircle";
   }
 
-  /* 点的初始半径，根据元素数量调整，元素越多半径越小，避免重叠 */
+  /* 小圆点的初始半径，根据元素数量调整，元素越多半径越小，避免重叠 */
   private dotRadius = 8 - Math.log2(this.count);
 
   constructor(count: number, color: string, shape: string) {
@@ -59,7 +59,7 @@ class DotCircle extends Builder {
   }
 
   protected draw(frequency: number[]) {
-    const MIN_SCALE = 0.5;
+    const MIN_SCALE = 1;
     const MAX_SCALE = 2.25;
     const PADDING = 10;
 
@@ -70,18 +70,25 @@ class DotCircle extends Builder {
       if (circle.type !== "circle") return;
 
       const angle = this.calcAngle(i);
+      const x = orbitRadius * Math.cos(angle);
+      const y = orbitRadius * Math.sin(angle);
+
       const freqIndex = Math.floor((i / this.count) * objHeights.length);
       const scaleValue = objHeights[freqIndex];
 
-      const x = orbitRadius * Math.cos(angle);
-      const y = orbitRadius * Math.sin(angle);
+      const time = Date.now() / 200;
+      const jitter = 0.15 * Math.sin(time + i); // 添加时间扰动
+      const animatedScale = scaleValue + jitter;
+
+      const opacity = Math.pow(scaleValue / MAX_SCALE, 1.5); // 非线性增强，高频更亮，低频更淡
 
       circle.set({
         left: x,
         top: y,
-        radius: this.dotRadius * scaleValue,
-        scaleX: scaleValue,
-        scaleY: scaleValue
+        radius: this.dotRadius * animatedScale,
+        scaleX: animatedScale,
+        scaleY: animatedScale,
+        opacity
       });
     });
   }

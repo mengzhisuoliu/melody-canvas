@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import type { ColorObject, ColorPickerChangeTrigger } from "tdesign-react";
 import { ColorPickerPanel, Select } from "tdesign-react";
 
@@ -15,7 +13,6 @@ import { OptionCard } from "@/components/base";
  */
 const BackdropDisplay: React.FC = () => {
   const { canvasInstance, ratio, setRatio } = useCanvasStore();
-  const [backgroundColor, setBackgroundColor] = useState(DEFAULT_BACKGROUND_COLOR);
 
   const updateBackground = (
     color: string,
@@ -25,7 +22,6 @@ const BackdropDisplay: React.FC = () => {
     }
   ) => {
     if (!canvasInstance) return;
-    setBackgroundColor(color);
 
     if (!context.color.isGradient) {
       canvasInstance.backgroundColor = color;
@@ -61,8 +57,8 @@ const BackdropDisplay: React.FC = () => {
             format="CSS"
             recentColors={null}
             swatchColors={GRADIENT_PRESET}
-            value={backgroundColor}
-            onChange={(color, ctx) => updateBackground(color, ctx)}
+            defaultValue={DEFAULT_BACKGROUND_COLOR}
+            onChange={updateBackground}
           />
         </OptionCard>
       </div>

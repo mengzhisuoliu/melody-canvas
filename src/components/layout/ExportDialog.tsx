@@ -10,7 +10,7 @@ Log.setLogLevel(Log.warn); // 隐藏默认 info 日志
 import { useMediaBreakpoint } from "@/hooks";
 import { useAudioStore, useCanvasStore } from "@/stores";
 
-import { downloadFile } from "@/libs/common";
+import { downloadFile, TEMP_CANVAS_KEY } from "@/libs/common";
 import { CanvasClip, getAudioBuffer } from "@/libs/media";
 
 import { LoadingOverlay } from "../base";
@@ -48,11 +48,11 @@ const ExportDialog: React.FC = () => {
     const factoryCopy = await builderFactory.clone(newCanvas);
 
     // 临时画布 -> 隐藏绘制
-    lowerCanvas.classList.add("temp_canvas");
+    lowerCanvas.classList.add(TEMP_CANVAS_KEY);
     lowerCanvas.style.display = "none";
 
     const upperCanvas = newCanvas.upperCanvasEl;
-    upperCanvas.classList.add("temp_canvas");
+    upperCanvas.classList.add(TEMP_CANVAS_KEY);
     upperCanvas.style.display = "none";
 
     document.body.appendChild(lowerCanvas);

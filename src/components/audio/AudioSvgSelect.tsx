@@ -86,8 +86,7 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, disabled, onChang
       <div
         className={`absolute max-h-80 top-27 z-50 w-[110%] overflow-y-auto bg-white rounded p-2 shadow-md ${
           isOpen ? "dropdown-open" : "dropdown-closed"
-        }
-          `}
+        }`}
         dark="bg-dark-800"
       >
         {Object.keys(svgList).map((key) => {
@@ -98,8 +97,7 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, disabled, onChang
               key={key}
               className={`h-16 w-full rounded-md ${
                 isSelected ? "pointer-events-none bg-emerald-50 dark:bg-dark-200" : "cursor-pointer"
-              }
-              `}
+              }`}
               onClick={() => handleSvgSelect(key)}
             >
               <svg

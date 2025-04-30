@@ -125,7 +125,7 @@ const AudioVisualizer: React.FC = () => {
               swatchColors={GRADIENT_PRESET}
               inputProps={{ style: INPUT_STYLE }}
               value={vizOptions.color}
-              onChange={(color, ctx) => updateColor(color, ctx)}
+              onChange={updateColor}
             />
           </OptionCard>
 

@@ -1,6 +1,7 @@
 import { IClip } from "@webav/av-cliper";
 
-import { BuilderFactory } from '@/visualizers';
+import { BuilderFactory } from "@/visualizers";
+import { TEMP_CANVAS_KEY } from "../common";
 
 export class CanvasClip implements IClip {
   ready: IClip["ready"];
@@ -54,7 +55,7 @@ export class CanvasClip implements IClip {
   }
 
   destroy() {
-    const tempCanvas = document.querySelectorAll("canvas.temp_canvas");
+    const tempCanvas = document.querySelectorAll(`canvas.${TEMP_CANVAS_KEY}`);
     tempCanvas.forEach((canvas) => {
       canvas.remove();
     });

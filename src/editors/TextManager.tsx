@@ -159,7 +159,7 @@ const TextManager: React.FC = () => {
               swatchColors={GRADIENT_PRESET}
               inputProps={{ style: INPUT_STYLE }}
               value={textOptions.color}
-              onChange={(color, ctx) => updateColor(color, ctx)}
+              onChange={updateColor}
             />
           </OptionCard>
 

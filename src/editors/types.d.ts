@@ -2,7 +2,7 @@ export type TextOptions = {
   color: string;
   fontWeight: 400 | 900;
   fontStyle: "normal" | "italic";
-  fontFamily: string;
+  fontFamily?: string;
 };
 
 export type RadiusOptions = {

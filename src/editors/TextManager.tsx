@@ -11,7 +11,7 @@ import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 
 import { ActionButton, OptionCard } from "@/components/base";
 
-import { DEFAULT_TEXT, FONT_LIST, OBJECT_CONFIG } from "./props";
+import { AVAILABLE_FONTS, DEFAULT_TEXT, OBJECT_CONFIG } from "./props";
 import type { TextOptions } from "./types";
 
 const TextManager: React.FC = () => {
@@ -192,7 +192,7 @@ const TextManager: React.FC = () => {
               onPopupVisibleChange={(visible) => setPopupVisible(visible)}
               panel={
                 <ul>
-                  {FONT_LIST.map((font) => (
+                  {AVAILABLE_FONTS.map((font) => (
                     <li
                       key={font}
                       className="text-xs cursor-pointer p-1 rounded-md hover:bg-emerald-50"

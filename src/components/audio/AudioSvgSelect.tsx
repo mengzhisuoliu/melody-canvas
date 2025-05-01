@@ -3,7 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { SVG_HEIGHT, SVG_WIDTH } from "@/libs/common";
 import type { SvgProps } from "@/visualizers/types";
 
-const svgModules = import.meta.glob("@/visualizers/builder/*/Svg.tsx");
+const svgModules = import.meta.glob("@/visualizers/builder/*/Svg.tsx", { eager: true });
+
+type AudioSvgList = {
+  [name: string]: React.FC<SvgProps>;
+};
 
 interface AudioSvgSelectProps {
   name: string;
@@ -15,23 +19,21 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, disabled, onChang
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [svgList, setSvgList] = useState<{ [key: string]: React.FC<SvgProps> }>({});
+  const [svgList, setSvgList] = useState<AudioSvgList>({});
 
   useEffect(() => {
-    const loadSvgList = async () => {
-      const loadedSvgList: { [key: string]: React.FC<SvgProps> } = {};
-      for (const path in svgModules) {
-        const module = (await svgModules[path]()) as { default: React.FC };
-        const svgName = path.split("/").slice(-2, -1)[0]; // 和父文件夹名一致
-        loadedSvgList[svgName] = module.default;
-      }
-      setSvgList(loadedSvgList);
+    const loadedSvgList: AudioSvgList = {};
 
-      const firstSvg = Object.keys(loadedSvgList)[0];
-      onChange(firstSvg);
-    };
+    for (const path in svgModules) {
+      const module = svgModules[path] as { default: React.FC };
+      const svgName = path.split("/").slice(-2, -1)[0];
+      loadedSvgList[svgName] = module.default;
+    }
 
-    loadSvgList();
+    setSvgList(loadedSvgList);
+
+    const firstSvg = Object.keys(loadedSvgList)[0];
+    onChange(firstSvg);
   }, []);
 
   useEffect(() => {

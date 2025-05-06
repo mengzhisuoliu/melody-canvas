@@ -1,4 +1,4 @@
-import { checkFontAvailability } from "@/libs/common";
+import { checkAvailableFonts } from "@/libs/common";
 import { DEFAULT_SHAPE } from "@/visualizers";
 import type { RadiusOptions, ShadowOptions, TextOptions, VizOptions } from "./types";
 
@@ -8,26 +8,31 @@ export const OBJECT_CONFIG = {
 };
 
 /* ----- TextManager ------ */
-export const FONT_LIST = [
+const FONT_LIST = [
   // 无衬线 sans-serif
   "Arial",
   "Impact",
-  "Comic Sans MS",
-  "Hanzipen SC",
   // 衬线 serif
   "FangSong",
   "STSong",
   "STZhongsong",
   "Times New Roman",
   // 等宽 monospace
-  "Courier New"
-].filter((font) => checkFontAvailability(font));
+  "Courier New",
+  "Monaco",
+  // 手写 cursive
+  "Comic Sans MS",
+  "Chalkboard SE",
+  "Hanzipen SC"
+];
+
+export const AVAILABLE_FONTS = checkAvailableFonts(FONT_LIST);
 
 export const DEFAULT_TEXT: TextOptions = {
   color: "#ffffff",
   fontWeight: 400,
   fontStyle: "normal",
-  fontFamily: FONT_LIST[0]
+  fontFamily: undefined
 };
 
 /* ----- ImageProcessor ------ */

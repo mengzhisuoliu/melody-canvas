@@ -13,7 +13,7 @@ import { INPUT_STYLE, pickWithDefaults } from "@/libs/common";
 import { AudioSvgSelect, AudioUploader } from "@/components/audio";
 import { ActionButton, OptionCard } from "@/components/base";
 
-import { DEFAULT_VIZ_OPTIONS } from "./props";
+import { AVAILABLE_COUNTS, DEFAULT_VIZ_OPTIONS } from "./props";
 import type { VizOptions } from "./types";
 
 const AudioVisualizer: React.FC = () => {
@@ -147,7 +147,7 @@ const AudioVisualizer: React.FC = () => {
               value={vizOptions.count}
               onChange={(val) => updateCount(val as number)}
             >
-              {[32, 64, 128, 256].map((val) => (
+              {AVAILABLE_COUNTS.map((val) => (
                 <div
                   className="flex-center"
                   key={val}

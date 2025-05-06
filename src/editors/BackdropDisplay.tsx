@@ -8,6 +8,8 @@ import { DEFAULT_BACKGROUND_COLOR, INPUT_STYLE } from "@/libs/common";
 
 import { OptionCard } from "@/components/base";
 
+import { AVAILABLE_RATIOS } from "./props";
+
 /**
  * 画布背景
  */
@@ -40,7 +42,7 @@ const BackdropDisplay: React.FC = () => {
         <OptionCard title="Ratio">
           <Select
             style={INPUT_STYLE}
-            options={["16:9", "9:16", "1:1"].map((item) => ({ label: item, value: item }))}
+            options={AVAILABLE_RATIOS.map((item) => ({ label: item, value: item }))}
             value={ratio}
             onChange={(ratio) => setRatio(ratio as string)}
           />

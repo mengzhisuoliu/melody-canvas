@@ -7,6 +7,40 @@ export const OBJECT_CONFIG = {
   top: 50
 };
 
+/* ----- AudioVisualizer ------ */
+export const AVAILABLE_COUNTS = [32, 64, 128, 256];
+
+export const DEFAULT_VIZ_OPTIONS: VizOptions = {
+  color: "#ffffff",
+  shape: DEFAULT_SHAPE,
+  count: 64
+};
+
+/* ----- BackdropDisplay ------ */
+export const AVAILABLE_RATIOS = ["16:9", "9:16", "1:1"];
+
+/* ----- ImageProcessor ------ */
+export const RADIUS_INPUT = [
+  { key: "tl", icon: "i-tabler:radius-top-left" },
+  { key: "tr", icon: "i-tabler:radius-top-right" },
+  { key: "bl", icon: "i-tabler:radius-bottom-left" },
+  { key: "br", icon: "i-tabler:radius-bottom-right" }
+];
+
+export const DEFAULT_RADIUS: RadiusOptions = {
+  tl: 0,
+  tr: 0,
+  bl: 0,
+  br: 0
+};
+
+export const DEFAULT_SHADOW: ShadowOptions = {
+  color: "#ffffff",
+  blur: 0,
+  offsetX: 0,
+  offsetY: 0
+};
+
 /* ----- TextManager ------ */
 const FONT_LIST = [
   // 无衬线 sans-serif
@@ -34,17 +68,3 @@ export const DEFAULT_TEXT: TextOptions = {
   fontStyle: "normal",
   fontFamily: undefined
 };
-
-/* ----- ImageProcessor ------ */
-export const RADIUS_INPUT = [
-  { key: "tl", icon: "i-tabler:radius-top-left" },
-  { key: "tr", icon: "i-tabler:radius-top-right" },
-  { key: "bl", icon: "i-tabler:radius-bottom-left" },
-  { key: "br", icon: "i-tabler:radius-bottom-right" }
-];
-
-export const DEFAULT_RADIUS: RadiusOptions = { tl: 0, tr: 0, bl: 0, br: 0 };
-export const DEFAULT_SHADOW: ShadowOptions = { color: "#ffffff", blur: 0, offsetX: 0, offsetY: 0 };
-
-/* ----- AudioVisualizer ------ */
-export const DEFAULT_VIZ_OPTIONS: VizOptions = { color: "#ffffff", shape: DEFAULT_SHAPE, count: 64 };

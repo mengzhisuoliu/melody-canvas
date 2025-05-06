@@ -3,10 +3,9 @@ import * as shaperList from "../shaper";
 type ShaperFunc = (frequency: number[]) => number[];
 
 /**
- * - frequency[]` 较小位置对应低频，较大位置对应高频
- * - 大多数音频会偏向「低中频」，高频部分能量少
- * - 从而累积在前面部分
- * - 因此默认的数组数据整体递减
+ * - `frequency[]` 较小位置对应低频，较大位置对应高频
+ * - 大多数音频的能量集中在「低中频」，高频能量少
+ * - 因此默认生成的频率数据整体呈递减趋势
  */
 export const DEFAULT_SHAPE = "Slope";
 

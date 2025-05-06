@@ -30,9 +30,9 @@ const AudioSvgSelect: React.FC<AudioSvgSelectProps> = ({ name, disabled, onChang
         const svgName = path.split("/").slice(-2, -1)[0];
         loadedSvgList[svgName] = module.default;
       }
-  
+
       setSvgList(loadedSvgList);
-  
+
       const firstSvg = Object.keys(loadedSvgList)[0];
       onChange(firstSvg);
     };
